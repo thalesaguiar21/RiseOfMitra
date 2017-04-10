@@ -1,7 +1,5 @@
-<p align="center">
-	<img src="/imgs_md/RiseOfMitraLogo.png" width="300">
-</p>
 
+<img src="/imgs_md/RiseOfMitraLogo.png" width="200" align="middle">
 
 # RiseOfMitra
 Rise of Mitra is turn-based board game with a discrete world.
