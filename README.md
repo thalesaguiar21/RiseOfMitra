@@ -1,3 +1,5 @@
+
+![alt tag](https://github.com/thalesaguiar21/RiseOfMitra/imgs_md/RiseOfMitraLogo.png)
 # RiseOfMitra
 Rise of Mitra is turn-based board game with a discrete world.
 
