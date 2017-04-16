@@ -12,7 +12,7 @@ Rise of Mitra tells the history of a battle for resources between two races in t
 
 # Glossary
 
-# # Class names
-I*.class -> Interface
-A*.class -> Abstract
-E*.class -> Enum
+<h2>Class names</h2>
+I*.class -> Interface</br>
+A*.class -> Abstract</br>
+E*.class -> Enum</br>
