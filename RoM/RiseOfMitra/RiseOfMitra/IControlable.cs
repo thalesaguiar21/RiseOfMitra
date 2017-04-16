@@ -8,5 +8,6 @@ namespace RiseOfMitra
 {
     interface IControlable
     {
+        
     }
 }
