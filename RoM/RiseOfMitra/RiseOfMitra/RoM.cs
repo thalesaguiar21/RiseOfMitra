@@ -1,20 +1,21 @@
 ﻿using System;
+using RoMUtils;
 
 public class RoM
 {
-    const int BOARD_SIZE = 35;
-
     private int[,] TerrainBoard;
     private char[,] ControlablesBoard;
+    private int boardSize;
 
     public RoM()
     {
-        TerrainBoard = new int[BOARD_SIZE, BOARD_SIZE];
-        ControlablesBoard = new char[BOARD_SIZE, BOARD_SIZE];
+        boardSize = GameConsts.BOARD_SIZE;
+        TerrainBoard = new int[boardSize, boardSize];
+        ControlablesBoard = new char[boardSize, boardSize];
 
-        for (int i = 0; i < BOARD_SIZE; i++)
+        for (int i = 0; i < boardSize; i++)
         {
-            for (int j = 0; j < BOARD_SIZE; j++)
+            for (int j = 0; j < boardSize; j++)
             {
                 TerrainBoard[i, j] = 0;
                 ControlablesBoard[i, j] = 'a';
@@ -22,11 +23,32 @@ public class RoM
         }
     }
 
+    private void PrintSideBySide<T, U>(T[,] table1, U[,] table2)
+    {
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSize; j++)
+            {
+                Console.Write(table1[i, j] + " ");
+            }
+
+            Console.Write("\t");
+
+            for (int j = 0; j < boardSize; j++)
+            {
+                Console.Write(table2[i, j] + " ");
+            }
+
+            Console.Write("\n");
+        }
+        Console.Write("\n\n");
+    }
+
     private void PrintTerrain<T>(T[,] terrain)
     {
-        for (int i = 0; i < BOARD_SIZE; i++)
+        for (int i = 0; i < boardSize; i++)
         {
-            for (int j = 0; j < BOARD_SIZE; j++)
+            for (int j = 0; j < boardSize; j++)
             {
                 Console.Write(terrain[i, j] + " ");
             }
@@ -44,5 +66,10 @@ public class RoM
     public void PrintControlablesBoard()
     {
         PrintTerrain<char>(ControlablesBoard);
+    }
+
+    public void PrintBoth()
+    {
+        PrintSideBySide<int, char>(TerrainBoard, ControlablesBoard);
     }
 }

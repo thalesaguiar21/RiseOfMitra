@@ -42,8 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="IControlable.cs" />
+    <Compile Include="AUnit.cs" />
+    <Compile Include="IMovable.cs" />
+    <Compile Include="APawn.cs" />
+    <Compile Include="RoMUtils.cs" />
+    <Compile Include="ETerrainType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoM.cs" />

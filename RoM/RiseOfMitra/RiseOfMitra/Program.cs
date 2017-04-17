@@ -13,8 +13,7 @@ namespace RiseOfMitra
             Console.WriteLine("Welcome to the world of Mitra!");
             RoM rom = new RoM();
             Console.Write("\n");
-            rom.PrintTerrainBoard();
-            rom.PrintControlablesBoard();
+            rom.PrintBoth();
 
 
             Console.ReadLine();
