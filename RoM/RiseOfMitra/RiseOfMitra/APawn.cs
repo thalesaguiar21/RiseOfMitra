@@ -9,8 +9,10 @@ namespace RiseOfMitra
     abstract class APawn : AUnit
     {
         private int MovePoints;
+        private ECultures NativeCulture;
         private int Atk;
         private int Def;
+        private int Range;
         private ETerrainType[] MasterTerrains;
         private const int MAX_LIFE = 3000;
         private const int MAX_DEF = 30;
@@ -19,17 +21,16 @@ namespace RiseOfMitra
 
         // Main methods
         public abstract bool Attack(APawn enemy);
-
         public abstract void AdaptForTerrain(ETerrainType currTerrain);
-
         public abstract Pair Move(Pair target);
-
         public abstract Pair Move(Pair[] targetPath);
 
         // Getters
         public int GetMovePoints() { return this.MovePoints; }
+        public ECultures GetNativeCulture() { return this.NativeCulture; }
         public int GetAtk() { return this.Atk; }
         public int GetDef() { return this.Def; }
+        public int GetRange() { return this.Range; }
         public ETerrainType[] GetMasterTerrains() { return this.MasterTerrains; }
 
         // Setters
@@ -44,6 +45,11 @@ namespace RiseOfMitra
             {
                 Console.WriteLine("Os pontos de movimentação de um peão devem estar entre 0 e " + MAX_MOV);
             }
+        }
+
+        public void SetNativeCulture(ECultures culture)
+        {
+            this.NativeCulture = culture;
         }
 
         public void SetAtk(int atk)
@@ -70,6 +76,18 @@ namespace RiseOfMitra
             else
             {
                 Console.WriteLine("A defesa do peão deve estar entre 0 e " + MAX_DEF);
+            }
+        }
+
+        public void SetRange(int range)
+        {
+            if(range > 0 || range > 0 || range < GameConsts.BOARD_SIZE || range < GameConsts.BOARD_SIZE)
+            {
+                this.Range = range;
+            }
+            else
+            {
+                Console.WriteLine("Alcançe da unidade fora dos limites!");
             }
         }
 

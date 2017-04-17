@@ -17,5 +17,10 @@ namespace RoMUtils
     {
         public int x;
         public int y;
+
+        public static int Distance(Pair a, Pair b)
+        {
+            return (int) Math.Floor(Math.Sqrt(Math.Pow(a.x - b.x, 2) + Math.Pow(a.y - b.y, 2)));
+        }
     }
 }
