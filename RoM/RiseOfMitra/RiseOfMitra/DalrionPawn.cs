@@ -9,6 +9,17 @@ namespace RiseOfMitra
 {
     class DalrionPawn : APawn
     {
+        public DalrionPawn(Pair position)
+        {
+            SetAtk(3);
+            SetDef(2);
+            SetLifePoints(5);
+            SetMovePoints(3);
+            SetPosition(position);
+            SetRange(1);
+            SetSize(1);
+        }
+
         public override void AdaptForTerrain(ETerrainType currTerrain)
         {
             switch (currTerrain)

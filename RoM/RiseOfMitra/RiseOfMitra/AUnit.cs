@@ -38,20 +38,6 @@ namespace RiseOfMitra
             }
         }
 
-        public void SetMaxLifePoints(int maxLifePoints)
-        {
-            bool validMax = maxLifePoints >= 0 && maxLifePoints <= GameConsts.MAX_LIFE;
-
-            if (validMax)
-            {
-                MaxLifePoints = maxLifePoints;
-            }
-            else
-            {
-                Console.WriteLine("Quantidade máxima de vida deve ser um número entre 0 e " + GameConsts.MAX_LIFE);
-            }
-        }
-
         public void SetLifePoints(int lifePoints)
         {
             bool validLife = lifePoints >= 0 && lifePoints <= MaxLifePoints;
