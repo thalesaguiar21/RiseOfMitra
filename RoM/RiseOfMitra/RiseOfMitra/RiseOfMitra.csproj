@@ -43,8 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AUnit.cs" />
-    <Compile Include="IMovable.cs" />
     <Compile Include="APawn.cs" />
+    <Compile Include="DalrionPawn.cs" />
+    <Compile Include="ECultures.cs" />
     <Compile Include="RoMUtils.cs" />
     <Compile Include="ETerrainType.cs" />
     <Compile Include="Program.cs" />

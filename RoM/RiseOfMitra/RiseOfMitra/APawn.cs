@@ -14,7 +14,6 @@ namespace RiseOfMitra
         private int Def;
         private int Range;
         private ETerrainType[] MasterTerrains;
-        private const int MAX_LIFE = 3000;
         private const int MAX_DEF = 30;
         private const int MAX_ATK = 35;
         private const int MAX_MOV = 5;

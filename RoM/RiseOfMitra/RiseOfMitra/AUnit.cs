@@ -13,11 +13,16 @@ namespace RiseOfMitra
         protected Pair Position;
         protected int MaxLifePoints;
         protected int LifePoints;
+        protected int Size;
+        private const int MAX_SIZE = 3;
 
+        // Getters
         public Pair GetPosition() { return this.Position; }
         public int GetMaxLifePoints() { return this.MaxLifePoints; }
         public int GetLifePoints() { return this.LifePoints; }
+        public int GetSize() { return this.Size; }
 
+        // Setters
         public void SetPosition(Pair position)
         {
             bool validX = position.x >= 0 && position.x <= GameConsts.BOARD_SIZE;
@@ -58,6 +63,18 @@ namespace RiseOfMitra
             else
             {
                 Console.WriteLine("Pontos de vida inválidos");
+            }
+        }
+
+        public void SetSize(int size)
+        {
+            if(size > 0 && size < MAX_SIZE)
+            {
+                Size = size;
+            }
+            else
+            {
+                Console.WriteLine(size + " não é um tamanho de unidade válido!");
             }
         }
     }

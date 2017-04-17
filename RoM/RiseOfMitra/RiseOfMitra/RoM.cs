@@ -29,10 +29,14 @@ public class RoM
     {
         bool play = true;
 
-        while (play)
+        do
         {
-            
-        }
+            Console.WriteLine("Starting Rise of Mitra...");
+            PrintBoth();
+            string leaveGame = Console.ReadLine();
+            if (leaveGame.ToLower().Equals("yes")) play = false;
+            Console.Clear();
+        } while (play);
     }
 
     private void PrintSideBySide<T, U>(T[,] table1, U[,] table2)
@@ -108,7 +112,7 @@ public class RoM
         {
             for (int j = 0; j < boardSize; j++)
             {
-                if (GameConsts.validDalrionsUnits) validControlables = false;
+                //if (terrain[i,j] in GameConsts.validDalrionsUnits) validControlables = false;
             }
         }
 
@@ -116,7 +120,7 @@ public class RoM
         {
             for (int j = 0; j < boardSize; j++)
             {
-                ControlablesBoard[i, j] = terrain[i, j];
+                //ControlablesBoard[i, j] = terrain[i, j];
             }
         }
     }
