@@ -6,10 +6,12 @@ public class RoM
     private int[,] TerrainBoard;
     private char[,] ControlablesBoard;
     private int boardSize;
+    private int nextPlayer;
 
     public RoM()
     {
         boardSize = GameConsts.BOARD_SIZE;
+        nextPlayer = 0;
         TerrainBoard = new int[boardSize, boardSize];
         ControlablesBoard = new char[boardSize, boardSize];
 
@@ -20,6 +22,16 @@ public class RoM
                 TerrainBoard[i, j] = 0;
                 ControlablesBoard[i, j] = 'a';
             }
+        }
+    }
+
+    public void Start()
+    {
+        bool play = true;
+
+        while (play)
+        {
+            
         }
     }
 
@@ -71,5 +83,46 @@ public class RoM
     public void PrintBoth()
     {
         PrintSideBySide<int, char>(TerrainBoard, ControlablesBoard);
+    }
+
+    public void SetTerrainBoard(int[,] terrain)
+    {
+        bool validTerrain = true;
+        if (validTerrain)
+        {
+            for (int i = 0; i < boardSize; i++)
+            {
+                for (int j = 0; j < boardSize; j++)
+                {
+                    TerrainBoard[i, j] = terrain[i, j];
+                }
+            }
+        }
+    }
+
+    public void SetControlablesboard(int[,] terrain)
+    {
+        bool validControlables = true;
+
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSize; j++)
+            {
+                if (GameConsts.validDalrionsUnits) validControlables = false;
+            }
+        }
+
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSize; j++)
+            {
+                ControlablesBoard[i, j] = terrain[i, j];
+            }
+        }
+    }
+
+    public void SetNextPlayer()
+    {
+        nextPlayer = ++nextPlayer % 2;
     }
 }
