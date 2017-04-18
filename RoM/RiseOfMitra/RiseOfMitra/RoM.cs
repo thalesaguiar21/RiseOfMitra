@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RiseOfMitra;
 using RoMUtils;
-using RiseOfMitra;
+using System;
+using System.Collections.Generic;
 
 public class RoM
 {
-    private int[,] TerrainBoard;
     private char[,] MainBoard;
     private Dictionary<Pair, AUnit> AvaiableUnits;
     private int boardSize;
@@ -16,7 +15,6 @@ public class RoM
     {
         boardSize = GameConsts.BOARD_SIZE;
         nextPlayer = 0;
-        TerrainBoard = new int[boardSize, boardSize];
         MainBoard = new char[boardSize, boardSize];
         Play = true;
 
@@ -24,7 +22,6 @@ public class RoM
         {
             for (int j = 0; j < boardSize; j++)
             {
-                TerrainBoard[i, j] = 0;
                 MainBoard[i, j] = 'a';
             }
         }
@@ -36,7 +33,7 @@ public class RoM
         do
         {
             Console.WriteLine("Player " + (nextPlayer + 1) + " turn..\n");
-            PrintBoth();
+            PrintMainBoard();
             OptionsMenu();
             Console.Write("Press enter to finish...");
             SetNextPlayer();
@@ -74,27 +71,6 @@ public class RoM
         }
     }
 
-    private void PrintSideBySide<T, U>(T[,] table1, U[,] table2)
-    {
-        for (int i = 0; i < boardSize; i++)
-        {
-            for (int j = 0; j < boardSize; j++)
-            {
-                Console.Write(table1[i, j] + " ");
-            }
-
-            Console.Write("\t");
-
-            for (int j = 0; j < boardSize; j++)
-            {
-                Console.Write(table2[i, j] + " ");
-            }
-
-            Console.Write("\n");
-        }
-        Console.Write("\n\n");
-    }
-
     private void PrintTerrain<T>(T[,] terrain)
     {
         for (int i = 0; i < boardSize; i++)
@@ -108,35 +84,9 @@ public class RoM
         Console.Write("\n\n");
     }
 
-
-    public void PrintTerrainBoard()
-    {
-        PrintTerrain<int>(TerrainBoard);
-    }
-
-    public void PrintControlablesBoard()
+    public void PrintMainBoard()
     {
         PrintTerrain<char>(MainBoard);
-    }
-
-    public void PrintBoth()
-    {
-        PrintSideBySide<int, char>(TerrainBoard, MainBoard);
-    }
-
-    public void SetTerrainBoard(int[,] terrain)
-    {
-        bool validTerrain = true;
-        if (validTerrain)
-        {
-            for (int i = 0; i < boardSize; i++)
-            {
-                for (int j = 0; j < boardSize; j++)
-                {
-                    TerrainBoard[i, j] = terrain[i, j];
-                }
-            }
-        }
     }
 
     public void SetControlablesboard(int[,] terrain)

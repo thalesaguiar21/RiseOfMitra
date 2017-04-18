@@ -11,17 +11,6 @@ namespace RoMUtils
         public const int BOARD_SIZE = 35;
         public const int MAX_LIFE = 3000;
         public static int[] validDalrionsUnits = new int[3] { 1, 3, 5 };
-        public static int[] validRahkarsUnits = new int[3] { 1, 3, 5 };
-    }
-
-    struct Pair
-    {
-        public int x;
-        public int y;
-
-        public static int Distance(Pair a, Pair b)
-        {
-            return (int) Math.Floor(Math.Sqrt(Math.Pow(a.x - b.x, 2) + Math.Pow(a.y - b.y, 2)));
-        }
+        public static int[] validRahkarsUnits = new int[3] { 2, 4, 6 };
     }
 }

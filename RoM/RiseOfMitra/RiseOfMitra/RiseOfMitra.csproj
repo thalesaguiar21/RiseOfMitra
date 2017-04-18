@@ -47,11 +47,13 @@
   <ItemGroup>
     <Compile Include="AUnit.cs" />
     <Compile Include="APawn.cs" />
+    <Compile Include="BoardChars.cs" />
+    <Compile Include="Pair.cs" />
     <Compile Include="DalrionPawn.cs" />
     <Compile Include="ECultures.cs" />
     <Compile Include="Gaia.cs" />
     <Compile Include="RahkarsPawn.cs" />
-    <Compile Include="RoMUtils.cs" />
+    <Compile Include="GameConsts.cs" />
     <Compile Include="ETerrainType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
