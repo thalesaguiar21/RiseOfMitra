@@ -13,6 +13,7 @@ namespace RiseOfMitra
         {
             SetAtk(3);
             SetDef(2);
+            SetMaxLifePoints(5);
             SetLifePoints(5);
             SetMovePoints(3);
             SetPosition(position);

@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>RiseOfMitra.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,6 +49,8 @@
     <Compile Include="APawn.cs" />
     <Compile Include="DalrionPawn.cs" />
     <Compile Include="ECultures.cs" />
+    <Compile Include="Gaia.cs" />
+    <Compile Include="RahkarsPawn.cs" />
     <Compile Include="RoMUtils.cs" />
     <Compile Include="ETerrainType.cs" />
     <Compile Include="Program.cs" />

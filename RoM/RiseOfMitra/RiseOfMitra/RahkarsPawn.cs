@@ -9,6 +9,18 @@ namespace RiseOfMitra
 {
     class RahkarsPawn : APawn
     {
+        public RahkarsPawn(Pair position)
+        {
+            SetAtk(2);
+            SetDef(2);
+            SetMaxLifePoints(6);
+            SetLifePoints(6);
+            SetMovePoints(3);
+            SetPosition(position);
+            SetRange(1);
+            SetSize(1);
+        }
+
         public override void AdaptForTerrain(ETerrainType currTerrain)
         {
             switch (currTerrain)

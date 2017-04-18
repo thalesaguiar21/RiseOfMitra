@@ -1,42 +1,77 @@
 ﻿using System;
+using System.Collections.Generic;
 using RoMUtils;
+using RiseOfMitra;
 
 public class RoM
 {
     private int[,] TerrainBoard;
-    private char[,] ControlablesBoard;
+    private char[,] MainBoard;
+    private Dictionary<Pair, AUnit> AvaiableUnits;
     private int boardSize;
     private int nextPlayer;
+    private bool Play;
 
     public RoM()
     {
         boardSize = GameConsts.BOARD_SIZE;
         nextPlayer = 0;
         TerrainBoard = new int[boardSize, boardSize];
-        ControlablesBoard = new char[boardSize, boardSize];
+        MainBoard = new char[boardSize, boardSize];
+        Play = true;
 
         for (int i = 0; i < boardSize; i++)
         {
             for (int j = 0; j < boardSize; j++)
             {
                 TerrainBoard[i, j] = 0;
-                ControlablesBoard[i, j] = 'a';
+                MainBoard[i, j] = 'a';
             }
         }
     }
 
     public void Start()
     {
-        bool play = true;
-
+        Console.WriteLine("Starting Rise of Mitra...");
         do
         {
-            Console.WriteLine("Starting Rise of Mitra...");
+            Console.WriteLine("Player " + (nextPlayer + 1) + " turn..\n");
             PrintBoth();
-            string leaveGame = Console.ReadLine();
-            if (leaveGame.ToLower().Equals("yes")) play = false;
+            OptionsMenu();
+            Console.Write("Press enter to finish...");
+            SetNextPlayer();
+            Console.ReadLine();
             Console.Clear();
-        } while (play);
+        } while (Play);
+    }
+
+    private void OptionsMenu()
+    {
+        Console.WriteLine("Avaiable options: ");
+        Console.Write("1) Move pawn\t2) Attack enemy pawn\t3) Exit game\n");
+        int userOp = 0;
+        try
+        {
+            userOp = int.Parse(Console.ReadLine());
+            switch (userOp)
+            {
+                case 1:
+                    Console.WriteLine("Moving pawn at () to ()");
+                    break;
+                case 2:
+                    Console.WriteLine("Attacking enemy pawn at ()");
+                    break;
+                case 3:
+                    Play = false;
+                    break;
+                default:
+                    throw new FormatException();
+            }
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine(userOp + " isn't a valid option!");
+        }
     }
 
     private void PrintSideBySide<T, U>(T[,] table1, U[,] table2)
@@ -81,12 +116,12 @@ public class RoM
 
     public void PrintControlablesBoard()
     {
-        PrintTerrain<char>(ControlablesBoard);
+        PrintTerrain<char>(MainBoard);
     }
 
     public void PrintBoth()
     {
-        PrintSideBySide<int, char>(TerrainBoard, ControlablesBoard);
+        PrintSideBySide<int, char>(TerrainBoard, MainBoard);
     }
 
     public void SetTerrainBoard(int[,] terrain)
@@ -106,23 +141,7 @@ public class RoM
 
     public void SetControlablesboard(int[,] terrain)
     {
-        bool validControlables = true;
-
-        for (int i = 0; i < boardSize; i++)
-        {
-            for (int j = 0; j < boardSize; j++)
-            {
-                //if (terrain[i,j] in GameConsts.validDalrionsUnits) validControlables = false;
-            }
-        }
-
-        for (int i = 0; i < boardSize; i++)
-        {
-            for (int j = 0; j < boardSize; j++)
-            {
-                //ControlablesBoard[i, j] = terrain[i, j];
-            }
-        }
+        throw new NotImplementedException();
     }
 
     public void SetNextPlayer()
