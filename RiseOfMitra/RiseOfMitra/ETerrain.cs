@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace RoMUtils
 {
-    enum ETerrainType
+    enum ETerrain
     {
-        Mountain,
-        Plain,
-        River,
-        Field,
-        Marsh,
-        Forest,
-        Desert
+        MOUNTAIN,
+        PLAIN,
+        RIVER,
+        FIELD,
+        MARSH,
+        FOREST,
+        DESERT
     }
 }

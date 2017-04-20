@@ -10,10 +10,6 @@ namespace RiseOfMitra
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to the world of Mitra!");
-            RoM rom = new RoM();
-            Console.Write("\n");
-            rom.Start();
         }
     }
 }

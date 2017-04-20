@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace RoMUtils
 {
-    enum ECultures
+    class GameConsts
     {
-        Dalrions,
-        Rahkars
+        public const int BOARD_COL = 45;
+        public const int BOARD_LIN = 35;
     }
 }

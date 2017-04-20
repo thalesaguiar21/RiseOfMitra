@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace RoMTerrains
+namespace RiseOfMitra
 {
-    class Gaia
+    enum ECultures
     {
+        DEFAULT,
+        DALRIONS,
+        RAHKARS
     }
 }
