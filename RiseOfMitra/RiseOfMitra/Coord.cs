@@ -51,9 +51,27 @@ namespace RoMUtils
             return null;
         }
 
+        public bool IsSame(Coord b)
+        {
+            if (X == b.X && Y == b.Y)
+                return true;
+            return false;
+        }
+
+        public static bool IsValid(Coord pos)
+        {
+            if (pos == null)
+                return false;
+            else if (pos.X < 0 || pos.Y < 0)
+                return false;
+            else if (pos.X > GameConsts.BOARD_LIN || pos.Y > GameConsts.BOARD_COL)
+                return false;
+            return true;
+        }
+
         public override string ToString()
         {
-            return "(" + X + ", " + Y + ")";
+            return "(" + (X + 1) + ", " + (Y + 1) + ")";
         }
     }
 }

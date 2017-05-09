@@ -32,25 +32,32 @@ namespace RiseOfMitra
             return null;
         }
 
-        public ECultures GetCulture() { return this.Culture; }
-        public List<ABasicPawn> GetPawns() { return this.Pawns; }
-        public CulturalCenter GetCenter() { return this.Center; }
+        public ECultures GetCulture() { return Culture; }
+        public List<ABasicPawn> GetPawns() { return Pawns; }
+        public CulturalCenter GetCenter() { return Center; }
+        public Coord GetCursor() { return Cursor; }
 
         public void SetCulture(ECultures cult)
         {
-            this.Culture = cult;
+            Culture = cult;
         }
 
         public void SetPawns(List<ABasicPawn> pawns)
         {
             if(pawns != null)
-                this.Pawns = pawns;
+                Pawns = pawns;
         }
 
         public void SetCulturalCenter(CulturalCenter center)
         {
             if (center != null)
-                this.Center = center;
+                Center = center;
+        }
+
+        public void SetCursor(Coord nCursor)
+        {
+            if (Coord.IsValid(nCursor))
+                Cursor = nCursor;
         }
     }
 }

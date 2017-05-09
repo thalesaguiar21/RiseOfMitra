@@ -24,7 +24,7 @@ namespace RiseOfMitra
 
         public Game()
         {
-            players = new Player[2];
+            InitPlayers();
             nextPlayer = 0;
             play = true;
             validCmd = false;
@@ -51,6 +51,15 @@ namespace RiseOfMitra
             Units.Add(dCenter);
             Units.Add(rCenter);
             PlaceUnits();
+        }
+
+        private void InitPlayers()
+        {
+            players = new Player[2];
+            players[0] = new Player();
+            players[1] = new Player();
+            players[0].SetCulture(ECultures.DALRIONS);
+            players[1].SetCulture(ECultures.RAHKARS);
         }
 
         private void InitCommands()
@@ -112,43 +121,50 @@ namespace RiseOfMitra
             do
             {
                 PrintBoard(null);
-                UserSelection(new Coord(0, 0));
+                GetUserCmd();
                 Console.Write("Press enter to finish...");
                 Console.ReadLine();
-                if(validCmd) SetNextPlayer();
+                if(validCmd)
+                    SetNextPlayer();
                 Console.Clear();
             } while (play);
 
         }
 
-        private void UserSelection(Coord pos)
+        private Coord SelectedPosition(Coord pos)
         {
             bool selected = true;
             do
             {
+                Console.Clear();
+                PrintBoard(pos);
                 var move = Console.ReadKey(false).Key;
                 switch (move)
                 {
                     case ConsoleKey.Enter:
-                        Console.WriteLine("You have selected the position " + pos);
+                        if (BoardStrings.IsValid(Board[pos.X, pos.Y]))
+                        {
+                            Console.WriteLine("You have selected the unit at " + pos);
+                            players[nextPlayer].SetCursor(pos);
+                            return new Coord(pos.X, pos.Y);
+                        }
+                        else
+                            Console.WriteLine("That's not a valid unit!");
+                        Console.ReadLine();
                         break;
                     case ConsoleKey.LeftArrow:
-                        Console.WriteLine("Left pressed");
                         if (pos.Y > 0)
                             pos.Y--;
                         break;
                     case ConsoleKey.UpArrow:
-                        Console.WriteLine("Up pressed");
                         if (pos.X > 0)
                             pos.X--;
                         break;
                     case ConsoleKey.RightArrow:
-                        Console.WriteLine("Right pressed");
                         if (pos.Y < GameConsts.BOARD_COL - 1)
                             pos.Y++;
                         break;
                     case ConsoleKey.DownArrow:
-                        Console.WriteLine("Down pressed");
                         if (pos.X < GameConsts.BOARD_LIN - 1)
                             pos.X++;
                         break;
@@ -156,12 +172,11 @@ namespace RiseOfMitra
                         selected = false;
                         break;
                     default:
-                        Console.WriteLine("Weird key pressed");
                         break;
                 }
-                Console.Clear();
-                PrintBoard(pos);
             } while (selected);
+
+            return null;
         }
 
         private void PrintBoard(Coord cursorPos)
@@ -173,7 +188,7 @@ namespace RiseOfMitra
                 {
                     ECultures cult = BoardStrings.ToCulture(Board[i, j]);
                     if (cursorPos != null 
-                        && (cursorPos.X == i && cursorPos.Y == j)) {
+                        && cursorPos.IsSame(new Coord(i, j)) ) {
                         Console.BackgroundColor = ConsoleColor.Cyan;
                         Console.Write(Board[i, j] + " ");
                         Console.ResetColor();
@@ -196,7 +211,7 @@ namespace RiseOfMitra
             }
         }
 
-        private void UserSelection()
+        private void GetUserCmd()
         {
             string msg = String.Format("Player {0} turn. Type in a command: ", nextPlayer + 1);
             Console.Write(msg);
@@ -227,9 +242,10 @@ namespace RiseOfMitra
         private void Attack()
         {
             Console.Write("Select an ally pawn: ");
-            string allyPos = Console.ReadLine();
+            Coord allyPos = SelectedPosition(players[nextPlayer].GetCursor());
+            Console.WriteLine("You have selected the ally pawn at " + allyPos);
             Console.Write("Select an enemy pawn: ");
-            string enemyPos = Console.ReadLine();
+            Coord enemyPos = SelectedPosition(players[nextPlayer].GetCursor());
             Console.WriteLine("Attacking enemy at " + enemyPos + " with ally at " + allyPos);
         }
 
