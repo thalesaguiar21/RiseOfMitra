@@ -11,7 +11,7 @@ namespace RiseOfMitra
     {
         public DalrionPawn()
         {
-            BOARD_CHAR = "$";
+            BOARD_CHAR = BoardStrings.CHAR_DALRION_PAWN;
             SetCurrLife(10);
             SetAtk(3);
             SetCulture(ECultures.DALRIONS);

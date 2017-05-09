@@ -11,10 +11,10 @@ namespace RiseOfMitra
     {
         public RahkarPawn()
         {
-            BOARD_CHAR = "%";
-            SetCurrLife(10);
+            BOARD_CHAR = BoardStrings.CHAR_RAHKAR_PAWN;
+            SetCurrLife(12);
             SetAtk(4);
-            SetCulture(ECultures.DALRIONS);
+            SetCulture(ECultures.RAHKARS);
             SetDef(2);
             SetMovePoints(3);
             SetPos(new Coord(0, 0));
