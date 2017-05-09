@@ -13,6 +13,7 @@ namespace RiseOfMitra
         private const string FOG = "@";
         private const string BLOCK = "X";
 
+        private Player[] players;
         private int nextPlayer;
         private bool play;
         private bool validCmd;
@@ -23,6 +24,7 @@ namespace RiseOfMitra
 
         public Game()
         {
+            players = new Player[2];
             nextPlayer = 0;
             play = true;
             validCmd = false;
@@ -31,17 +33,36 @@ namespace RiseOfMitra
             MyCommands = new Dictionary<string, bool>();
             BoardColors = new Dictionary<ECultures, ConsoleColor>();
 
-            // Adding commands
+            // Adding units
+            InitCommands();
+            ClearBoard();
+            CreatePawns();
+            ABuilding dCenter = CulturalCenterFactory.GetCulturalCenter(ECultures.DALRIONS);
+            ABuilding rCenter = CulturalCenterFactory.GetCulturalCenter(ECultures.RAHKARS);
+            dCenter.SetPos(new Coord(1, 1));
+            int buildSize = rCenter.GetSize() + 1;
+            rCenter.SetPos(new Coord(GameConsts.BOARD_LIN - buildSize, GameConsts.BOARD_COL - buildSize));
+
+            // Defining colors
+            BoardColors.Add(ECultures.DALRIONS, ConsoleColor.Blue);
+            BoardColors.Add(ECultures.RAHKARS, ConsoleColor.Yellow);
+
+            // Creating Cultural centers
+            Units.Add(dCenter);
+            Units.Add(rCenter);
+            PlaceUnits();
+        }
+
+        private void InitCommands()
+        {
             MyCommands.Add(Commands.ATTACK, true);
             MyCommands.Add(Commands.MOVE, true);
             MyCommands.Add(Commands.CONQUER, false);
             MyCommands.Add(Commands.EXIT, true);
+        }
 
-            // Adding colors
-            BoardColors.Add(ECultures.DALRIONS, ConsoleColor.Blue);
-            BoardColors.Add(ECultures.RAHKARS, ConsoleColor.Yellow);
-
-            // Filling the Board
+        private void ClearBoard()
+        {
             for (int i = 0; i < GameConsts.BOARD_LIN; i++)
             {
                 for (int j = 0; j < GameConsts.BOARD_COL; j++)
@@ -49,34 +70,20 @@ namespace RiseOfMitra
                     Board[i, j] = ".";
                 }
             }
+        }
 
-            // Creating Pawns
+        private void CreatePawns()
+        {
             for (int i = 0; i < GameConsts.INITIAL_PAWNS; i++)
             {
                 ABasicPawn dPawn = PawnFactory.GetPawn(ECultures.DALRIONS);
-                dPawn.SetPos(new Coord(1+i, 7));
+                dPawn.SetPos(new Coord(1 + i, 7));
                 Units.Add(dPawn);
 
                 ABasicPawn rPawn = PawnFactory.GetPawn(ECultures.RAHKARS);
                 rPawn.SetPos(new Coord(GameConsts.BOARD_LIN - 2 - i, GameConsts.BOARD_COL - 8));
                 Units.Add(rPawn);
             }
-
-            // Creating Cultural centers
-            ABuilding dCenter = CulturalCenterFactory.GetCulturalCenter(ECultures.DALRIONS);
-            ABuilding rCenter = CulturalCenterFactory.GetCulturalCenter(ECultures.RAHKARS);
-
-            
-            dCenter.SetPos(new Coord(1, 1));
-            int buildSize = rCenter.GetSize() + 1;
-            rCenter.SetPos(new Coord(GameConsts.BOARD_LIN - buildSize, GameConsts.BOARD_COL - buildSize));
-
-            Units.Add(dCenter);
-            Units.Add(rCenter);
-
-            // Placing Temples
-
-            PlaceUnits();            
         }
 
         private void PlaceUnits()
