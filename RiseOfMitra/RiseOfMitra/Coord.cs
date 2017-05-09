@@ -51,24 +51,6 @@ namespace RoMUtils
             return null;
         }
 
-        public static bool operator ==(Coord a, Coord b)
-        {
-            if(a.X == b.X && a.Y == b.Y)
-            {
-                return true;
-            }
-            else return false;
-        }
-
-        public static bool operator !=(Coord a, Coord b)
-        {
-            if (a.X != b.X || a.Y != b.Y)
-            {
-                return true;
-            }
-            return false;
-        }
-
         public override string ToString()
         {
             return "(" + X + ", " + Y + ")";

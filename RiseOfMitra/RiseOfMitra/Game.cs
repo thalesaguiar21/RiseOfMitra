@@ -111,8 +111,8 @@ namespace RiseOfMitra
         {
             do
             {
-                PrintBoard();
-                UserSelection();
+                PrintBoard(null);
+                UserSelection(new Coord(0, 0));
                 Console.Write("Press enter to finish...");
                 Console.ReadLine();
                 if(validCmd) SetNextPlayer();
@@ -121,7 +121,50 @@ namespace RiseOfMitra
 
         }
 
-        private void PrintBoard()
+        private void UserSelection(Coord pos)
+        {
+            bool selected = true;
+            do
+            {
+                var move = Console.ReadKey(false).Key;
+                switch (move)
+                {
+                    case ConsoleKey.Enter:
+                        Console.WriteLine("You have selected the position " + pos);
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        Console.WriteLine("Left pressed");
+                        if (pos.Y > 0)
+                            pos.Y--;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        Console.WriteLine("Up pressed");
+                        if (pos.X > 0)
+                            pos.X--;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        Console.WriteLine("Right pressed");
+                        if (pos.Y < GameConsts.BOARD_COL - 1)
+                            pos.Y++;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        Console.WriteLine("Down pressed");
+                        if (pos.X < GameConsts.BOARD_LIN - 1)
+                            pos.X++;
+                        break;
+                    case ConsoleKey.Escape:
+                        selected = false;
+                        break;
+                    default:
+                        Console.WriteLine("Weird key pressed");
+                        break;
+                }
+                Console.Clear();
+                PrintBoard(pos);
+            } while (selected);
+        }
+
+        private void PrintBoard(Coord cursorPos)
         {
             Console.WriteLine();
             for (int i = 0; i < GameConsts.BOARD_LIN; i++)
@@ -129,7 +172,13 @@ namespace RiseOfMitra
                 for (int j = 0; j < GameConsts.BOARD_COL; j++)
                 {
                     ECultures cult = BoardStrings.ToCulture(Board[i, j]);
-                    if (cult == ECultures.DALRIONS)
+                    if (cursorPos != null 
+                        && (cursorPos.X == i && cursorPos.Y == j)) {
+                        Console.BackgroundColor = ConsoleColor.Cyan;
+                        Console.Write(Board[i, j] + " ");
+                        Console.ResetColor();
+                    }
+                    else if (cult == ECultures.DALRIONS)
                         ColoredPrint(Board[i, j] + " ", BoardColors[ECultures.DALRIONS]);
                     else if(cult == ECultures.RAHKARS)
                         ColoredPrint(Board[i, j] + " ", BoardColors[ECultures.RAHKARS]);
