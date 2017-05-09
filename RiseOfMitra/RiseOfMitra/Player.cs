@@ -12,9 +12,16 @@ namespace RiseOfMitra
         private ECultures Culture;
         private List<ABasicPawn> Pawns;
         private CulturalCenter Center;
+        private Coord Cursor;
         // Lista de templos
 
-
+        public Player()
+        {
+            Culture = ECultures.DEFAULT;
+            Pawns = null;
+            Center = null;
+            Cursor = new Coord(0, 0);
+        }
 
         public ABasicPawn PawnAt(Coord pos)
         {
