@@ -19,36 +19,9 @@ namespace RoMUtils
 
         public static int Distance(Coord a, Coord b)
         {
-            int squareTerm1 = (a.X - b.X) * (a.X - b.X);
-            int squareTerm2 = (a.Y - b.Y) * (a.Y - b.Y);
-            return (int) Math.Floor(Math.Sqrt(squareTerm1 + squareTerm2));
-        }
-
-        public static Coord ToCoord(string str)
-        {
-            str = str.Trim();
-            int maxLength = ("" + GameConsts.BOARD_COL + "," + GameConsts.BOARD_LIN).Length;
-            int minLenght = 3;
-            if (str.Length <= maxLength || str.Length >= minLenght)
-            {
-                string[] comps = str.Split(',');
-                if (comps.Length != 2)
-                {
-                    return null;
-                }
-                else
-                {
-                    try
-                    {
-                        return new Coord(int.Parse(comps[0]), int.Parse(comps[1]));
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("Can't parse " + str + " into Coord!");
-                    }
-                }
-            }
-            return null;
+            int xs = Math.Abs(a.X - b.X);
+            int ys = Math.Abs(a.Y - b.Y);
+            return xs + ys;
         }
 
         public bool IsSame(Coord b)

@@ -15,8 +15,8 @@ namespace RiseOfMitra
         private const int MAX_ATK = 10;
 
 
-        public int GetMovePoints() { return this.MovePoints; }
-        public int GetAtk() { return this.Atk; }
+        public int GetMovePoints() { return MovePoints; }
+        public int GetAtk() { return Atk; }
 
         public void SetMovePoints(int movePoints)
         {
@@ -24,7 +24,7 @@ namespace RiseOfMitra
                 Console.WriteLine(movePoints + " isn't a valid movement point!");
             else
             {
-                this.MovePoints = movePoints;
+                MovePoints = movePoints;
             }
         }
 
@@ -34,9 +34,11 @@ namespace RiseOfMitra
                 Console.WriteLine(atk + " isn't a valid atack point!");
             else
             {
-                this.Atk = atk;
+                Atk = atk;
             }
         }
+
+        //public 
 
         public abstract void adapt(ETerrain terrain);
     }

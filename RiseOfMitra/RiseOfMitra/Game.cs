@@ -120,7 +120,7 @@ namespace RiseOfMitra
         {
             do
             {
-                PrintBoard(null);
+                PrintBoard(null, null);
                 GetUserCmd();
                 Console.Write("Press enter to finish...");
                 Console.ReadLine();
@@ -131,20 +131,24 @@ namespace RiseOfMitra
 
         }
 
-        private Coord SelectedPosition(Coord pos)
+        private Coord SelectedPosition(Coord pos, string cmd)
         {
             bool selected = true;
             do
             {
                 Console.Clear();
-                PrintBoard(pos);
+                PrintBoard(pos, null);
                 var move = Console.ReadKey(false).Key;
                 switch (move)
                 {
                     case ConsoleKey.Enter:
                         if (BoardStrings.IsValid(Board[pos.X, pos.Y]))
                         {
-                            Console.WriteLine("You have selected the unit at " + pos);
+                            if(cmd == Commands.MOVE)
+                            {
+                                Console.Clear();
+                                PrintBoard(pos, Commands.MOVE);
+                            }
                             players[nextPlayer].SetCursor(pos);
                             return new Coord(pos.X, pos.Y);
                         }
@@ -153,19 +157,19 @@ namespace RiseOfMitra
                         Console.ReadLine();
                         break;
                     case ConsoleKey.LeftArrow:
-                        if (pos.Y > 0)
+                        if (pos.Y > 1)
                             pos.Y--;
                         break;
                     case ConsoleKey.UpArrow:
-                        if (pos.X > 0)
+                        if (pos.X > 1)
                             pos.X--;
                         break;
                     case ConsoleKey.RightArrow:
-                        if (pos.Y < GameConsts.BOARD_COL - 1)
+                        if (pos.Y < GameConsts.BOARD_COL - 2)
                             pos.Y++;
                         break;
                     case ConsoleKey.DownArrow:
-                        if (pos.X < GameConsts.BOARD_LIN - 1)
+                        if (pos.X < GameConsts.BOARD_LIN - 2)
                             pos.X++;
                         break;
                     case ConsoleKey.Escape:
@@ -179,7 +183,7 @@ namespace RiseOfMitra
             return null;
         }
 
-        private void PrintBoard(Coord cursorPos)
+        private void PrintBoard(Coord cursorPos, string userCmd)
         {
             Console.WriteLine();
             for (int i = 0; i < GameConsts.BOARD_LIN; i++)
@@ -187,8 +191,9 @@ namespace RiseOfMitra
                 for (int j = 0; j < GameConsts.BOARD_COL; j++)
                 {
                     ECultures cult = BoardStrings.ToCulture(Board[i, j]);
-                    if (cursorPos != null 
-                        && cursorPos.IsSame(new Coord(i, j)) ) {
+                    if (cursorPos != null
+                        && cursorPos.IsSame(new Coord(i, j)))
+                    {
                         Console.BackgroundColor = ConsoleColor.Cyan;
                         Console.Write(Board[i, j] + " ");
                         Console.ResetColor();
@@ -197,6 +202,13 @@ namespace RiseOfMitra
                         ColoredPrint(Board[i, j] + " ", BoardColors[ECultures.DALRIONS]);
                     else if(cult == ECultures.RAHKARS)
                         ColoredPrint(Board[i, j] + " ", BoardColors[ECultures.RAHKARS]);
+                    else if (cursorPos != null &&
+                            Coord.Distance(cursorPos, new Coord(i, j)) < 5 && userCmd == Commands.MOVE)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.Write(Board[i, j] + " ");
+                        Console.ResetColor();
+                    }
                     else Console.Write(Board[i, j] + " ");
                 }
                 Console.Write("\t");
@@ -242,44 +254,19 @@ namespace RiseOfMitra
         private void Attack()
         {
             Console.Write("Select an ally pawn: ");
-            Coord allyPos = SelectedPosition(players[nextPlayer].GetCursor());
-            Console.WriteLine("You have selected the ally pawn at " + allyPos);
+            Coord allyPos = SelectedPosition(players[nextPlayer].GetCursor(), Commands.ATTACK);
+            Console.ReadLine();
             Console.Write("Select an enemy pawn: ");
-            Coord enemyPos = SelectedPosition(players[nextPlayer].GetCursor());
+            Coord enemyPos = SelectedPosition(players[nextPlayer].GetCursor(), Commands.ATTACK);
             Console.WriteLine("Attacking enemy at " + enemyPos + " with ally at " + allyPos);
         }
 
         private void Move()
         {
             validCmd = false;
-            Console.Write("Select an ally pawn: ");
-            Coord allyPos = Coord.ToCoord(Console.ReadLine());
-            Console.Write("Select a target position: ");
-            Coord target = Coord.ToCoord(Console.ReadLine());
-            if (target != null && allyPos != null)
-            {
-                if (Board[target.X, target.Y] != ".")
-                    Console.WriteLine("The target position is already occupied!");
-                else
-                {
-                    ABasicPawn allyPawn = PawnAt(allyPos);
-                    if (allyPawn == null)
-                        Console.WriteLine("There is no pawn at the ally position!");
-                    else if (allyPawn.ToString() != BoardStrings.CHAR_DALRION_PAWN
-                            && allyPawn.ToString() != BoardStrings.CHAR_RAHKAR_PAWN)
-                        Console.WriteLine("The ally position is not a pawn!");
-                    else
-                    {
-                        allyPawn.SetPos(target);
-                        Board[allyPos.X, allyPos.Y] = EMPTY;
-                        Board[target.X, target.Y] = allyPawn.ToString();
-                        Console.WriteLine("Moving ally at " + allyPos + " to " + target);
-                        validCmd = true;
-                    }
-                        
-                }
-            }
-            else Console.WriteLine("Invalid positions!");
+            Coord allyPos = SelectedPosition(players[nextPlayer].GetCursor(), Commands.MOVE);
+            Console.ReadLine();
+            Coord target = SelectedPosition(players[nextPlayer].GetCursor(), Commands.MOVE);
         }
 
         private ABasicPawn PawnAt(Coord pos)
