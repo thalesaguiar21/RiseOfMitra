@@ -9,24 +9,28 @@ namespace RiseOfMitra
 {
     class PawnFactory
     {
-        public static ABasicPawn GetPawn(ECultures nature)
+        public static ABasicPawn CreatePawn(ECultures nature, string[,] board)
         {
-            ABasicPawn pawn;
+            ABasicPawn pawn = null;
             switch (nature)
             {
                 case ECultures.DALRIONS:
                     pawn = new DalrionPawn();
-                    if (!validatePawn(pawn)) break;
-                    return pawn;
+                    pawn.SetBoard(board);
+                    if (!validatePawn(pawn))
+                        pawn = null;
+                    break;
                 case ECultures.RAHKARS:
                     pawn = new RahkarPawn();
-                    if (!validatePawn(pawn)) break;
-                    return pawn;
+                    pawn.SetBoard(board);
+                    if (!validatePawn(pawn))
+                        pawn = null;
+                    break;
                 default:
-                    Console.WriteLine(nature + " isn't a valid pawn!");
+                    Console.WriteLine(nature + " isn't a valid culture!");
                     break;
             }
-            return null;
+            return pawn;
         }
 
 
@@ -41,6 +45,7 @@ namespace RiseOfMitra
                 isValid &= pawn.GetMovePoints() == 3;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
+                isValid &= (pawn.GetBoard() != null);
             }
             else if (pawn.NativeOf() == ECultures.RAHKARS)
             {
@@ -50,6 +55,7 @@ namespace RiseOfMitra
                 isValid &= pawn.GetMovePoints() == 3;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
+                isValid &= (pawn.GetBoard() != null);
             }
             return isValid;
         }

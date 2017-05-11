@@ -12,5 +12,8 @@ namespace RoMUtils
         public const string MOVE = "MOVE";
         public const string CONQUER = "CONQUER";
         public const string EXIT = "EXIT";
+
+        public const string GET_PAWN = "GET PAWN";
+        public const string GET_POS = "GET POS";
     }
 }

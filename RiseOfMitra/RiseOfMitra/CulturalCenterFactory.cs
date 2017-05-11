@@ -9,9 +9,9 @@ namespace RiseOfMitra
 {
     class CulturalCenterFactory
     {
-        public static ABuilding GetCulturalCenter(ECultures native)
+        public static ABuilding CreateCultCenter(ECultures native, string[,] board)
         {
-            CulturalCenter center;
+            CulturalCenter center = null;
             switch (native)
             {
                 case ECultures.DEFAULT:
@@ -19,27 +19,31 @@ namespace RiseOfMitra
                     break;
                 case ECultures.DALRIONS:
                     center = new CulturalCenter(ECultures.DALRIONS);
+                    center.SetBoard(board);
                     center.SetCulture(ECultures.DALRIONS);
                     center.SetCurrLife(100);
                     center.SetDef(3);
                     center.SetLifePerSec(2);
                     center.SetPos(new Coord(0, 0));
                     center.SetSize(5);
-                    return center;
+                    break;
                 case ECultures.RAHKARS:
                     center = new CulturalCenter(ECultures.RAHKARS);
+                    center.SetBoard(board);
                     center.SetCulture(ECultures.RAHKARS);
                     center.SetCurrLife(130);
                     center.SetDef(2);
                     center.SetLifePerSec(1);
                     center.SetPos(new Coord(0, 0));
                     center.SetSize(5);
-                    return center;
+                    break;
                 default:
                     Console.WriteLine("Invalid culture. Can't create cultural center!");
                     break;
             }
-            return null;
+            if (center.GetBoard() == null)
+                center = null;
+            return center;
         }
     }
 }

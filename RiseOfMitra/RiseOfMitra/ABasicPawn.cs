@@ -38,8 +38,27 @@ namespace RiseOfMitra
             }
         }
 
-        //public 
+        protected bool ExistPath(Coord init, Coord target)
+        {
+            if (init.IsSame(target))
+                return true;
+            else if (Board[target.X, target.Y] != BoardStrings.EMPTY)
+                return false;
+            else if (Coord.Distance(init, target) > MovePoints)
+                return false;
+            else if (init.X - 1 > 0 && Board[init.X - 1, init.Y] == BoardStrings.EMPTY)
+                ExistPath(new Coord(init.X - 1, init.Y), target);
+            else if (init.X + 1 < GameConsts.BOARD_LIN && Board[init.X + 1, init.Y] == BoardStrings.EMPTY)
+                ExistPath(new Coord(init.X + 1, init.Y), target);
+            else if (init.Y - 1 > 0 && Board[init.X, init.Y - 1] == BoardStrings.EMPTY)
+                ExistPath(new Coord(init.X, init.Y - 1), target);
+            else if (init.Y + 1 < GameConsts.BOARD_COL && Board[init.X, init.Y + 1] == BoardStrings.EMPTY)
+                ExistPath(new Coord(init.X, init.Y + 1), target);
+            return false;
+        }
 
-        public abstract void adapt(ETerrain terrain);
+        public abstract void Move(Coord target);
+
+        public abstract void Adapt(ETerrain terrain);
     }
 }

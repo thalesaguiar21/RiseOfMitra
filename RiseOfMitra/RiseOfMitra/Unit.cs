@@ -9,6 +9,7 @@ namespace RiseOfMitra
 {
     class Unit
     {
+        protected string[,] Board;
         protected string BOARD_CHAR;
         private int CurrLife;
         private int Def;
@@ -39,11 +40,12 @@ namespace RiseOfMitra
             return BOARD_CHAR;
         }
 
-        public int GetCurrLife() { return this.CurrLife; }
-        public int GetDef() { return this.Def; }
-        public Coord GetPos() { return this.Pos; }
-        public int GetSize() { return this.Size; }
-        public ECultures NativeOf() { return this.native; }
+        public int GetCurrLife() { return CurrLife; }
+        public int GetDef() { return Def; }
+        public Coord GetPos() { return Pos; }
+        public int GetSize() { return Size; }
+        public ECultures NativeOf() { return native; }
+        public string[,] GetBoard() { return Board; }
 
         public void SetCurrLife(int life)
         {
@@ -53,7 +55,7 @@ namespace RiseOfMitra
             }
             else
             {
-                this.CurrLife = life;
+                CurrLife = life;
             }
         }
 
@@ -63,7 +65,7 @@ namespace RiseOfMitra
                 Console.WriteLine("Unit's defense can't exceed " + MAX_DEF + " or be lower than 0!");
             else
             {
-                this.Def = def;
+                Def = def;
             }
         }
 
@@ -74,7 +76,7 @@ namespace RiseOfMitra
                 Console.WriteLine(pos + " isn't a valid position!");
             else
             {
-                this.Pos = pos;
+                Pos = pos;
             }
         }
 
@@ -84,13 +86,21 @@ namespace RiseOfMitra
                 Console.WriteLine(size + " isn't a valid size!");
             else
             {
-                this.Size = size;
+                Size = size;
             }
         }
 
         public void SetCulture(ECultures culture)
         {
-            this.native = culture;
+            native = culture;
+        }
+
+        public void SetBoard(string[,] board)
+        {
+            if(board != null 
+                && board.GetLength(0) == GameConsts.BOARD_LIN
+                && board.GetLength(1) == GameConsts.BOARD_COL)
+                Board = board;
         }
     }
 }

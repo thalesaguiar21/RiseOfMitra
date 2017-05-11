@@ -20,14 +20,15 @@ namespace RiseOfMitra
             Culture = ECultures.DEFAULT;
             Pawns = null;
             Center = null;
-            Cursor = new Coord(0, 0);
+            Cursor = new Coord(1, 1);
         }
 
         public ABasicPawn PawnAt(Coord pos)
         {
             for (int i = 0; i < Pawns.Capacity; i++)
             {
-                if (Pawns[i].GetPos() == pos) return Pawns[i];
+                if (Pawns[i].GetPos().IsSame(pos))
+                    return Pawns[i];
             }
             return null;
         }

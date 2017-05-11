@@ -1,9 +1,5 @@
 ﻿using RoMUtils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiseOfMitra
 {
@@ -11,6 +7,7 @@ namespace RiseOfMitra
     {
         public DalrionPawn()
         {
+            Board = null;
             BOARD_CHAR = BoardStrings.CHAR_DALRION_PAWN;
             SetCurrLife(10);
             SetAtk(3);
@@ -26,7 +23,7 @@ namespace RiseOfMitra
             return BOARD_CHAR;
         }
 
-        public override void adapt(ETerrain terrain)
+        public override void Adapt(ETerrain terrain)
         {
             switch (terrain)
             {
@@ -53,6 +50,20 @@ namespace RiseOfMitra
                     break;
                 default:
                     break;
+            }
+        }
+
+        public override void Move(Coord target)
+        {
+            if (target != null)
+            {
+                if (Coord.Distance(GetPos(), target) < GetMovePoints())
+                {
+                    if (ExistPath(GetPos(), target))
+                    {
+                        Console.WriteLine("There's an avaiable path, moving unit.");
+                    }
+                }
             }
         }
     }
