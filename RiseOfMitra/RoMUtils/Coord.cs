@@ -1,8 +1,9 @@
 ﻿using System;
+using Consts;
 
-namespace RoMUtils
+namespace Cells
 {
-    class Coord
+    public class Coord
     {
         public int X;
         public int Y;
@@ -33,7 +34,7 @@ namespace RoMUtils
                 return false;
             else if (pos.X < 0 || pos.Y < 0)
                 return false;
-            else if (pos.X > GameConsts.BOARD_LIN || pos.Y > GameConsts.BOARD_COL)
+            else if (pos.X > BoardConsts.BOARD_LIN || pos.Y > BoardConsts.BOARD_COL)
                 return false;
             return true;
         }

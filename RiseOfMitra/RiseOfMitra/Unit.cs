@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RoMUtils;
+using Cells;
+using Types;
+using Consts;
 
 namespace RiseOfMitra
 {
@@ -71,8 +69,8 @@ namespace RiseOfMitra
 
         public void SetPos(Coord pos)
         {
-            if (pos.X >= GameConsts.BOARD_LIN || pos.X < 0
-                || pos.Y >= GameConsts.BOARD_COL || pos.Y < 0)
+            if (pos.X >= BoardConsts.BOARD_LIN || pos.X < 0
+                || pos.Y >= BoardConsts.BOARD_COL || pos.Y < 0)
                 Console.WriteLine(pos + " isn't a valid position!");
             else
             {
@@ -98,8 +96,8 @@ namespace RiseOfMitra
         public void SetBoard(string[,] board)
         {
             if(board != null 
-                && board.GetLength(0) == GameConsts.BOARD_LIN
-                && board.GetLength(1) == GameConsts.BOARD_COL)
+                && board.GetLength(0) == BoardConsts.BOARD_LIN
+                && board.GetLength(1) == BoardConsts.BOARD_COL)
                 Board = board;
         }
     }

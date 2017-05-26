@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoMUtils
+namespace Consts
 {
-    class Commands
+    public class Commands
     {
         public const string ATTACK = "ATTACK";
         public const string MOVE = "MOVE";

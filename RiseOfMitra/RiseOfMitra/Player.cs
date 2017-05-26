@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RoMUtils;
+using Types;
+using Cells;
 
 namespace RiseOfMitra
 {
@@ -18,14 +16,14 @@ namespace RiseOfMitra
         public Player()
         {
             Culture = ECultures.DEFAULT;
-            Pawns = null;
+            Pawns = new List<ABasicPawn>();
             Center = null;
             Cursor = new Coord(1, 1);
         }
 
         public ABasicPawn PawnAt(Coord pos)
         {
-            for (int i = 0; i < Pawns.Capacity; i++)
+            for (int i = 0; i < Pawns.Count; i++)
             {
                 if (Pawns[i].GetPos().IsSame(pos))
                     return Pawns[i];
@@ -59,6 +57,14 @@ namespace RiseOfMitra
         {
             if (Coord.IsValid(nCursor))
                 Cursor = nCursor;
+        }
+
+        public void AddPawn(ABasicPawn pawn)
+        {
+            if(pawn != null && pawn.NativeOf() == Culture)
+            {
+                Pawns.Add(pawn);
+            }
         }
     }
 }

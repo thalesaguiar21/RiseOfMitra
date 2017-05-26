@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using RoMUtils;
+using Types;
+using Cells;
+using Consts;
 
 namespace RiseOfMitra
 {
@@ -20,7 +21,7 @@ namespace RiseOfMitra
             nextPlayer = 0;
             play = true;
             validCmd = false;
-            Board = new string[GameConsts.BOARD_LIN, GameConsts.BOARD_COL];
+            Board = new string[BoardConsts.BOARD_LIN, BoardConsts.BOARD_COL];
             Units = new List<Unit>();
 
             // Adding units
@@ -30,7 +31,7 @@ namespace RiseOfMitra
             ABuilding rCenter = CulturalCenterFactory.CreateCultCenter(ECultures.RAHKARS, Board);
             dCenter.SetPos(new Coord(1, 1));
             int buildSize = rCenter.GetSize() + 1;
-            rCenter.SetPos(new Coord(GameConsts.BOARD_LIN - buildSize, GameConsts.BOARD_COL - buildSize));
+            rCenter.SetPos(new Coord(BoardConsts.BOARD_LIN - buildSize, BoardConsts.BOARD_COL - buildSize));
 
             // Creating Cultural centers
             Units.Add(dCenter);
@@ -49,9 +50,9 @@ namespace RiseOfMitra
         
         private void ClearBoard()
         {
-            for (int i = 0; i < GameConsts.BOARD_LIN; i++)
+            for (int i = 0; i < BoardConsts.BOARD_LIN; i++)
             {
-                for (int j = 0; j < GameConsts.BOARD_COL; j++)
+                for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
                     Board[i, j] = ".";
                 }
@@ -60,15 +61,19 @@ namespace RiseOfMitra
 
         private void CreatePawns()
         {
-            for (int i = 0; i < GameConsts.INITIAL_PAWNS; i++)
+            List<DalrionPawn> dPawns = new List<DalrionPawn>();
+            List<DalrionPawn> rPawns = new List<DalrionPawn>();
+            for (int i = 0; i < BoardConsts.INITIAL_PAWNS; i++)
             {
                 ABasicPawn dPawn = PawnFactory.CreatePawn(ECultures.DALRIONS, Board);
                 dPawn.SetPos(new Coord(1 + i, 7));
                 Units.Add(dPawn);
+                players[0].AddPawn(dPawn);
 
                 ABasicPawn rPawn = PawnFactory.CreatePawn(ECultures.RAHKARS, Board);
-                rPawn.SetPos(new Coord(GameConsts.BOARD_LIN - 2 - i, GameConsts.BOARD_COL - 8));
+                rPawn.SetPos(new Coord(BoardConsts.BOARD_LIN - 2 - i, BoardConsts.BOARD_COL - 8));
                 Units.Add(rPawn);
+                players[1].AddPawn(rPawn);
             }
         }
 
@@ -97,7 +102,7 @@ namespace RiseOfMitra
         {
             do
             {
-                BoardStrings.PrintBoard(Board, null, null, null);
+                RoMBoard.PrintBoard(Board, null, null, null, 0);
                 GetUserCmd();
                 Console.Write("Press enter to finish...");
                 Console.ReadLine();
@@ -108,7 +113,7 @@ namespace RiseOfMitra
 
         }
 
-        private Coord SelectedPosition(Coord pos, Coord prevSelec, string cmd)
+        private Coord SelectedPosition(Coord pos, Coord prevSelec, string cmd, int distance)
         {
             bool selected = false;
             Coord selection = null;
@@ -116,9 +121,9 @@ namespace RiseOfMitra
             {
                 Console.Clear();
                 if(cmd == Commands.GET_POS || cmd == Commands.MOVE)
-                    BoardStrings.PrintBoard(Board, Commands.MOVE, pos, prevSelec);
+                    RoMBoard.PrintBoard(Board, Commands.MOVE, pos, prevSelec, distance);
                 else
-                    BoardStrings.PrintBoard(Board, null, pos, prevSelec);
+                    RoMBoard.PrintBoard(Board, null, pos, prevSelec, distance);
                 var move = Console.ReadKey(false).Key;
                 switch (move)
                 {
@@ -126,7 +131,7 @@ namespace RiseOfMitra
                         selected = true;
                         if (cmd == Commands.MOVE)
                         {
-                            if (BoardStrings.IsValid(Board[pos.X, pos.Y]))
+                            if (RoMBoard.IsValid(Board[pos.X, pos.Y]) && players[nextPlayer].PawnAt(pos) != null)
                             {
                                 players[nextPlayer].SetCursor(pos);
                                 selection = new Coord(pos.X, pos.Y);
@@ -149,11 +154,11 @@ namespace RiseOfMitra
                             pos.X--;
                         break;
                     case ConsoleKey.RightArrow:
-                        if (pos.Y < GameConsts.BOARD_COL - 2)
+                        if (pos.Y < BoardConsts.BOARD_COL - 2)
                             pos.Y++;
                         break;
                     case ConsoleKey.DownArrow:
-                        if (pos.X < GameConsts.BOARD_LIN - 2)
+                        if (pos.X < BoardConsts.BOARD_LIN - 2)
                             pos.X++;
                         break;
                     case ConsoleKey.Escape:
@@ -198,10 +203,10 @@ namespace RiseOfMitra
         private void Attack()
         {
             Console.Write("Select an ally pawn: ");
-            Coord allyPos = SelectedPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK);
+            Coord allyPos = SelectedPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK, 0);
             Console.ReadLine();
             Console.Write("Select an enemy pawn: ");
-            Coord enemyPos = SelectedPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK);
+            Coord enemyPos = SelectedPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK, 0);
             Console.WriteLine("Attacking enemy at " + enemyPos + " with ally at " + allyPos);
         }
 
@@ -213,7 +218,7 @@ namespace RiseOfMitra
             bool validSelection = false;
             do
             {
-                allyPawn = SelectedPosition(players[nextPlayer].GetCursor(), null, Commands.MOVE);
+                allyPawn = SelectedPosition(players[nextPlayer].GetCursor(), null, Commands.MOVE, 0);
                 if (allyPawn == null)
                 {
                     validSelection = false;
@@ -223,7 +228,8 @@ namespace RiseOfMitra
                 else
                 {
                     Console.Clear();
-                    BoardStrings.PrintBoard(Board, Commands.MOVE, players[nextPlayer].GetCursor(), allyPawn);
+                    RoMBoard.PrintBoard(Board, Commands.MOVE, players[nextPlayer].GetCursor(), 
+                        allyPawn, players[nextPlayer].PawnAt(allyPawn).GetMovePoints());
                     validSelection = ConfirmSelection();
                 }
             } while (!validSelection);
@@ -232,7 +238,8 @@ namespace RiseOfMitra
             bool validTarget = false;
             do
             {
-                target = SelectedPosition(players[nextPlayer].GetCursor(), allyPawn, Commands.GET_POS);
+                target = SelectedPosition(players[nextPlayer].GetCursor(), allyPawn, Commands.GET_POS,
+                    players[nextPlayer].PawnAt(allyPawn).GetMovePoints());
                 if (target == null)
                 {
                     validTarget = false;
@@ -250,23 +257,17 @@ namespace RiseOfMitra
                     validTarget = ConfirmSelection();
                 }
             } while (!validTarget);
-            Console.WriteLine("Moving unit at " + allyPawn + " to " + target);
-            Board[allyPawn.X, allyPawn.Y] = BoardStrings.EMPTY;
-            string pawnChar = null;
-            switch (players[nextPlayer].GetCulture())
+            bool moved = players[nextPlayer].PawnAt(allyPawn).Move(target);
+            string msg = "";
+            if (moved)
+                msg = "Moved";
+            else
             {
-                case ECultures.DEFAULT:
-                    break;
-                case ECultures.DALRIONS:
-                    pawnChar = BoardStrings.CHAR_DALRION_PAWN;
-                    break;
-                case ECultures.RAHKARS:
-                    pawnChar = BoardStrings.CHAR_RAHKAR_PAWN;
-                    break;
-                default:
-                    break;
+                msg = "Unable to move";
+                validCmd = false;
             }
-            Board[target.X, target.Y] = pawnChar;
+            Console.WriteLine("\n" + msg + " unit at " + allyPawn + " to " + target);
+            
             Console.ReadLine();
         }
 

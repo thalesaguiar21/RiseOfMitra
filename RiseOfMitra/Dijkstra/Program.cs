@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoMUtils
+namespace ShortestPath
 {
-    enum ECultures
+    class Program
     {
-        DEFAULT,
-        DALRIONS,
-        RAHKARS
+        static void Main(string[] args)
+        {
+        }
     }
 }

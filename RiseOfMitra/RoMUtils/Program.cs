@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace RoMUtils
 {
-    class GameConsts
+    class Program
     {
-        public const int BOARD_LIN = 35;
-        public const int BOARD_COL = 45;
-        public const int INITIAL_PAWNS = 6;
+        static void Main(string[] args)
+        {
+        }
     }
 }
-

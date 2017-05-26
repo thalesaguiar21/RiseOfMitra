@@ -1,5 +1,7 @@
-﻿using System;
-using RoMUtils;
+﻿using Consts;
+using Types;
+using Cells;
+using System;
 
 namespace RiseOfMitra
 {
@@ -53,18 +55,23 @@ namespace RiseOfMitra
             }
         }
 
-        public override void Move(Coord target)
+        public override bool Move(Coord target)
         {
+            /*bool canMove = false;
             if (target != null)
             {
                 if (Coord.Distance(GetPos(), target) < GetMovePoints())
                 {
                     if(ExistPath(GetPos(), target))
                     {
-                        BoardStrings.PrintBoard(Board, Commands.MOVE, null, GetPos());
+                        Board[GetPos().X, GetPos().Y] = BoardStrings.EMPTY;
+                        Board[target.X, target.Y] = BoardStrings.CHAR_RAHKAR_PAWN;
+                        canMove = true;
                     }
                 }
             }
+            return canMove;*/
+            throw new NotImplementedException();
         }
     }
 }

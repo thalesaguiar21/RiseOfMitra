@@ -1,27 +1,21 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using System;
+using Types;
+using Cells;
+using Consts;
+using Consts;
 
-namespace RoMUtils
+namespace RiseOfMitra
 {
-    class BoardStrings
+    class RoMBoard
     {
-        public const string CHAR_DALRION_PAWN = "$";
-        public const string CHAR_RAHKAR_PAWN = "#";
-        public const string CHAR_DALRION_CENTER = "@";
-        public const string CHAR_RAHKAR_CENTER = "%";
-        public const string EMPTY = ".";
-        public const string FOG = "-";
-        public const string BLOCKED = "X";
-
-        private static string[] NON_VALID_UNITS = { ".", "X", "-"};
-        private static string[] DalrionChar = { "$", "@" };
-        private static string[] RahkarChar = { "#", "%" };
         private static Dictionary<ECultures, ConsoleColor> CultColors = new Dictionary<ECultures, ConsoleColor>
         {
             { ECultures.DALRIONS, ConsoleColor.Blue },
             { ECultures.RAHKARS, ConsoleColor.Yellow }
         };
+
         private static Dictionary<string, bool> Cmds = new Dictionary<string, bool>
         {
             { Commands.ATTACK, true },
@@ -29,41 +23,70 @@ namespace RoMUtils
             { Commands.CONQUER, false },
             { Commands.EXIT, true }
         };
+
         private static string[] Legend = new string[]
         {
-            "Dalrion pawn: " + CHAR_DALRION_PAWN,
-            "Dalrion center: " + CHAR_DALRION_CENTER,
-            "Rahkar pawn: " + CHAR_RAHKAR_PAWN,
-            "Rahkar center: " + CHAR_RAHKAR_CENTER,
-            "Empty cell: " + EMPTY,
-            "Cell with fog: " + FOG,
-            "Blocked cell: " + BLOCKED,
+            "Dalrion pawn: " + BoardStrings.CHAR_DALRION_PAWN,
+            "Dalrion center: " + BoardStrings.CHAR_DALRION_CENTER,
+            "Rahkar pawn: " + BoardStrings.CHAR_RAHKAR_PAWN,
+            "Rahkar center: " + BoardStrings.CHAR_RAHKAR_CENTER,
+            "Empty cell: " +BoardStrings. EMPTY,
+            "Cell with fog: " + BoardStrings.FOG,
+            "Blocked cell: " + BoardStrings.BLOCKED,
         };
 
         public static bool IsValid(string boardChar)
         {
-            if (NON_VALID_UNITS.Contains(boardChar))
+            if (BoardStrings.IVALID_UNITS.Contains(boardChar))
                 return false;
             return true;
         }
 
         public static ECultures ToCulture(string msg)
         {
-            if (DalrionChar.Contains(msg)) return ECultures.DALRIONS;
-            else if (RahkarChar.Contains(msg)) return ECultures.RAHKARS;
+            if (BoardStrings.DALRION_UNITS.Contains(msg)) return ECultures.DALRIONS;
+            else if (BoardStrings.RAHKAR_UNITS.Contains(msg)) return ECultures.RAHKARS;
             return ECultures.DEFAULT;
         }
 
-        public static void PrintBoard(string[,] board, string cmd, Coord cursorPos, Coord selection)
+        private bool IsValidAdajcent(string[,] board, Coord neigh, Coord init, int range)
+        {
+            bool isValid = true;
+            if (board[neigh.X, neigh.Y] != BoardStrings.EMPTY)
+                isValid = false;
+            if (Coord.Distance(init, neigh) > range)
+                isValid = false;
+            return isValid;
+        }
+
+        public List<Coord> GetNeighbors(string[,] board, Coord init, int range)
+        {
+            List<Coord> adj = new List<Coord>();
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    if(IsValidAdajcent(board, new Coord(i, j), init, range))
+                    {
+                        adj.Add(new Coord(i, j));
+                    }
+                }
+            }
+            return adj;
+        }
+
+        public static void PrintBoard(string[,] board, string cmd, Coord cursorPos, Coord selection, int distance)
         {
             Console.WriteLine();
-            for (int i = 0; i < GameConsts.BOARD_LIN; i++)
+            for (int i = 0; i < BoardConsts.BOARD_LIN; i++)
             {
-                for (int j = 0; j < GameConsts.BOARD_COL; j++)
+                for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
-                    ECultures cult = BoardStrings.ToCulture(board[i, j]);
-                    if (selection != null && Coord.Distance(selection, new Coord(i, j)) < 5 && cmd == Commands.MOVE)
+                    ECultures cult = ToCulture(board[i, j]);
+                    if (selection != null && Coord.Distance(selection, new Coord(i, j)) < distance && cmd == Commands.MOVE)
+                    {
                         Console.BackgroundColor = ConsoleColor.Red;
+                    }
                     if (cursorPos != null && cursorPos.IsSame(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
                     if (cult == ECultures.DALRIONS)

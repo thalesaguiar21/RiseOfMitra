@@ -61,21 +61,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ABuilding.cs" />
-    <Compile Include="BoardStrings.cs" />
+    <Compile Include="RoMBoard.cs" />
     <Compile Include="CulturalCenter.cs" />
-    <Compile Include="Commands.cs" />
     <Compile Include="CulturalCenterFactory.cs" />
     <Compile Include="IAdaptable.cs" />
     <Compile Include="DalrionPawn.cs" />
-    <Compile Include="ETerrain.cs" />
     <Compile Include="PawnFactory.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="RahkarPawn.cs" />
     <Compile Include="Unit.cs" />
     <Compile Include="ABasicPawn.cs" />
-    <Compile Include="Coord.cs" />
-    <Compile Include="ECultures.cs" />
-    <Compile Include="GameConsts.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -93,6 +88,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RoMUtils\RoMUtils.csproj">
+      <Project>{0a198aea-b29c-44a5-ac8d-f31ecb91f83f}</Project>
+      <Name>RoMUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

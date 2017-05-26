@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiseOfMitra
 {
@@ -11,7 +7,7 @@ namespace RiseOfMitra
         private int LifePerSec;
         private const int MAX_LIFEPERSEC = 3;
 
-        public int GetLifePerSec() { return this.LifePerSec; }
+        public int GetLifePerSec() { return LifePerSec; }
 
         public void SetLifePerSec(int lifePerSec)
         {

@@ -1,6 +1,6 @@
-﻿namespace RoMUtils
+﻿namespace Types
 {
-    enum ETerrain
+    public enum ETerrain
     {
         MOUNTAIN,
         PLAIN,
