@@ -286,9 +286,11 @@ namespace RiseOfMitra
                 // Verifica se a célula selecionada possui um peão aliado
                 validSelection = Board[allyPawn.X, allyPawn.Y].Equals(allyChar);
 
-                string msg = (validSelection) ? ("Selected pawn at " + allyPawn) : ("Invalid unit!");
-                Console.WriteLine(msg);
-                Console.ReadLine();
+                if (!validSelection)
+                {
+                    Console.Write("Invalid unit!");
+                    Console.ReadLine();
+                }
             } while (!validSelection);
 
             Dijkstra didi = new Dijkstra(Board, allyPawn, players[currPlayer].PawnAt(allyPawn).GetMovePoints());
@@ -302,8 +304,10 @@ namespace RiseOfMitra
                 // Verifica se é possível se mover para a célula selecionada
                 validSelection = validCells.Contains(target);
 
-                string msg = (validSelection) ? ("Moving to position " + target) : ("Invalid target!");
-                Console.WriteLine(msg);
+                if (!validSelection)
+                {
+                    Console.Write("Invalid unit!");
+                }
             } while (!validSelection);
 
             players[currPlayer].PawnAt(allyPawn).Move(target);
