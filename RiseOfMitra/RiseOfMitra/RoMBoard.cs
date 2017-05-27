@@ -43,9 +43,12 @@ namespace RiseOfMitra
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
                     ECultures cult = BoardStrings.ToCulture(board[i, j]);
-                    if (selection != null && avaiableCells.Contains(new Coord(i, j)) && cmd == Commands.MOVE)
+                    if (selection != null && avaiableCells.Contains(new Coord(i, j)))
                     {
-                        Console.BackgroundColor = ConsoleColor.Green;
+                        if (Commands.MOVE == cmd)
+                            Console.BackgroundColor = ConsoleColor.DarkGreen;
+                        else if (Commands.ATTACK == cmd)
+                            Console.BackgroundColor = ConsoleColor.DarkRed;
                     }
                     if (cursor != null && cursor.IsSame(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
@@ -76,7 +79,7 @@ namespace RiseOfMitra
             }
         }
 
-        public static void PrintBoard(string[,] board, string cmd, Coord cursorPos, Coord selection, int distance)
+        public static void PrintBoard(string[,] board, Coord cursorPos)
         {
             Console.WriteLine();
             for (int i = 0; i < BoardConsts.BOARD_LIN; i++)
@@ -84,10 +87,6 @@ namespace RiseOfMitra
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
                     ECultures cult = BoardStrings.ToCulture(board[i, j]);
-                    if (selection != null && Coord.Distance(selection, new Coord(i, j)) < distance && cmd == Commands.MOVE)
-                    {
-                        Console.BackgroundColor = ConsoleColor.Red;
-                    }
                     if (cursorPos != null && cursorPos.IsSame(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
                     if (cult == ECultures.DALRIONS)

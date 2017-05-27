@@ -105,7 +105,7 @@ namespace RiseOfMitra
         {
             do
             {
-                RoMBoard.PrintBoard(Board, null, null, null, 0);
+                RoMBoard.PrintBoard(Board, null);
                 GetUserCmd();
                 Console.Write("Press enter to finish...");
                 Console.ReadLine();
@@ -116,17 +116,15 @@ namespace RiseOfMitra
 
         }
 
-        private Coord SelectPosition(Coord pos, Coord prevSelec, string cmd, int distance)
+        private Coord SelectPosition(Coord pos)
         {
             bool selected = false;
             Coord selection = null;
             do
             {
                 Console.Clear();
-                if(cmd == Commands.GET_POS || cmd == Commands.MOVE)
-                    RoMBoard.PrintBoard(Board, Commands.MOVE, pos, prevSelec, distance);
-                else
-                    RoMBoard.PrintBoard(Board, null, pos, prevSelec, distance);
+                RoMBoard.PrintBoard(Board, pos);
+
                 var move = Console.ReadKey(false).Key;
                 switch (move)
                 {
@@ -168,7 +166,7 @@ namespace RiseOfMitra
             do
             {
                 Console.Clear();
-                RoMBoard.PrintBoard(Board, Commands.MOVE, pos, prevSelec, avaiableCells);
+                RoMBoard.PrintBoard(Board, cmd, pos, prevSelec, avaiableCells);
                 var move = Console.ReadKey(false).Key;
                 switch (move)
                 {
@@ -253,22 +251,66 @@ namespace RiseOfMitra
 
         private void Attack()
         {
-            //Console.Write("Select an ally pawn: ");
-            //Coord allyPos = SelectPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK, 0);
-            //Console.ReadLine();
-            //Console.Write("Select an enemy pawn: ");
-            //Coord enemyPos = SelectPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK, 0);
-            //Console.WriteLine("Attacking enemy at " + enemyPos + " with ally at " + allyPos);
+            bool isAlly = false;
+            Coord allyPos = null;
+            ABasicPawn allyPawn = null;
 
-            Console.WriteLine("Attaking pawn...");
-            Console.ReadLine();
+            do
+            {
+                allyPos = SelectPosition(curPlayer.GetCursor());
+                allyPawn = curPlayer.PawnAt(allyPos);
+
+                string allyChar;
+                if (curPlayer.GetCulture() == ECultures.DALRIONS)
+                    allyChar = BoardStrings.DALRION_PAWN;
+                else
+                    allyChar = BoardStrings.RAHKAR_PAWN;
+
+                // Verifica se a célula selecionada possui um peão aliado
+                if (Board[allyPos.X, allyPos.Y].Equals(allyChar) && allyPawn != null)
+                    isAlly = true;
+                else
+                    isAlly = false;
+
+                if (!isAlly)
+                {
+                    Console.Write("Invalid unit!");
+                    Console.ReadLine();
+                }
+            } while (!isAlly);
+
+            Dijkstra didi = new Dijkstra(Board, allyPawn.GetPos(), allyPawn.GetAtkRange());
+            List<Coord> enemiesInRange = didi.GetAtkRange(curPlayer.GetCulture());
+            Coord target = null;
+
+            if(enemiesInRange.Count > 0)
+            {
+                bool validTarget = false;
+                do
+                {
+                    target = SelectPosition(allyPos, curPlayer.GetCursor(), Commands.ATTACK, enemiesInRange);
+                    validTarget = enemiesInRange.Contains(target);
+
+                    if (!validTarget)
+                    {
+                        Console.WriteLine("Invalid target");
+                        Console.ReadLine();
+                    }
+                } while (!validTarget);
+            }
+            else
+            {
+                validCmd = false;
+                Console.Write("This pawn has no enemies in range!");
+                Console.ReadLine();
+            }
         }
 
         private void Move()
         {
             Console.Write("Select an ally pawn...");
             Console.ReadLine();
-            Coord allyPawn = null;
+            Coord allyPos = null;
             bool validSelection = false;
             
             // Select a valid ally pawn
@@ -280,9 +322,13 @@ namespace RiseOfMitra
                 else
                     allyChar = BoardStrings.RAHKAR_PAWN;
 
-                allyPawn = SelectPosition(curPlayer.GetCursor(), null, Commands.MOVE, 0);
+                allyPos = SelectPosition(curPlayer.GetCursor());
+
                 // Verifica se a célula selecionada possui um peão aliado
-                validSelection = Board[allyPawn.X, allyPawn.Y].Equals(allyChar);
+                if (Board[allyPos.X, allyPos.Y].Equals(allyChar) && curPlayer.PawnAt(allyPos) != null)
+                    validSelection = true;
+                else
+                    validSelection = false;
 
                 if (!validSelection)
                 {
@@ -291,14 +337,14 @@ namespace RiseOfMitra
                 }
             } while (!validSelection);
 
-            Dijkstra didi = new Dijkstra(Board, allyPawn, curPlayer.PawnAt(allyPawn).GetMovePoints());
+            Dijkstra didi = new Dijkstra(Board, allyPos, curPlayer.PawnAt(allyPos).GetMovePoints());
             List<Coord> validCells = didi.GetValidPaths();
             Coord target;
 
             validSelection = false;
             do
             {
-                target = SelectPosition(curPlayer.GetCursor(), allyPawn, Commands.MOVE, validCells);
+                target = SelectPosition(curPlayer.GetCursor(), allyPos, Commands.MOVE, validCells);
                 // Verifica se é possível se mover para a célula selecionada
                 validSelection = validCells.Contains(target);
 
@@ -308,7 +354,7 @@ namespace RiseOfMitra
                 }
             } while (!validSelection);
 
-            curPlayer.PawnAt(allyPawn).Move(target);
+            curPlayer.PawnAt(allyPos).Move(target);
         }
 
         private void Inspect()
@@ -321,7 +367,7 @@ namespace RiseOfMitra
 
             do
             {
-                selPos = SelectPosition(curPlayer.GetCursor(), null, Commands.INSPECT, 0);
+                selPos = SelectPosition(curPlayer.GetCursor());
                 isUnit = BoardStrings.IsValid(Board[selPos.X, selPos.Y]);
                 string msg = "";
 

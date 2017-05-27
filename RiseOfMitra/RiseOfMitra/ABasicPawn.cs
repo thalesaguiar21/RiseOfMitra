@@ -9,7 +9,9 @@ namespace RiseOfMitra
     {
         private int MovePoints;
         private int Atk;
-        private const int MAX_MOVE = 5;
+        private int AtkRange;
+        private const int MAX_MOVE = 10;
+        private const int MAX_RANGE = 3;
         private const int MAX_ATK = 10;
 
         public new string GetStatus()
@@ -17,11 +19,19 @@ namespace RiseOfMitra
             StringBuilder msg = base.GetStatus();
             msg.Append("Mov: " + MovePoints + "\n");
             msg.Append("Atk: " + Atk + "\n");
+            msg.Append("Atk range: " + AtkRange + "\n");
             return msg.ToString();
         }
 
         public int GetMovePoints() { return MovePoints; }
         public int GetAtk() { return Atk; }
+        public int GetAtkRange() { return AtkRange; }
+
+        public void SetAtkRange(int atkRange)
+        {
+            if (atkRange > 0 && atkRange <= MAX_RANGE)
+                AtkRange = atkRange;
+        }
 
         public void SetMovePoints(int movePoints)
         {

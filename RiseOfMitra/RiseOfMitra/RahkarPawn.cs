@@ -11,12 +11,13 @@ namespace RiseOfMitra
         {
             Board = null;
             BOARD_CHAR = BoardStrings.RAHKAR_PAWN;
-            SetCurrLife(12);
-            SetTotalLife(12);
-            SetAtk(4);
+            SetCurrLife(0);
+            SetTotalLife(0);
+            SetAtk(0);
+            SetAtkRange(0);
             SetCulture(ECultures.RAHKARS);
-            SetDef(2);
-            SetMovePoints(3);
+            SetDef(0);
+            SetMovePoints(1);
             SetPos(new Coord(0, 0));
             SetSize(1);
         }
