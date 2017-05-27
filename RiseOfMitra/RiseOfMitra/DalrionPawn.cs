@@ -13,6 +13,7 @@ namespace RiseOfMitra
             Board = null;
             BOARD_CHAR = BoardStrings.DALRION_PAWN;
             SetCurrLife(10);
+            SetTotalLife(10);
             SetAtk(3);
             SetCulture(ECultures.DALRIONS);
             SetDef(3);

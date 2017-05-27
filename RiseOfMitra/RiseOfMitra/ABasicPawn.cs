@@ -1,6 +1,7 @@
 ﻿using System;
 using Types;
 using Cells;
+using System.Text;
 
 namespace RiseOfMitra
 {
@@ -11,6 +12,13 @@ namespace RiseOfMitra
         private const int MAX_MOVE = 5;
         private const int MAX_ATK = 10;
 
+        public new string GetStatus()
+        {
+            StringBuilder msg = base.GetStatus();
+            msg.Append("Mov: " + MovePoints + "\n");
+            msg.Append("Atk: " + Atk + "\n");
+            return msg.ToString();
+        }
 
         public int GetMovePoints() { return MovePoints; }
         public int GetAtk() { return Atk; }

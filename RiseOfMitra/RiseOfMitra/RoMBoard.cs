@@ -20,6 +20,7 @@ namespace RiseOfMitra
             { Commands.ATTACK,  true },
             { Commands.MOVE,    true },
             { Commands.CONQUER, false },
+            { Commands.INSPECT, true },
             { Commands.EXIT,    true }
         };
 

@@ -19,6 +19,7 @@ namespace RiseOfMitra
                     center.SetBoard(board);
                     center.SetCulture(ECultures.DALRIONS);
                     center.SetCurrLife(100);
+                    center.SetTotalLife(100);
                     center.SetDef(3);
                     center.SetLifePerSec(2);
                     center.SetPos(new Coord(0, 0));
@@ -29,6 +30,7 @@ namespace RiseOfMitra
                     center.SetBoard(board);
                     center.SetCulture(ECultures.RAHKARS);
                     center.SetCurrLife(130);
+                    center.SetTotalLife(130);
                     center.SetDef(2);
                     center.SetLifePerSec(1);
                     center.SetPos(new Coord(0, 0));

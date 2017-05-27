@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace RiseOfMitra
 {
@@ -6,6 +7,13 @@ namespace RiseOfMitra
     {
         private int LifePerSec;
         private const int MAX_LIFEPERSEC = 3;
+
+        public new string GetStatus()
+        {
+            StringBuilder msg = base.GetStatus();
+            msg.Append("Life/sec: " + LifePerSec + "\n");
+            return msg.ToString();
+        }
 
         public int GetLifePerSec() { return LifePerSec; }
 

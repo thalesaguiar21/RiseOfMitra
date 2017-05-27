@@ -27,17 +27,7 @@ namespace RiseOfMitra
 
             // Adding units
             ClearBoard();
-            CreatePawns();
-            ABuilding dCenter = CulturalCenterFactory.CreateCultCenter(ECultures.DALRIONS, Board);
-            ABuilding rCenter = CulturalCenterFactory.CreateCultCenter(ECultures.RAHKARS, Board);
-            dCenter.SetPos(new Coord(1, 1));
-            int buildSize = rCenter.GetSize() + 1;
-            rCenter.SetPos(new Coord(BoardConsts.BOARD_LIN - buildSize, BoardConsts.BOARD_COL - buildSize));
-
-            // Creating Cultural centers
-            Units.Add(dCenter);
-            Units.Add(rCenter);
-
+            CreateUnits();
             PlaceUnits();
         }
 
@@ -61,7 +51,7 @@ namespace RiseOfMitra
             }
         }
 
-        private void CreatePawns()
+        private void CreateUnits()
         {
             List<DalrionPawn> dPawns = new List<DalrionPawn>();
             List<DalrionPawn> rPawns = new List<DalrionPawn>();
@@ -77,6 +67,19 @@ namespace RiseOfMitra
                 Units.Add(rPawn);
                 players[1].AddPawn(rPawn);
             }
+
+            ABuilding dCenter = CulturalCenterFactory.CreateCultCenter(ECultures.DALRIONS, Board);
+            ABuilding rCenter = CulturalCenterFactory.CreateCultCenter(ECultures.RAHKARS, Board);
+            dCenter.SetPos(new Coord(1, 1));
+            int buildSize = rCenter.GetSize() + 1;
+            rCenter.SetPos(new Coord(BoardConsts.BOARD_LIN - buildSize, BoardConsts.BOARD_COL - buildSize));
+
+            // Creating Cultural centers
+            Units.Add(dCenter);
+            Units.Add(rCenter);
+
+            players[0].SetCulturalCenter((CulturalCenter) dCenter);
+            players[1].SetCulturalCenter((CulturalCenter) rCenter);
         }
 
         private void PlaceUnits()
@@ -237,6 +240,9 @@ namespace RiseOfMitra
                 case Commands.CONQUER:
                     Conquer();
                     break;
+                case Commands.INSPECT:
+                    Inspect();
+                    break;
                 case Commands.EXIT:
                     play = false;
                     break;
@@ -298,11 +304,45 @@ namespace RiseOfMitra
 
                 string msg = (validSelection) ? ("Moving to position " + target) : ("Invalid target!");
                 Console.WriteLine(msg);
-                Console.ReadLine();
             } while (!validSelection);
 
             players[currPlayer].PawnAt(allyPawn).Move(target);
+        }
+
+        private void Inspect()
+        {
+            Console.Write("Select an unit...");
             Console.ReadLine();
+            Coord selPos = null;
+            bool isUnit = false;
+
+            do
+            {
+                selPos = SelectPosition(players[currPlayer].GetCursor(), null, Commands.INSPECT, 0);
+                isUnit = BoardStrings.IsValid(Board[selPos.X, selPos.Y]);
+                string msg = "";
+
+                foreach (Player it in players)
+                {
+                    if (it.GetCenter().InUnit(selPos))
+                    {
+                        msg = it.GetCenter().GetStatus();
+                        break;
+                    }
+                    else if (it.PawnAt(selPos) != null)
+                    {
+                        msg = it.PawnAt(selPos).GetStatus();
+                        break;
+                    }
+                    else
+                    {
+                        msg = "Invalid unit!";
+                        isUnit = false;
+                    }              
+                }
+                Console.Write(msg);
+                Console.ReadLine();
+            } while (!isUnit);
         }
 
         private void Conquer()
