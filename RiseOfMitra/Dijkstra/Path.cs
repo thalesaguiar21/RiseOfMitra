@@ -67,6 +67,7 @@ namespace ShortestPath
                 }
                 tmpValidCells.RemoveAt(0);
             }
+            validCells.RemoveAt(0);
             return validCells;
         }
     }
