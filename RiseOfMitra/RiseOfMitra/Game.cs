@@ -10,20 +10,17 @@ namespace RiseOfMitra
     class Game
     {
         private Player[] players;
-        private int currPlayer;
+        private Player curPlayer;
         private bool play;
         private bool validCmd;
         private string[,] Board;
-        private List<Unit> Units;
 
         public Game()
         {
             InitPlayers();
-            currPlayer = 0;
             play = true;
             validCmd = false;
             Board = new string[BoardConsts.BOARD_LIN, BoardConsts.BOARD_COL];
-            Units = new List<Unit>();
 
             // Adding units
             ClearBoard();
@@ -38,6 +35,9 @@ namespace RiseOfMitra
             players[1] = new Player();
             players[0].SetCulture(ECultures.DALRIONS);
             players[1].SetCulture(ECultures.RAHKARS);
+
+            players[1].SetCursor(new Coord(BoardConsts.BOARD_LIN - 2, BoardConsts.BOARD_COL - 2));
+            curPlayer = players[0];
         }
         
         private void ClearBoard()
@@ -59,12 +59,10 @@ namespace RiseOfMitra
             {
                 ABasicPawn dPawn = PawnFactory.CreatePawn(ECultures.DALRIONS, Board);
                 dPawn.SetPos(new Coord(1 + i, 7));
-                Units.Add(dPawn);
                 players[0].AddPawn(dPawn);
 
                 ABasicPawn rPawn = PawnFactory.CreatePawn(ECultures.RAHKARS, Board);
                 rPawn.SetPos(new Coord(BoardConsts.BOARD_LIN - 2 - i, BoardConsts.BOARD_COL - 8));
-                Units.Add(rPawn);
                 players[1].AddPawn(rPawn);
             }
 
@@ -73,20 +71,20 @@ namespace RiseOfMitra
             dCenter.SetPos(new Coord(1, 1));
             int buildSize = rCenter.GetSize() + 1;
             rCenter.SetPos(new Coord(BoardConsts.BOARD_LIN - buildSize, BoardConsts.BOARD_COL - buildSize));
-
-            // Creating Cultural centers
-            Units.Add(dCenter);
-            Units.Add(rCenter);
-
+            
             players[0].SetCulturalCenter((CulturalCenter) dCenter);
             players[1].SetCulturalCenter((CulturalCenter) rCenter);
         }
 
         private void PlaceUnits()
         {
-            foreach (Unit unit in Units)
+            foreach (Player it in players)
             {
-                PlaceUnit(unit, unit.GetPos());
+                foreach (Unit unit in it.GetPawns())
+                {
+                    PlaceUnit(unit, unit.GetPos());
+                }
+                PlaceUnit(it.GetCenter(), it.GetCenter().GetPos());
             }
         }
 
@@ -224,7 +222,7 @@ namespace RiseOfMitra
 
         private void GetUserCmd()
         {
-            string msg = String.Format("PLAYER {0} TURN.\nType in a command: ", currPlayer + 1);
+            string msg = String.Format("{0} TURN.\nType in a command: ", curPlayer.GetCulture());
             Console.Write(msg);
             string userCmd = Console.ReadLine().Trim().ToUpper();
             validCmd = true;
@@ -277,12 +275,12 @@ namespace RiseOfMitra
             do
             {
                 string allyChar;
-                if (players[currPlayer].GetCulture() == ECultures.DALRIONS)
+                if (curPlayer.GetCulture() == ECultures.DALRIONS)
                     allyChar = BoardStrings.DALRION_PAWN;
                 else
                     allyChar = BoardStrings.RAHKAR_PAWN;
 
-                allyPawn = SelectPosition(players[currPlayer].GetCursor(), null, Commands.MOVE, 0);
+                allyPawn = SelectPosition(curPlayer.GetCursor(), null, Commands.MOVE, 0);
                 // Verifica se a célula selecionada possui um peão aliado
                 validSelection = Board[allyPawn.X, allyPawn.Y].Equals(allyChar);
 
@@ -293,14 +291,14 @@ namespace RiseOfMitra
                 }
             } while (!validSelection);
 
-            Dijkstra didi = new Dijkstra(Board, allyPawn, players[currPlayer].PawnAt(allyPawn).GetMovePoints());
+            Dijkstra didi = new Dijkstra(Board, allyPawn, curPlayer.PawnAt(allyPawn).GetMovePoints());
             List<Coord> validCells = didi.GetValidPaths();
             Coord target;
 
             validSelection = false;
             do
             {
-                target = SelectPosition(players[currPlayer].GetCursor(), allyPawn, Commands.MOVE, validCells);
+                target = SelectPosition(curPlayer.GetCursor(), allyPawn, Commands.MOVE, validCells);
                 // Verifica se é possível se mover para a célula selecionada
                 validSelection = validCells.Contains(target);
 
@@ -310,7 +308,7 @@ namespace RiseOfMitra
                 }
             } while (!validSelection);
 
-            players[currPlayer].PawnAt(allyPawn).Move(target);
+            curPlayer.PawnAt(allyPawn).Move(target);
         }
 
         private void Inspect()
@@ -323,7 +321,7 @@ namespace RiseOfMitra
 
             do
             {
-                selPos = SelectPosition(players[currPlayer].GetCursor(), null, Commands.INSPECT, 0);
+                selPos = SelectPosition(curPlayer.GetCursor(), null, Commands.INSPECT, 0);
                 isUnit = BoardStrings.IsValid(Board[selPos.X, selPos.Y]);
                 string msg = "";
 
@@ -332,11 +330,13 @@ namespace RiseOfMitra
                     if (it.GetCenter().InUnit(selPos))
                     {
                         msg = it.GetCenter().GetStatus();
+                        isUnit = true;
                         break;
                     }
                     else if (it.PawnAt(selPos) != null)
                     {
                         msg = it.PawnAt(selPos).GetStatus();
+                        isUnit = true;
                         break;
                     }
                     else
@@ -357,7 +357,10 @@ namespace RiseOfMitra
 
         private void SetNextPlayer()
         {
-            currPlayer = (currPlayer + 1) % 2;
+            if (curPlayer == players[0])
+                curPlayer = players[1];
+            else
+                curPlayer = players[0];
         }
 
         static void Main(string[] args)

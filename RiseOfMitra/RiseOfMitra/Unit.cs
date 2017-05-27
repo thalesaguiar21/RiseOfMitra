@@ -36,9 +36,9 @@ namespace RiseOfMitra
         // Verify if the target is contained in the Unit
         public bool InUnit(Coord target)
         {
-            for (int i = 0; i < Size-1; i++)
+            for (int i = 0; i < Size; i++)
             {
-                for (int j = 0; j < Size-1; j++)
+                for (int j = 0; j < Size; j++)
                 {
                     if (Pos.X + i == target.X && Pos.Y + j == target.Y)
                         return true;
