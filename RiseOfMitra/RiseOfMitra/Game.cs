@@ -319,6 +319,7 @@ namespace RiseOfMitra
             Console.ReadLine();
             Coord selPos = null;
             bool isUnit = false;
+            validCmd = false;
 
             do
             {
