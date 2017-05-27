@@ -10,7 +10,7 @@ namespace RiseOfMitra
         public RahkarPawn()
         {
             Board = null;
-            BOARD_CHAR = BoardStrings.CHAR_RAHKAR_PAWN;
+            BOARD_CHAR = BoardStrings.RAHKAR_PAWN;
             SetCurrLife(12);
             SetAtk(4);
             SetCulture(ECultures.RAHKARS);
@@ -55,23 +55,11 @@ namespace RiseOfMitra
             }
         }
 
-        public override bool Move(Coord target)
+        public override void Move(Coord target)
         {
-            /*bool canMove = false;
-            if (target != null)
-            {
-                if (Coord.Distance(GetPos(), target) < GetMovePoints())
-                {
-                    if(ExistPath(GetPos(), target))
-                    {
-                        Board[GetPos().X, GetPos().Y] = BoardStrings.EMPTY;
-                        Board[target.X, target.Y] = BoardStrings.CHAR_RAHKAR_PAWN;
-                        canMove = true;
-                    }
-                }
-            }
-            return canMove;*/
-            throw new NotImplementedException();
+            Board[GetPos().X, GetPos().Y] = BoardStrings.EMPTY;
+            Board[target.X, target.Y] = BoardStrings.RAHKAR_PAWN;
+            SetPos(target);
         }
     }
 }

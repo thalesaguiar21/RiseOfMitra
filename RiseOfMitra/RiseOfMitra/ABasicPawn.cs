@@ -35,7 +35,7 @@ namespace RiseOfMitra
             }
         }
 
-        public abstract bool Move(Coord target);
+        public abstract void Move(Coord target);
 
         public abstract void Adapt(ETerrain terrain);
     }

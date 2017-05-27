@@ -11,7 +11,7 @@ namespace RiseOfMitra
         public DalrionPawn()
         {
             Board = null;
-            BOARD_CHAR = BoardStrings.CHAR_DALRION_PAWN;
+            BOARD_CHAR = BoardStrings.DALRION_PAWN;
             SetCurrLife(10);
             SetAtk(3);
             SetCulture(ECultures.DALRIONS);
@@ -56,23 +56,11 @@ namespace RiseOfMitra
             }
         }
 
-        public override bool Move(Coord target)
+        public override void Move(Coord target)
         {
-            /*bool canMove = false;
-            if (target != null)
-            {
-                if (Coord.Distance(GetPos(), target) < GetMovePoints())
-                {
-                    if (ExistPath(GetPos(), target))
-                    {
-                        Board[GetPos().X, GetPos().Y] = RoMBoard.EMPTY;
-                        Board[target.X, target.Y] = RoMBoard.CHAR_RAHKAR_PAWN;
-                        canMove = true;
-                    }
-                }
-            }
-            return canMove;*/
-            throw new NotImplementedException();
+            Board[GetPos().X, GetPos().Y] = BoardStrings.EMPTY;
+            Board[target.X, target.Y] = BoardStrings.DALRION_PAWN;
+            SetPos(target);
         }
     }
 }

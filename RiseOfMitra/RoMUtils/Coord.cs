@@ -3,7 +3,7 @@ using Consts;
 
 namespace Cells
 {
-    public class Coord
+    public class Coord : IEquatable<Coord>
     {
         public int X;
         public int Y;
@@ -32,16 +32,21 @@ namespace Cells
         {
             if (pos == null)
                 return false;
-            else if (pos.X < 0 || pos.Y < 0)
+            else if (pos.X <= 0 || pos.Y <= 0)
                 return false;
-            else if (pos.X > BoardConsts.BOARD_LIN || pos.Y > BoardConsts.BOARD_COL)
+            else if (pos.X >= BoardConsts.BOARD_LIN || pos.Y >= BoardConsts.BOARD_COL)
                 return false;
             return true;
         }
 
         public override string ToString()
         {
-            return "(" + (X + 1) + ", " + (Y + 1) + ")";
+            return "(" + (X) + ", " + (Y) + ")";
+        }
+
+        public bool Equals(Coord other)
+        {
+            return other.X == X && other.Y == Y;
         }
     }
 }

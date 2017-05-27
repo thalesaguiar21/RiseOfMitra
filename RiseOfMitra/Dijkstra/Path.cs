@@ -27,7 +27,7 @@ namespace ShortestPath
                 isValid = false;
             else if (validCells.Contains(np))
                 isValid = false;
-            else if (Board[np.X, np.Y] != ".")
+            else if (Board[np.X, np.Y] != BoardStrings.EMPTY)
                 isValid = false;
             else if (Coord.Distance(np, Origin) > MaxDist)
                 isValid = false;
@@ -37,16 +37,17 @@ namespace ShortestPath
         private List<Coord> GetNeighbors(Coord cell)
         {
             List<Coord> neighbors = new List<Coord>();
+            List<Coord> tmpNeighbors = new List<Coord>();
 
-            neighbors.Add(new Coord(cell.X + 1, cell.Y));
-            neighbors.Add(new Coord(cell.X - 1, cell.Y));
-            neighbors.Add(new Coord(cell.X, cell.Y - 1));
-            neighbors.Add(new Coord(cell.X, cell.Y + 1));
+            tmpNeighbors.Add(new Coord(cell.X + 1, cell.Y));
+            tmpNeighbors.Add(new Coord(cell.X - 1, cell.Y));
+            tmpNeighbors.Add(new Coord(cell.X, cell.Y - 1));
+            tmpNeighbors.Add(new Coord(cell.X, cell.Y + 1));
 
-            foreach (Coord c in neighbors)
+            for (int i = 0; i < tmpNeighbors.Count; i++)
             {
-                if (!IsValidNeighbor(c))
-                    neighbors.Remove(c);
+                if (IsValidNeighbor(tmpNeighbors[i]))
+                    neighbors.Add(tmpNeighbors[i]);
             }
 
             return neighbors;
@@ -58,10 +59,11 @@ namespace ShortestPath
             tmpValidCells.Add(Origin);
             while (tmpValidCells.Count > 0)
             {
-                foreach (Coord cell in GetNeighbors(tmpValidCells[0]))
+                List<Coord> validNeighbors = GetNeighbors(tmpValidCells[0]);
+                for (int i = 0; i < validNeighbors.Count; i++)
                 {
-                    tmpValidCells.Add(cell);
-                    validCells.Add(cell);
+                    tmpValidCells.Add(validNeighbors[i]);
+                    validCells.Add(validNeighbors[i]);
                 }
                 tmpValidCells.RemoveAt(0);
             }

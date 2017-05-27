@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Types;
 using Cells;
 using Consts;
+using ShortestPath;
 
 namespace RiseOfMitra
 {
     class Game
     {
         private Player[] players;
-        private int nextPlayer;
+        private int currPlayer;
         private bool play;
         private bool validCmd;
         private string[,] Board;
@@ -18,7 +19,7 @@ namespace RiseOfMitra
         public Game()
         {
             InitPlayers();
-            nextPlayer = 0;
+            currPlayer = 0;
             play = true;
             validCmd = false;
             Board = new string[BoardConsts.BOARD_LIN, BoardConsts.BOARD_COL];
@@ -36,6 +37,7 @@ namespace RiseOfMitra
             // Creating Cultural centers
             Units.Add(dCenter);
             Units.Add(rCenter);
+
             PlaceUnits();
         }
 
@@ -113,7 +115,7 @@ namespace RiseOfMitra
 
         }
 
-        private Coord SelectedPosition(Coord pos, Coord prevSelec, string cmd, int distance)
+        private Coord SelectPosition(Coord pos, Coord prevSelec, string cmd, int distance)
         {
             bool selected = false;
             Coord selection = null;
@@ -129,21 +131,7 @@ namespace RiseOfMitra
                 {
                     case ConsoleKey.Enter:
                         selected = true;
-                        if (cmd == Commands.MOVE)
-                        {
-                            if (RoMBoard.IsValid(Board[pos.X, pos.Y]) && players[nextPlayer].PawnAt(pos) != null)
-                            {
-                                players[nextPlayer].SetCursor(pos);
-                                selection = new Coord(pos.X, pos.Y);
-                            }
-                            else
-                                selection = null;
-                        }
-                        else if (cmd == Commands.GET_POS)
-                        {
-                            players[nextPlayer].SetCursor(pos);
-                            selection = new Coord(pos.X, pos.Y);
-                        }
+                        selection = new Coord(pos.X, pos.Y);
                         break;
                     case ConsoleKey.LeftArrow:
                         if (pos.Y > 1)
@@ -172,9 +160,68 @@ namespace RiseOfMitra
             return selection;
         }
 
+        private Coord SelectPosition(Coord pos, Coord prevSelec, string cmd, List<Coord> avaiableCells)
+        {
+            bool selected = false;
+            Coord selection = null;
+            do
+            {
+                Console.Clear();
+                RoMBoard.PrintBoard(Board, Commands.MOVE, pos, prevSelec, avaiableCells);
+                var move = Console.ReadKey(false).Key;
+                switch (move)
+                {
+                    case ConsoleKey.Enter:
+                        selected = true;
+                        selection = new Coord(pos.X, pos.Y);
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        if (pos.Y > 1)
+                            pos.Y--;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        if (pos.X > 1)
+                            pos.X--;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (pos.Y < BoardConsts.BOARD_COL - 2)
+                            pos.Y++;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        if (pos.X < BoardConsts.BOARD_LIN - 2)
+                            pos.X++;
+                        break;
+                    case ConsoleKey.Escape:
+                        selected = true;
+                        break;
+                    default:
+                        break;
+                }
+            } while (!selected);
+
+            return selection;
+        }
+
+        public bool ConfirmSelection()
+        {
+            bool confirmed = false;
+            Console.WriteLine("Press S to confirm or C to select another pawn...");
+            ConsoleKey pressedKey;
+            do
+            {
+                pressedKey = Console.ReadKey(false).Key;
+                if (pressedKey == ConsoleKey.S)
+                    confirmed = true;
+                else if (pressedKey == ConsoleKey.C)
+                    confirmed = false;
+            } while (pressedKey != ConsoleKey.S && pressedKey != ConsoleKey.C);
+
+            return confirmed;
+        }
+
         private void GetUserCmd()
         {
-            string msg = String.Format("{0}s turn. Type in a command: ", nextPlayer + 1);
+            string msg = String.Format("PLAYER {0} TURN.\nType in a command: ", currPlayer + 1);
             Console.Write(msg);
             string userCmd = Console.ReadLine().Trim().ToUpper();
             validCmd = true;
@@ -202,12 +249,15 @@ namespace RiseOfMitra
 
         private void Attack()
         {
-            Console.Write("Select an ally pawn: ");
-            Coord allyPos = SelectedPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK, 0);
+            //Console.Write("Select an ally pawn: ");
+            //Coord allyPos = SelectPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK, 0);
+            //Console.ReadLine();
+            //Console.Write("Select an enemy pawn: ");
+            //Coord enemyPos = SelectPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK, 0);
+            //Console.WriteLine("Attacking enemy at " + enemyPos + " with ally at " + allyPos);
+
+            Console.WriteLine("Attaking pawn...");
             Console.ReadLine();
-            Console.Write("Select an enemy pawn: ");
-            Coord enemyPos = SelectedPosition(players[nextPlayer].GetCursor(), null, Commands.ATTACK, 0);
-            Console.WriteLine("Attacking enemy at " + enemyPos + " with ally at " + allyPos);
         }
 
         private void Move()
@@ -216,76 +266,43 @@ namespace RiseOfMitra
             Console.ReadLine();
             Coord allyPawn = null;
             bool validSelection = false;
+            
+            // Select a valid ally pawn
             do
             {
-                allyPawn = SelectedPosition(players[nextPlayer].GetCursor(), null, Commands.MOVE, 0);
-                if (allyPawn == null)
-                {
-                    validSelection = false;
-                    Console.WriteLine("That's not a valid unit, please select an ally Pawn!");
-                    Console.ReadLine();
-                }
+                string allyChar;
+                if (players[currPlayer].GetCulture() == ECultures.DALRIONS)
+                    allyChar = BoardStrings.DALRION_PAWN;
                 else
-                {
-                    Console.Clear();
-                    RoMBoard.PrintBoard(Board, Commands.MOVE, players[nextPlayer].GetCursor(), 
-                        allyPawn, players[nextPlayer].PawnAt(allyPawn).GetMovePoints());
-                    validSelection = ConfirmSelection();
-                }
+                    allyChar = BoardStrings.RAHKAR_PAWN;
+
+                allyPawn = SelectPosition(players[currPlayer].GetCursor(), null, Commands.MOVE, 0);
+                // Verifica se a célula selecionada possui um peão aliado
+                validSelection = Board[allyPawn.X, allyPawn.Y].Equals(allyChar);
+
+                string msg = (validSelection) ? ("Selected pawn at " + allyPawn) : ("Invalid unit!");
+                Console.WriteLine(msg);
+                Console.ReadLine();
             } while (!validSelection);
 
-            Coord target = null;
-            bool validTarget = false;
-            do
-            {
-                target = SelectedPosition(players[nextPlayer].GetCursor(), allyPawn, Commands.GET_POS,
-                    players[nextPlayer].PawnAt(allyPawn).GetMovePoints());
-                if (target == null)
-                {
-                    validTarget = false;
-                    Console.WriteLine("That's not a valid selection, please select another cell!");
-                    Console.ReadLine();
-                }
-                else if (Board[target.X, target.Y] != BoardStrings.EMPTY)
-                {
-                    validTarget = false;
-                    Console.WriteLine("Plase select an empty cell!");
-                    Console.ReadLine();
-                }
-                else
-                {
-                    validTarget = ConfirmSelection();
-                }
-            } while (!validTarget);
-            bool moved = players[nextPlayer].PawnAt(allyPawn).Move(target);
-            string msg = "";
-            if (moved)
-                msg = "Moved";
-            else
-            {
-                msg = "Unable to move";
-                validCmd = false;
-            }
-            Console.WriteLine("\n" + msg + " unit at " + allyPawn + " to " + target);
-            
-            Console.ReadLine();
-        }
+            Dijkstra didi = new Dijkstra(Board, allyPawn, players[currPlayer].PawnAt(allyPawn).GetMovePoints());
+            List<Coord> validCells = didi.GetValidPaths();
+            Coord target;
 
-        public bool ConfirmSelection()
-        {
-            bool confirmed = false;
-            Console.WriteLine("Press S to confirm or C to select another pawn...");
-            ConsoleKey pressedKey;
+            validSelection = false;
             do
             {
-                pressedKey = Console.ReadKey(false).Key;
-                if (pressedKey == ConsoleKey.S)
-                    confirmed = true;
-                else if (pressedKey == ConsoleKey.C)
-                    confirmed = false;
-            } while (pressedKey != ConsoleKey.S && pressedKey != ConsoleKey.C);
-            
-            return confirmed;
+                target = SelectPosition(players[currPlayer].GetCursor(), allyPawn, Commands.MOVE, validCells);
+                // Verifica se é possível se mover para a célula selecionada
+                validSelection = validCells.Contains(target);
+
+                string msg = (validSelection) ? ("Moving to position " + target) : ("Invalid target!");
+                Console.WriteLine(msg);
+                Console.ReadLine();
+            } while (!validSelection);
+
+            players[currPlayer].PawnAt(allyPawn).Move(target);
+            Console.ReadLine();
         }
 
         private void Conquer()
@@ -293,24 +310,9 @@ namespace RiseOfMitra
             Console.WriteLine("PH");
         }
 
-        private ABasicPawn PawnAt(Coord pos)
-        {
-            foreach (Unit unit in Units)
-            {
-                if(unit.GetType().Name == typeof(DalrionPawn).Name 
-                    || unit.GetType().Name == typeof(RahkarPawn).Name)
-                {
-                    Coord uCoord = unit.GetPos();
-                    if (uCoord.X == pos.X && uCoord.Y == pos.Y)
-                        return (ABasicPawn) unit;
-                }
-            }
-            return null;
-        }
-
         private void SetNextPlayer()
         {
-            nextPlayer = (nextPlayer + 1) % 2;
+            currPlayer = (currPlayer + 1) % 2;
         }
 
         static void Main(string[] args)

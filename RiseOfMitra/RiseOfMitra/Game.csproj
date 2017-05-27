@@ -90,6 +90,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dijkstra\ShortestPath.csproj">
+      <Project>{2e2f913d-1d71-417b-a3c8-9ca7b4436142}</Project>
+      <Name>ShortestPath</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RoMUtils\RoMUtils.csproj">
       <Project>{0a198aea-b29c-44a5-ac8d-f31ecb91f83f}</Project>
       <Name>RoMUtils</Name>
