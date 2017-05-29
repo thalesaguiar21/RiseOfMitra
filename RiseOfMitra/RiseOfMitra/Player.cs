@@ -25,7 +25,7 @@ namespace RiseOfMitra
         {
             for (int i = 0; i < Pawns.Count; i++)
             {
-                if (Pawns[i].GetPos().IsSame(pos))
+                if (Pawns[i].GetPos().Equals(pos))
                     return Pawns[i];
             }
             return null;

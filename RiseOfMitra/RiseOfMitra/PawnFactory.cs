@@ -56,9 +56,10 @@ namespace RiseOfMitra
             bool isValid = true;
             if(pawn.NativeOf() == ECultures.DALRIONS)
             {
+                isValid &= pawn.GetCurrLife() == 10;
+                isValid &= pawn.GetTotalLife() == 10;
                 isValid &= pawn.GetAtk() == 3;
                 isValid &= pawn.GetAtkRange() == 5;
-                isValid &= pawn.GetCurrLife() == 10;
                 isValid &= pawn.GetDef() == 3;
                 isValid &= pawn.GetMovePoints() == 10;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);

@@ -11,7 +11,7 @@ namespace RiseOfMitra
         private int Atk;
         private int AtkRange;
         private const int MAX_MOVE = 10;
-        private const int MAX_RANGE = 3;
+        private const int MAX_RANGE = 5;
         private const int MAX_ATK = 10;
 
         public new string GetStatus()

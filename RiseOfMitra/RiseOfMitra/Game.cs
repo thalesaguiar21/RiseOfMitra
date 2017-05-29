@@ -299,8 +299,21 @@ namespace RiseOfMitra
                 do
                 {
                     target = SelectPosition(allyPos, curPlayer.GetCursor(), Commands.ATTACK, attackRange);
-                    validTarget = attackRange.Contains(target);
-
+                    validTarget = attackRange.Contains(target) && GetOponent().PawnAt(target) != null;
+                    if (validTarget)
+                    {
+                        ABasicPawn enemy = GetOponent().PawnAt(target);
+                        int res = allyPawn.GetAtk() - enemy.GetDef();
+                        if (res > 0)
+                        {
+                            enemy.SetCurrLife(enemy.GetCurrLife() - res);
+                            Console.WriteLine("You have dealt {0} damage", res);
+                        }
+                        else
+                        {
+                            Console.WriteLine("The opponent has blocked");
+                        }
+                    }
                     if (!validTarget)
                     {
                         Console.WriteLine("Invalid target");
