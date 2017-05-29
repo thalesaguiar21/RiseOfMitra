@@ -50,7 +50,7 @@ namespace RiseOfMitra
                         else if (Commands.ATTACK == cmd)
                             Console.BackgroundColor = ConsoleColor.DarkRed;
                     }
-                    if (cursor != null && cursor.IsSame(new Coord(i, j)))
+                    if (cursor != null && cursor.Equals(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
                     if (cult == ECultures.DALRIONS)
                         ColoredPrint(board[i, j] + " ", CultColors[ECultures.DALRIONS]);
@@ -87,7 +87,7 @@ namespace RiseOfMitra
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
                     ECultures cult = BoardStrings.ToCulture(board[i, j]);
-                    if (cursorPos != null && cursorPos.IsSame(new Coord(i, j)))
+                    if (cursorPos != null && cursorPos.Equals(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
                     if (cult == ECultures.DALRIONS)
                         ColoredPrint(board[i, j] + " ", CultColors[ECultures.DALRIONS]);

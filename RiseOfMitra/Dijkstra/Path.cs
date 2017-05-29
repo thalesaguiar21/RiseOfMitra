@@ -11,7 +11,6 @@ namespace ShortestPath
         private Coord Origin;
         private int MaxDist;
         private List<Coord> validCells;
-        private ECultures Ally;
 
         public Dijkstra(string[,] board, Coord origin, int maxDist)
         {
@@ -22,44 +21,17 @@ namespace ShortestPath
             validCells.Add(Origin);
         }
 
-        private bool IsValidMoveNeighbor(Coord np)
+        private bool IsValidMoveNeighbor(Coord np, string cmd)
         {
             bool isValid = true;
             if (!Coord.IsValid(np))
                 isValid = false;
             else if (validCells.Contains(np))
                 isValid = false;
-            else if (Board[np.X, np.Y] != BoardStrings.EMPTY)
+            else if (cmd == Commands.MOVE && Board[np.X, np.Y] != BoardStrings.EMPTY)
                 isValid = false;
             else if (Coord.Distance(np, Origin) > MaxDist)
                 isValid = false;
-            return isValid;
-        }
-
-        private bool IsValidAtkNeighbor(Coord np)
-        {
-            bool isValid = true;
-            if (!Coord.IsValid(np))
-                isValid = false;
-            else if (validCells.Contains(np))
-                isValid = false;
-            else if (Coord.Distance(np, Origin) > MaxDist)
-                isValid = false;
-            else
-            {
-                switch (Ally)
-                {
-                    case ECultures.DALRIONS:
-                        isValid = BoardStrings.IsRahkar(Board[np.X, np.Y]);                        
-                        break;
-                    case ECultures.RAHKARS:
-                        isValid = BoardStrings.IsDalrion(Board[np.X, np.Y]);
-                        break;
-                    default:
-                        isValid = false;
-                        break;
-                }
-            }
             return isValid;
         }
 
@@ -75,51 +47,20 @@ namespace ShortestPath
 
             for (int i = 0; i < tmpNeighbors.Count; i++)
             {
-                if (cmd == Commands.MOVE)
-                {
-                    if (IsValidMoveNeighbor(tmpNeighbors[i]))
-                        neighbors.Add(tmpNeighbors[i]);
-                }
-                else if (cmd == Commands.ATTACK)
-                {
-                    if (IsValidAtkNeighbor(tmpNeighbors[i]))
-                        neighbors.Add(tmpNeighbors[i]);
-                }
-                else
-                {
-                    return null;
-                }
+                if (IsValidMoveNeighbor(tmpNeighbors[i], cmd))
+                    neighbors.Add(tmpNeighbors[i]);
             }
 
             return neighbors;
         }
 
-        public List<Coord> GetValidPaths()
+        public List<Coord> GetValidPaths(string cmd)
         {
             List<Coord> tmpValidCells = new List<Coord>();
             tmpValidCells.Add(Origin);
             while (tmpValidCells.Count > 0)
             {
-                List<Coord> validNeighbors = GetNeighbors(tmpValidCells[0], Commands.MOVE);
-                for (int i = 0; i < validNeighbors.Count; i++)
-                {
-                    tmpValidCells.Add(validNeighbors[i]);
-                    validCells.Add(validNeighbors[i]);
-                }
-                tmpValidCells.RemoveAt(0);
-            }
-            validCells.RemoveAt(0);
-            return validCells;
-        }
-
-        public List<Coord> GetAtkRange(ECultures ally)
-        {
-            List<Coord> tmpValidCells = new List<Coord>();
-            tmpValidCells.Add(Origin);
-            Ally = ally;
-            while (tmpValidCells.Count > 0)
-            {
-                List<Coord> validNeighbors = GetNeighbors(tmpValidCells[0], Commands.ATTACK);
+                List<Coord> validNeighbors = GetNeighbors(tmpValidCells[0], cmd);
                 for (int i = 0; i < validNeighbors.Count; i++)
                 {
                     tmpValidCells.Add(validNeighbors[i]);

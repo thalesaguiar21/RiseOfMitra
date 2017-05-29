@@ -21,13 +21,6 @@ namespace Cells
             return xs + ys;
         }
 
-        public bool IsSame(Coord b)
-        {
-            if (X == b.X && Y == b.Y)
-                return true;
-            return false;
-        }
-
         public static bool IsValid(Coord pos)
         {
             if (pos == null)

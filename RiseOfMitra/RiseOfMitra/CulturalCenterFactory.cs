@@ -6,7 +6,7 @@ namespace RiseOfMitra
 {
     class CulturalCenterFactory
     {
-        public static ABuilding CreateCultCenter(ECultures native, string[,] board)
+        public ABuilding Create(ECultures native, string[,] board)
         {
             CulturalCenter center = null;
             switch (native)

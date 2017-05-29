@@ -53,21 +53,21 @@ namespace RiseOfMitra
 
         private void CreateUnits()
         {
-            List<DalrionPawn> dPawns = new List<DalrionPawn>();
-            List<DalrionPawn> rPawns = new List<DalrionPawn>();
+            PawnFactory pawnFac = new PawnFactory();
             for (int i = 0; i < BoardConsts.INITIAL_PAWNS; i++)
             {
-                ABasicPawn dPawn = PawnFactory.CreatePawn(ECultures.DALRIONS, Board);
+                ABasicPawn dPawn = pawnFac.Create(ECultures.DALRIONS, Board);
                 dPawn.SetPos(new Coord(1 + i, 7));
                 players[0].AddPawn(dPawn);
 
-                ABasicPawn rPawn = PawnFactory.CreatePawn(ECultures.RAHKARS, Board);
+                ABasicPawn rPawn = pawnFac.Create(ECultures.RAHKARS, Board);
                 rPawn.SetPos(new Coord(BoardConsts.BOARD_LIN - 2 - i, BoardConsts.BOARD_COL - 8));
                 players[1].AddPawn(rPawn);
             }
 
-            ABuilding dCenter = CulturalCenterFactory.CreateCultCenter(ECultures.DALRIONS, Board);
-            ABuilding rCenter = CulturalCenterFactory.CreateCultCenter(ECultures.RAHKARS, Board);
+            CulturalCenterFactory centFac = new CulturalCenterFactory(); 
+            ABuilding dCenter = centFac.Create(ECultures.DALRIONS, Board);
+            ABuilding rCenter = centFac.Create(ECultures.RAHKARS, Board);
             dCenter.SetPos(new Coord(1, 1));
             int buildSize = rCenter.GetSize() + 1;
             rCenter.SetPos(new Coord(BoardConsts.BOARD_LIN - buildSize, BoardConsts.BOARD_COL - buildSize));
@@ -280,16 +280,26 @@ namespace RiseOfMitra
             } while (!isAlly);
 
             Dijkstra didi = new Dijkstra(Board, allyPawn.GetPos(), allyPawn.GetAtkRange());
-            List<Coord> enemiesInRange = didi.GetAtkRange(curPlayer.GetCulture());
+            List<Coord> attackRange = didi.GetValidPaths(Commands.ATTACK);
             Coord target = null;
+            bool enemiesInRange = false;
 
-            if(enemiesInRange.Count > 0)
+            foreach (Coord it in attackRange)
+            {
+                if(GetOponent().PawnAt(it) != null)
+                {
+                    enemiesInRange = true;
+                    break;
+                }
+            }
+
+            if (enemiesInRange)
             {
                 bool validTarget = false;
                 do
                 {
-                    target = SelectPosition(allyPos, curPlayer.GetCursor(), Commands.ATTACK, enemiesInRange);
-                    validTarget = enemiesInRange.Contains(target);
+                    target = SelectPosition(allyPos, curPlayer.GetCursor(), Commands.ATTACK, attackRange);
+                    validTarget = attackRange.Contains(target);
 
                     if (!validTarget)
                     {
@@ -338,7 +348,7 @@ namespace RiseOfMitra
             } while (!validSelection);
 
             Dijkstra didi = new Dijkstra(Board, allyPos, curPlayer.PawnAt(allyPos).GetMovePoints());
-            List<Coord> validCells = didi.GetValidPaths();
+            List<Coord> validCells = didi.GetValidPaths(Commands.MOVE);
             Coord target;
 
             validSelection = false;
@@ -407,6 +417,14 @@ namespace RiseOfMitra
                 curPlayer = players[1];
             else
                 curPlayer = players[0];
+        }
+
+        private Player GetOponent()
+        {
+            if (curPlayer == players[0])
+                return players[1];
+            else
+                return players[0];
         }
 
         static void Main(string[] args)

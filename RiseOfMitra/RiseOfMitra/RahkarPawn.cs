@@ -63,5 +63,10 @@ namespace RiseOfMitra
             Board[target.X, target.Y] = BoardStrings.RAHKAR_PAWN;
             SetPos(target);
         }
+
+        public override void Attack(Coord target)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
