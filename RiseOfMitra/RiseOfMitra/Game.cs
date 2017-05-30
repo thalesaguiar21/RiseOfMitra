@@ -107,7 +107,7 @@ namespace RiseOfMitra
             {
                 RoMBoard.PrintBoard(Board, null);
                 GetUserCmd();
-                Console.Write("Press enter to finish your turn...");
+                Console.Write("Press enter to continue...");
                 Console.ReadLine();
                 if(validCmd)
                     SetNextPlayer();
@@ -179,109 +179,136 @@ namespace RiseOfMitra
             }
         }
 
-        private void Attack()
+        private ABasicPawn GetAllyPawn()
         {
+            ABasicPawn pawn = null;
             bool isAlly = false;
-            Coord allyPos = null;
-            ABasicPawn allyPawn = null;
 
             do
             {
-                allyPos = RoMBoard.SelectPosition(Board, curPlayer.GetCursor());
-                allyPawn = curPlayer.GetPawnAt(allyPos);
+                Coord pos = RoMBoard.SelectPosition(Board, curPlayer.GetCursor());
+                pawn = curPlayer.GetPawnAt(pos);
+                BoardConsts consts = new BoardConsts();
 
-                string allyChar;
-                if (curPlayer.GetCulture() == ECultures.DALRIONS)
-                    allyChar = BoardConsts.DALRION_PAWN;
-                else
-                    allyChar = BoardConsts.RAHKAR_PAWN;
-
-                // Verifica se a célula selecionada possui um peão aliado
-                if (Board[allyPos.X, allyPos.Y].Equals(allyChar) && allyPawn != null)
-                    isAlly = true;
-                else
-                    isAlly = false;
-
-                if (!isAlly)
+                if (consts.ToCulture(Board[pos.X, pos.Y]) == curPlayer.GetCulture()
+                        && pawn != null)
                 {
-                    Console.Write("Invalid unit!");
-                    Console.ReadLine();
+                    isAlly = true;
+                }
+                else
+                {
+                    Console.Write("Invalid unit! Press (C) to exit or (R) to reselect: ");
+
+                    bool valid;
+                    do
+                    {
+                        valid = true;
+                        var move = Console.ReadKey(false).Key;
+                        switch (move)
+                        {
+                            case ConsoleKey.C:
+                                pawn = null;
+                                isAlly = true;
+                                break;
+                            case ConsoleKey.R:
+                                isAlly = false;
+                                break;
+                            default:
+                                valid = false;
+                                break;
+                        }
+                    } while (!valid);
                 }
             } while (!isAlly);
+            Console.WriteLine();
+            return pawn;
+        }
 
-            Dijkstra didi = new Dijkstra(Board, allyPawn.GetPos(), allyPawn.GetAtkRange());
-            List<Coord> attackRange = didi.GetValidPaths(Commands.ATTACK);
-            Coord target = null;
-            List<Unit> enemyUnitsInRange = new List<Unit>();
+        private void Attack()
+        {
+            Coord allyPos = null;
+            ABasicPawn allyPawn = GetAllyPawn();
 
-            foreach (Unit unit in GetOponent().GetUnits())
+            if (allyPawn != null)
             {
-                foreach (Coord cell in attackRange)
-                {
-                    if (unit.InUnit(cell))
-                    {
-                        enemyUnitsInRange.Add(unit);
-                    }
-                }
-            }
+                Dijkstra didi = new Dijkstra(Board, allyPawn.GetPos(), allyPawn.GetAtkRange());
+                List<Coord> attackRange = didi.GetValidPaths(Commands.ATTACK);
+                Coord target = null;
+                List<Unit> enemyUnitsInRange = new List<Unit>();
 
-            if (enemyUnitsInRange.Count > 0)
-            {
-                bool inRange = false;
-                do
+                foreach (Unit unit in GetOponent().GetUnits())
                 {
-                    target = RoMBoard.SelectPosition(Board, allyPos, curPlayer.GetCursor(), Commands.ATTACK, attackRange);
-                    Unit enemySelected = null;
-
-                    foreach (Unit unit in enemyUnitsInRange)
+                    foreach (Coord cell in attackRange)
                     {
-                        if (unit.InUnit(target))
+                        if (unit.InUnit(cell))
                         {
-                            enemySelected = unit;
-                            break;
+                            enemyUnitsInRange.Add(unit);
                         }
                     }
+                }
 
-                    inRange = attackRange.Contains(target) && enemySelected != null;
-                    
-                    if (inRange)
+                if (enemyUnitsInRange.Count > 0)
+                {
+                    bool inRange = false;
+                    do
                     {
-                        Unit enemy = GetOponent().GetPawnAt(target);
-                        if (enemy == null)
-                            enemy = GetOponent().GetCenter();
+                        target = RoMBoard.SelectPosition(Board, allyPos, curPlayer.GetCursor(), Commands.ATTACK, attackRange);
+                        Unit enemySelected = null;
 
-                        int res = allyPawn.GetAtk() - enemy.GetDef();
-                        if (res > 0)
+                        foreach (Unit unit in enemyUnitsInRange)
                         {
-                            enemy.SetCurrLife(enemy.GetCurrLife() - res);
-                            if(enemy.GetCurrLife() <= 0)
+                            if (unit.InUnit(target))
                             {
-                                if (enemy is ABasicPawn)
-                                {
-                                    Board[target.X, target.Y] = BoardConsts.EMPTY;
-                                    GetOponent().GetUnits().Remove(enemy);
-                                }
-                                Console.WriteLine("KILLED");
+                                enemySelected = unit;
+                                break;
                             }
-                            Console.WriteLine("You have dealt {0} damage", res);
+                        }
+
+                        inRange = attackRange.Contains(target) && enemySelected != null;
+
+                        if (inRange)
+                        {
+                            Unit enemy = GetOponent().GetPawnAt(target);
+                            if (enemy == null)
+                                enemy = GetOponent().GetCenter();
+
+                            int res = allyPawn.GetAtk() - enemy.GetDef();
+                            if (res > 0)
+                            {
+                                enemy.SetCurrLife(enemy.GetCurrLife() - res);
+                                if (enemy.GetCurrLife() <= 0)
+                                {
+                                    if (enemy is ABasicPawn)
+                                    {
+                                        Board[target.X, target.Y] = BoardConsts.EMPTY;
+                                        GetOponent().GetUnits().Remove(enemy);
+                                    }
+                                    Console.WriteLine("KILLED");
+                                }
+                                Console.WriteLine("You have dealt {0} damage", res);
+                            }
+                            else
+                            {
+                                Console.WriteLine("The opponent has blocked");
+                            }
                         }
                         else
                         {
-                            Console.WriteLine("The opponent has blocked");
+                            Console.WriteLine("Invalid target");
+                            Console.ReadLine();
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid target");
-                        Console.ReadLine();
-                    }
-                } while (!inRange);
+                    } while (!inRange);
+                }
+                else
+                {
+                    validCmd = false;
+                    Console.Write("This pawn has no enemies in range!");
+                    Console.ReadLine();
+                }
             }
             else
             {
                 validCmd = false;
-                Console.Write("This pawn has no enemies in range!");
-                Console.ReadLine();
             }
         }
 
@@ -289,51 +316,35 @@ namespace RiseOfMitra
         {
             Console.Write("Select an ally pawn...");
             Console.ReadLine();
-            Coord allyPos = null;
             bool validSelection = false;
-            
-            // Select a valid ally pawn
-            do
+            ABasicPawn allyPawn = GetAllyPawn();
+            if (allyPawn != null)
             {
-                string allyChar;
-                if (curPlayer.GetCulture() == ECultures.DALRIONS)
-                    allyChar = BoardConsts.DALRION_PAWN;
-                else
-                    allyChar = BoardConsts.RAHKAR_PAWN;
+                Coord pos = allyPawn.GetPos();
 
-                allyPos = RoMBoard.SelectPosition(Board, curPlayer.GetCursor());
+                Dijkstra didi = new Dijkstra(Board, pos, allyPawn.GetMovePoints());
+                List<Coord> validCells = didi.GetValidPaths(Commands.MOVE);
+                Coord target;
 
-                // Verifica se a célula selecionada possui um peão aliado
-                if (Board[allyPos.X, allyPos.Y].Equals(allyChar) && curPlayer.GetPawnAt(allyPos) != null)
-                    validSelection = true;
-                else
-                    validSelection = false;
-
-                if (!validSelection)
+                validSelection = false;
+                do
                 {
-                    Console.Write("Invalid unit!");
-                    Console.ReadLine();
-                }
-            } while (!validSelection);
+                    target = RoMBoard.SelectPosition(Board, curPlayer.GetCursor(), pos, Commands.MOVE, validCells);
+                    // Verifica se é possível se mover para a célula selecionada
+                    validSelection = validCells.Contains(target);
 
-            Dijkstra didi = new Dijkstra(Board, allyPos, curPlayer.GetPawnAt(allyPos).GetMovePoints());
-            List<Coord> validCells = didi.GetValidPaths(Commands.MOVE);
-            Coord target;
+                    if (!validSelection)
+                    {
+                        Console.Write("Invalid unit!");
+                    }
+                } while (!validSelection);
 
-            validSelection = false;
-            do
+                curPlayer.GetPawnAt(pos).Move(target);
+            }
+            else
             {
-                target = RoMBoard.SelectPosition(Board, curPlayer.GetCursor(), allyPos, Commands.MOVE, validCells);
-                // Verifica se é possível se mover para a célula selecionada
-                validSelection = validCells.Contains(target);
-
-                if (!validSelection)
-                {
-                    Console.Write("Invalid unit!");
-                }
-            } while (!validSelection);
-
-            curPlayer.GetPawnAt(allyPos).Move(target);
+                validCmd = false;
+            }
         }
 
         private void Inspect()
