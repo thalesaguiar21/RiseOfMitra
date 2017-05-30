@@ -46,7 +46,7 @@ namespace RiseOfMitra
             {
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
-                    Board[i, j] = ".";
+                    Board[i, j] = BoardConsts.EMPTY;
                 }
             }
         }
@@ -131,91 +131,6 @@ namespace RiseOfMitra
             Console.ReadLine();
         }
 
-        private Coord SelectPosition(Coord pos)
-        {
-            bool selected = false;
-            Coord selection = null;
-            do
-            {
-                Console.Clear();
-                RoMBoard.PrintBoard(Board, pos);
-
-                var move = Console.ReadKey(false).Key;
-                switch (move)
-                {
-                    case ConsoleKey.Enter:
-                        selected = true;
-                        selection = new Coord(pos.X, pos.Y);
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        if (pos.Y > 1)
-                            pos.Y--;
-                        break;
-                    case ConsoleKey.UpArrow:
-                        if (pos.X > 1)
-                            pos.X--;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        if (pos.Y < BoardConsts.BOARD_COL - 2)
-                            pos.Y++;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        if (pos.X < BoardConsts.BOARD_LIN - 2)
-                            pos.X++;
-                        break;
-                    case ConsoleKey.Escape:
-                        selected = true;
-                        break;
-                    default:
-                        break;
-                }
-            } while (!selected);
-
-            return selection;
-        }
-
-        private Coord SelectPosition(Coord pos, Coord prevSelec, string cmd, List<Coord> avaiableCells)
-        {
-            bool selected = false;
-            Coord selection = null;
-            do
-            {
-                Console.Clear();
-                RoMBoard.PrintBoard(Board, cmd, pos, prevSelec, avaiableCells);
-                var move = Console.ReadKey(false).Key;
-                switch (move)
-                {
-                    case ConsoleKey.Enter:
-                        selected = true;
-                        selection = new Coord(pos.X, pos.Y);
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        if (pos.Y > 1)
-                            pos.Y--;
-                        break;
-                    case ConsoleKey.UpArrow:
-                        if (pos.X > 1)
-                            pos.X--;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        if (pos.Y < BoardConsts.BOARD_COL - 2)
-                            pos.Y++;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        if (pos.X < BoardConsts.BOARD_LIN - 2)
-                            pos.X++;
-                        break;
-                    case ConsoleKey.Escape:
-                        selected = true;
-                        break;
-                    default:
-                        break;
-                }
-            } while (!selected);
-
-            return selection;
-        }
-
         public bool ConfirmSelection()
         {
             bool confirmed = false;
@@ -272,7 +187,7 @@ namespace RiseOfMitra
 
             do
             {
-                allyPos = SelectPosition(curPlayer.GetCursor());
+                allyPos = RoMBoard.SelectPosition(Board, curPlayer.GetCursor());
                 allyPawn = curPlayer.GetPawnAt(allyPos);
 
                 string allyChar;
@@ -315,7 +230,7 @@ namespace RiseOfMitra
                 bool inRange = false;
                 do
                 {
-                    target = SelectPosition(allyPos, curPlayer.GetCursor(), Commands.ATTACK, attackRange);
+                    target = RoMBoard.SelectPosition(Board, allyPos, curPlayer.GetCursor(), Commands.ATTACK, attackRange);
                     Unit enemySelected = null;
 
                     foreach (Unit unit in enemyUnitsInRange)
@@ -386,7 +301,7 @@ namespace RiseOfMitra
                 else
                     allyChar = BoardConsts.RAHKAR_PAWN;
 
-                allyPos = SelectPosition(curPlayer.GetCursor());
+                allyPos = RoMBoard.SelectPosition(Board, curPlayer.GetCursor());
 
                 // Verifica se a célula selecionada possui um peão aliado
                 if (Board[allyPos.X, allyPos.Y].Equals(allyChar) && curPlayer.GetPawnAt(allyPos) != null)
@@ -408,7 +323,7 @@ namespace RiseOfMitra
             validSelection = false;
             do
             {
-                target = SelectPosition(curPlayer.GetCursor(), allyPos, Commands.MOVE, validCells);
+                target = RoMBoard.SelectPosition(Board, curPlayer.GetCursor(), allyPos, Commands.MOVE, validCells);
                 // Verifica se é possível se mover para a célula selecionada
                 validSelection = validCells.Contains(target);
 
@@ -428,11 +343,12 @@ namespace RiseOfMitra
             Coord selPos = null;
             bool isUnit = false;
             validCmd = false;
+            BoardConsts consts = new BoardConsts();
 
             do
             {
-                selPos = SelectPosition(curPlayer.GetCursor());
-                isUnit = BoardConsts.IsValid(Board[selPos.X, selPos.Y]);
+                selPos = RoMBoard.SelectPosition(Board, curPlayer.GetCursor());
+                isUnit = consts.IsValid(Board[selPos.X, selPos.Y]);
                 string msg = "";
 
                 foreach (Player it in players)

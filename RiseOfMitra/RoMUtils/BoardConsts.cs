@@ -19,27 +19,26 @@ namespace Consts
         public const string FOG = "-";
         public const string BLOCKED = "X";
 
-        private static string[] DALRION_UNITS = { "$", "@" };
-        private static string[] RAHKAR_UNITS = { "#", "%" };
+        private string[] DALRION_UNITS = { "$", "@" };
+        private string[] RAHKAR_UNITS = { "#", "%" };
 
 
-        public static bool IsDalrion(string cell)
+        public bool IsDalrion(string cell)
         {
             return DALRION_UNITS.Contains(cell);
         }
 
-        public static bool IsRahkar(string cell)
+        public bool IsRahkar(string cell)
         {
             return RAHKAR_UNITS.Contains(cell);
         }
 
-        public static bool IsValid(string cell)
+        public bool IsValid(string cell)
         {
             return IsRahkar(cell) || IsDalrion(cell);
         }
 
-
-        public static ECultures ToCulture(string msg)
+        public ECultures ToCulture(string msg)
         {
             if (IsDalrion(msg)) return ECultures.DALRIONS;
             else if (IsRahkar(msg)) return ECultures.RAHKARS;

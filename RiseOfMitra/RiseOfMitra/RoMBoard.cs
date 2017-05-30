@@ -35,14 +35,100 @@ namespace RiseOfMitra
             "Blocked cell: "    + BoardConsts.BLOCKED,
         };
 
+        public static Coord SelectPosition(string[,] board, Coord pos)
+        {
+            bool selected = false;
+            Coord selection = null;
+            do
+            {
+                Console.Clear();
+                PrintBoard(board, pos);
+
+                var move = Console.ReadKey(false).Key;
+                switch (move)
+                {
+                    case ConsoleKey.Enter:
+                        selected = true;
+                        selection = new Coord(pos.X, pos.Y);
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        if (pos.Y > 1)
+                            pos.Y--;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        if (pos.X > 1)
+                            pos.X--;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (pos.Y < BoardConsts.BOARD_COL - 2)
+                            pos.Y++;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        if (pos.X < BoardConsts.BOARD_LIN - 2)
+                            pos.X++;
+                        break;
+                    case ConsoleKey.Escape:
+                        selected = true;
+                        break;
+                    default:
+                        break;
+                }
+            } while (!selected);
+
+            return selection;
+        }
+
+        public static Coord SelectPosition(string[,] board, Coord pos, Coord prevSelec, string cmd, List<Coord> avaiableCells)
+        {
+            bool selected = false;
+            Coord selection = null;
+            do
+            {
+                Console.Clear();
+                RoMBoard.PrintBoard(board, cmd, pos, prevSelec, avaiableCells);
+                var move = Console.ReadKey(false).Key;
+                switch (move)
+                {
+                    case ConsoleKey.Enter:
+                        selected = true;
+                        selection = new Coord(pos.X, pos.Y);
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        if (pos.Y > 1)
+                            pos.Y--;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        if (pos.X > 1)
+                            pos.X--;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (pos.Y < BoardConsts.BOARD_COL - 2)
+                            pos.Y++;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        if (pos.X < BoardConsts.BOARD_LIN - 2)
+                            pos.X++;
+                        break;
+                    case ConsoleKey.Escape:
+                        selected = true;
+                        break;
+                    default:
+                        break;
+                }
+            } while (!selected);
+
+            return selection;
+        }
+
         public static void PrintBoard(string[,] board, string cmd, Coord cursor, Coord selection, List<Coord> avaiableCells)
         {
+            BoardConsts consts = new BoardConsts();
             Console.WriteLine();
             for (int i = 0; i < BoardConsts.BOARD_LIN; i++)
             {
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
-                    ECultures cult = BoardConsts.ToCulture(board[i, j]);
+                    ECultures cult = consts.ToCulture(board[i, j]);
                     if (selection != null && avaiableCells.Contains(new Coord(i, j)))
                     {
                         if (Commands.MOVE == cmd)
@@ -81,12 +167,13 @@ namespace RiseOfMitra
 
         public static void PrintBoard(string[,] board, Coord cursorPos)
         {
+            BoardConsts consts = new BoardConsts();
             Console.WriteLine();
             for (int i = 0; i < BoardConsts.BOARD_LIN; i++)
             {
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
-                    ECultures cult = BoardConsts.ToCulture(board[i, j]);
+                    ECultures cult = consts.ToCulture(board[i, j]);
                     if (cursorPos != null && cursorPos.Equals(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
                     if (cult == ECultures.DALRIONS)
