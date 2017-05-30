@@ -20,11 +20,9 @@ namespace RiseOfMitra
             Pawns = new List<ABasicPawn>();
             Center = null;
             Cursor = new Coord(1, 1);
-            Units = new List<Unit>();
-
         }
 
-        public ABasicPawn PawnAt(Coord pos)
+        public ABasicPawn GetPawnAt(Coord pos)
         {
             for (int i = 0; i < Pawns.Count; i++)
             {
@@ -45,6 +43,23 @@ namespace RiseOfMitra
             playerUnits.AddRange(Pawns);
             playerUnits.Add(Center);
             return playerUnits;
+        }
+
+        public Unit GetUnitAt(Coord pos)
+        {
+            Unit unit = null;
+            if(pos != null)
+            {
+                foreach (Unit it in GetUnits())
+                {
+                    if (it.InUnit(pos))
+                    {
+                        unit = it;
+                        break;
+                    }
+                }
+            }
+            return unit;
         }
 
         public void SetCulture(ECultures cult)

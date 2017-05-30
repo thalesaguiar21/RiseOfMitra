@@ -266,7 +266,7 @@ namespace RiseOfMitra
             do
             {
                 allyPos = SelectPosition(curPlayer.GetCursor());
-                allyPawn = curPlayer.PawnAt(allyPos);
+                allyPawn = curPlayer.GetPawnAt(allyPos);
 
                 string allyChar;
                 if (curPlayer.GetCulture() == ECultures.DALRIONS)
@@ -309,7 +309,6 @@ namespace RiseOfMitra
                 do
                 {
                     target = SelectPosition(allyPos, curPlayer.GetCursor(), Commands.ATTACK, attackRange);
-                    inRange = attackRange.Contains(target);
                     Unit enemySelected = null;
 
                     foreach (Unit unit in enemyUnitsInRange)
@@ -321,9 +320,11 @@ namespace RiseOfMitra
                         }
                     }
 
-                    if (inRange && enemySelected != null)
+                    inRange = attackRange.Contains(target) && enemySelected != null;
+                    
+                    if (inRange)
                     {
-                        Unit enemy = GetOponent().PawnAt(target);
+                        Unit enemy = GetOponent().GetPawnAt(target);
                         if (enemy == null)
                             enemy = GetOponent().GetCenter();
 
@@ -333,7 +334,12 @@ namespace RiseOfMitra
                             enemy.SetCurrLife(enemy.GetCurrLife() - res);
                             if(enemy.GetCurrLife() <= 0)
                             {
-
+                                if (enemy is ABasicPawn)
+                                {
+                                    Board[target.X, target.Y] = BoardStrings.EMPTY;
+                                    GetOponent().GetUnits().Remove(enemy);
+                                }
+                                Console.WriteLine("KILLED");
                             }
                             Console.WriteLine("You have dealt {0} damage", res);
                         }
@@ -342,7 +348,7 @@ namespace RiseOfMitra
                             Console.WriteLine("The opponent has blocked");
                         }
                     }
-                    if (!inRange)
+                    else
                     {
                         Console.WriteLine("Invalid target");
                         Console.ReadLine();
@@ -376,7 +382,7 @@ namespace RiseOfMitra
                 allyPos = SelectPosition(curPlayer.GetCursor());
 
                 // Verifica se a célula selecionada possui um peão aliado
-                if (Board[allyPos.X, allyPos.Y].Equals(allyChar) && curPlayer.PawnAt(allyPos) != null)
+                if (Board[allyPos.X, allyPos.Y].Equals(allyChar) && curPlayer.GetPawnAt(allyPos) != null)
                     validSelection = true;
                 else
                     validSelection = false;
@@ -388,7 +394,7 @@ namespace RiseOfMitra
                 }
             } while (!validSelection);
 
-            Dijkstra didi = new Dijkstra(Board, allyPos, curPlayer.PawnAt(allyPos).GetMovePoints());
+            Dijkstra didi = new Dijkstra(Board, allyPos, curPlayer.GetPawnAt(allyPos).GetMovePoints());
             List<Coord> validCells = didi.GetValidPaths(Commands.MOVE);
             Coord target;
 
@@ -405,7 +411,7 @@ namespace RiseOfMitra
                 }
             } while (!validSelection);
 
-            curPlayer.PawnAt(allyPos).Move(target);
+            curPlayer.GetPawnAt(allyPos).Move(target);
         }
 
         private void Inspect()
@@ -430,9 +436,9 @@ namespace RiseOfMitra
                         isUnit = true;
                         break;
                     }
-                    else if (it.PawnAt(selPos) != null)
+                    else if (it.GetPawnAt(selPos) != null)
                     {
-                        msg = it.PawnAt(selPos).GetStatus();
+                        msg = it.GetPawnAt(selPos).GetStatus();
                         isUnit = true;
                         break;
                     }
