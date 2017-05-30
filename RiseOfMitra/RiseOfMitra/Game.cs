@@ -107,7 +107,7 @@ namespace RiseOfMitra
             {
                 RoMBoard.PrintBoard(Board, null);
                 GetUserCmd();
-                Console.Write("Press enter to finish...");
+                Console.Write("Press enter to finish your turn...");
                 Console.ReadLine();
                 if(validCmd)
                     SetNextPlayer();
@@ -119,9 +119,16 @@ namespace RiseOfMitra
                 }
                 Console.Clear();
             } while (play);
-
-            Console.WriteLine("WINNER");
-
+            string msg = "";
+            if(curPlayer.GetCenter().GetCurrLife() <= 0)
+            {
+                if (curPlayer.GetCulture() == ECultures.DALRIONS)
+                    msg = "DALRIONS";
+                else
+                    msg = "RAHKARS";
+            }
+            Console.WriteLine(" ARE THE WINNERs!");
+            Console.ReadLine();
         }
 
         private Coord SelectPosition(Coord pos)
