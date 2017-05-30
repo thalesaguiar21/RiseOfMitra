@@ -11,8 +11,8 @@ namespace RiseOfMitra
         
         public CulturalCenter(ECultures native)
         {
-            if (native == ECultures.DALRIONS) BOARD_CHAR = BoardStrings.DALRION_CENTER;
-            else if (native == ECultures.RAHKARS) BOARD_CHAR = BoardStrings.RAHKAR_CENTER;
+            if (native == ECultures.DALRIONS) BOARD_CHAR = BoardConsts.DALRION_CENTER;
+            else if (native == ECultures.RAHKARS) BOARD_CHAR = BoardConsts.RAHKAR_CENTER;
             SetCulture(ECultures.DEFAULT);
             SetCurrLife(0);
             SetDef(0);

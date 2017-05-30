@@ -26,13 +26,13 @@ namespace RiseOfMitra
 
         private static string[] Legend = new string[]
         {
-            "Dalrion pawn: "    + BoardStrings.DALRION_PAWN,
-            "Dalrion center: "  + BoardStrings.DALRION_CENTER,
-            "Rahkar pawn: "     + BoardStrings.RAHKAR_PAWN,
-            "Rahkar center: "   + BoardStrings.RAHKAR_CENTER,
-            "Empty cell: "      + BoardStrings.EMPTY,
-            "Cell with fog: "   + BoardStrings.FOG,
-            "Blocked cell: "    + BoardStrings.BLOCKED,
+            "Dalrion pawn: "    + BoardConsts.DALRION_PAWN,
+            "Dalrion center: "  + BoardConsts.DALRION_CENTER,
+            "Rahkar pawn: "     + BoardConsts.RAHKAR_PAWN,
+            "Rahkar center: "   + BoardConsts.RAHKAR_CENTER,
+            "Empty cell: "      + BoardConsts.EMPTY,
+            "Cell with fog: "   + BoardConsts.FOG,
+            "Blocked cell: "    + BoardConsts.BLOCKED,
         };
 
         public static void PrintBoard(string[,] board, string cmd, Coord cursor, Coord selection, List<Coord> avaiableCells)
@@ -42,7 +42,7 @@ namespace RiseOfMitra
             {
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
-                    ECultures cult = BoardStrings.ToCulture(board[i, j]);
+                    ECultures cult = BoardConsts.ToCulture(board[i, j]);
                     if (selection != null && avaiableCells.Contains(new Coord(i, j)))
                     {
                         if (Commands.MOVE == cmd)
@@ -86,7 +86,7 @@ namespace RiseOfMitra
             {
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++)
                 {
-                    ECultures cult = BoardStrings.ToCulture(board[i, j]);
+                    ECultures cult = BoardConsts.ToCulture(board[i, j]);
                     if (cursorPos != null && cursorPos.Equals(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
                     if (cult == ECultures.DALRIONS)

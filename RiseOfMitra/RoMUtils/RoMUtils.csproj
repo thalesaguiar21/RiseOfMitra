@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoardStrings.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="Coord.cs" />
     <Compile Include="ECultures.cs" />

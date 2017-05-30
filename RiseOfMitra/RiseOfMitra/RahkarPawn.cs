@@ -10,7 +10,7 @@ namespace RiseOfMitra
         public RahkarPawn()
         {
             Board = null;
-            BOARD_CHAR = BoardStrings.RAHKAR_PAWN;
+            BOARD_CHAR = BoardConsts.RAHKAR_PAWN;
             SetCurrLife(0);
             SetTotalLife(0);
             SetAtk(0);
@@ -59,8 +59,8 @@ namespace RiseOfMitra
 
         public override void Move(Coord target)
         {
-            Board[GetPos().X, GetPos().Y] = BoardStrings.EMPTY;
-            Board[target.X, target.Y] = BoardStrings.RAHKAR_PAWN;
+            Board[GetPos().X, GetPos().Y] = BoardConsts.EMPTY;
+            Board[target.X, target.Y] = BoardConsts.RAHKAR_PAWN;
             SetPos(target);
         }
 

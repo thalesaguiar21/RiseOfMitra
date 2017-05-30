@@ -11,7 +11,7 @@ namespace RiseOfMitra
         public DalrionPawn()
         {
             Board = null;
-            BOARD_CHAR = BoardStrings.DALRION_PAWN;
+            BOARD_CHAR = BoardConsts.DALRION_PAWN;
             SetCurrLife(0);
             SetTotalLife(0);
             SetAtk(0);
@@ -60,8 +60,8 @@ namespace RiseOfMitra
 
         public override void Move(Coord target)
         {
-            Board[GetPos().X, GetPos().Y] = BoardStrings.EMPTY;
-            Board[target.X, target.Y] = BoardStrings.DALRION_PAWN;
+            Board[GetPos().X, GetPos().Y] = BoardConsts.EMPTY;
+            Board[target.X, target.Y] = BoardConsts.DALRION_PAWN;
             SetPos(target);
         }
 

@@ -277,9 +277,9 @@ namespace RiseOfMitra
 
                 string allyChar;
                 if (curPlayer.GetCulture() == ECultures.DALRIONS)
-                    allyChar = BoardStrings.DALRION_PAWN;
+                    allyChar = BoardConsts.DALRION_PAWN;
                 else
-                    allyChar = BoardStrings.RAHKAR_PAWN;
+                    allyChar = BoardConsts.RAHKAR_PAWN;
 
                 // Verifica se a célula selecionada possui um peão aliado
                 if (Board[allyPos.X, allyPos.Y].Equals(allyChar) && allyPawn != null)
@@ -343,7 +343,7 @@ namespace RiseOfMitra
                             {
                                 if (enemy is ABasicPawn)
                                 {
-                                    Board[target.X, target.Y] = BoardStrings.EMPTY;
+                                    Board[target.X, target.Y] = BoardConsts.EMPTY;
                                     GetOponent().GetUnits().Remove(enemy);
                                 }
                                 Console.WriteLine("KILLED");
@@ -382,9 +382,9 @@ namespace RiseOfMitra
             {
                 string allyChar;
                 if (curPlayer.GetCulture() == ECultures.DALRIONS)
-                    allyChar = BoardStrings.DALRION_PAWN;
+                    allyChar = BoardConsts.DALRION_PAWN;
                 else
-                    allyChar = BoardStrings.RAHKAR_PAWN;
+                    allyChar = BoardConsts.RAHKAR_PAWN;
 
                 allyPos = SelectPosition(curPlayer.GetCursor());
 
@@ -432,7 +432,7 @@ namespace RiseOfMitra
             do
             {
                 selPos = SelectPosition(curPlayer.GetCursor());
-                isUnit = BoardStrings.IsValid(Board[selPos.X, selPos.Y]);
+                isUnit = BoardConsts.IsValid(Board[selPos.X, selPos.Y]);
                 string msg = "";
 
                 foreach (Player it in players)
