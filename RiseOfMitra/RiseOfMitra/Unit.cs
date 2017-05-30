@@ -40,7 +40,7 @@ namespace RiseOfMitra
             {
                 for (int j = 0; j < Size; j++)
                 {
-                    if (Pos.X + i == target.X && Pos.Y + j == target.Y)
+                    if (Pos.Equals(target))
                         return true;
                 }
             }

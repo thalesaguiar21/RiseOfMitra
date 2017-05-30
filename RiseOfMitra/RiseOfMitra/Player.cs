@@ -11,6 +11,7 @@ namespace RiseOfMitra
         private List<ABasicPawn> Pawns;
         private CulturalCenter Center;
         private Coord Cursor;
+        List<Unit> Units;
         // Lista de templos
 
         public Player()
@@ -19,6 +20,8 @@ namespace RiseOfMitra
             Pawns = new List<ABasicPawn>();
             Center = null;
             Cursor = new Coord(1, 1);
+            Units = new List<Unit>();
+
         }
 
         public ABasicPawn PawnAt(Coord pos)
@@ -35,6 +38,14 @@ namespace RiseOfMitra
         public List<ABasicPawn> GetPawns() { return Pawns; }
         public CulturalCenter GetCenter() { return Center; }
         public Coord GetCursor() { return Cursor; }
+
+        public List<Unit> GetUnits()
+        {
+            List<Unit> playerUnits = new List<Unit>();
+            playerUnits.AddRange(Pawns);
+            playerUnits.Add(Center);
+            return playerUnits;
+        }
 
         public void SetCulture(ECultures cult)
         {

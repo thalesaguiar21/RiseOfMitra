@@ -111,8 +111,16 @@ namespace RiseOfMitra
                 Console.ReadLine();
                 if(validCmd)
                     SetNextPlayer();
+
+                foreach (Player player in players)
+                {
+                    if (player.GetCenter().GetCurrLife() <= 0)
+                        play = false;
+                }
                 Console.Clear();
             } while (play);
+
+            Console.WriteLine("WINNER");
 
         }
 
@@ -282,31 +290,51 @@ namespace RiseOfMitra
             Dijkstra didi = new Dijkstra(Board, allyPawn.GetPos(), allyPawn.GetAtkRange());
             List<Coord> attackRange = didi.GetValidPaths(Commands.ATTACK);
             Coord target = null;
-            bool enemiesInRange = false;
+            List<Unit> enemyUnitsInRange = new List<Unit>();
 
-            foreach (Coord it in attackRange)
+            foreach (Unit unit in GetOponent().GetUnits())
             {
-                if(GetOponent().PawnAt(it) != null)
+                foreach (Coord cell in attackRange)
                 {
-                    enemiesInRange = true;
-                    break;
+                    if (unit.InUnit(cell))
+                    {
+                        enemyUnitsInRange.Add(unit);
+                    }
                 }
             }
 
-            if (enemiesInRange)
+            if (enemyUnitsInRange.Count > 0)
             {
-                bool validTarget = false;
+                bool inRange = false;
                 do
                 {
                     target = SelectPosition(allyPos, curPlayer.GetCursor(), Commands.ATTACK, attackRange);
-                    validTarget = attackRange.Contains(target) && GetOponent().PawnAt(target) != null;
-                    if (validTarget)
+                    inRange = attackRange.Contains(target);
+                    Unit enemySelected = null;
+
+                    foreach (Unit unit in enemyUnitsInRange)
                     {
-                        ABasicPawn enemy = GetOponent().PawnAt(target);
+                        if (unit.InUnit(target))
+                        {
+                            enemySelected = unit;
+                            break;
+                        }
+                    }
+
+                    if (inRange && enemySelected != null)
+                    {
+                        Unit enemy = GetOponent().PawnAt(target);
+                        if (enemy == null)
+                            enemy = GetOponent().GetCenter();
+
                         int res = allyPawn.GetAtk() - enemy.GetDef();
                         if (res > 0)
                         {
                             enemy.SetCurrLife(enemy.GetCurrLife() - res);
+                            if(enemy.GetCurrLife() <= 0)
+                            {
+
+                            }
                             Console.WriteLine("You have dealt {0} damage", res);
                         }
                         else
@@ -314,12 +342,12 @@ namespace RiseOfMitra
                             Console.WriteLine("The opponent has blocked");
                         }
                     }
-                    if (!validTarget)
+                    if (!inRange)
                     {
                         Console.WriteLine("Invalid target");
                         Console.ReadLine();
                     }
-                } while (!validTarget);
+                } while (!inRange);
             }
             else
             {
