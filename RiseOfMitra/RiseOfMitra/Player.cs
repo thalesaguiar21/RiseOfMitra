@@ -95,5 +95,16 @@ namespace RiseOfMitra
             }
             return found;
         }
+
+        public void PeformMove(string[,] board) {
+            Coord selPos = RoMBoard.SelectPosition(board, Cursor);
+            ABasicPawn pawn = GetPawnAt(selPos);
+
+            if (pawn != null) {
+                pawn.Attack(Cursor);
+            } else {
+                Console.WriteLine("This position is not a valid unit!");
+            }
+        }
     }
 }
