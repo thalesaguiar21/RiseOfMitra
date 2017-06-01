@@ -65,27 +65,19 @@ namespace RiseOfMitra
                     Coord target = RoMBoard.SelectPosition(Board, cursor, GetPos(), Commands.MOVE, moveRange);
                     validTarget = moveRange.Contains(target);
 
-                    string msg = "";
-
                     if (validTarget) {
-                        msg = "Moving to position";
                         Board[GetPos().X, GetPos().Y] = BoardConsts.EMPTY;
                         Board[target.X, target.Y] = BoardConsts.RAHKAR_PAWN;
                         SetPos(target);
                     } else {
-                        msg = "Invalid target!";
+                        Console.Write("Invalid target! ");
+                        Console.ReadLine();
                     }
-
-                    Console.WriteLine(msg);
                 } while (!validTarget);
             } else {
-                Console.WriteLine("This pawn can't move!");
+                Console.Write("This pawn can't move! ");
             }
             return validTarget;
-        }
-
-        public override bool Attack(Coord target) {
-            throw new NotImplementedException();
         }
     }
 }

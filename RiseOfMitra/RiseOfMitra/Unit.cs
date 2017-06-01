@@ -43,6 +43,16 @@ namespace RiseOfMitra
             return false;
         }
 
+        public void Erase() {
+            for (int i = 0; i < GetSize(); i++) {
+                for (int k = 0; k < GetSize(); k++) {
+                    int cX = GetPos().X + i;
+                    int cY = GetPos().Y + k;
+                    Board[cX, cY] = BoardConsts.EMPTY;
+                }
+            }
+        }
+
         public override string ToString() {
             return BOARD_CHAR;
         }

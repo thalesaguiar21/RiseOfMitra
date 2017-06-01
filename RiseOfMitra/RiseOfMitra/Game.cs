@@ -88,6 +88,7 @@ namespace RiseOfMitra
             }
         }
 
+
         public void Start() {
             do {
                 RoMBoard.PrintBoard(Board, null);
@@ -195,67 +196,21 @@ namespace RiseOfMitra
         }
 
         private void Attack() {
-            ABasicPawn allyPawn = GetAllyPawn();
 
-            if (allyPawn != null) {
-                Dijkstra didi = new Dijkstra(Board, allyPawn.GetPos(), allyPawn.GetAtkRange());
-                List<Coord> attackRange = didi.GetValidPaths(Commands.ATTACK);
-                Coord target = null;
-                List<Unit> enemies = new List<Unit>();
-
-                foreach (Unit unit in GetOponent().GetUnits()) {
-                    foreach (Coord cell in attackRange) {
-                        if (unit.InUnit(cell)) {
-                            enemies.Add(unit);
-                        }
-                    }
+            Coord enemyPos = null;
+            enemyPos = curPlayer.PerformAttack(Board, GetOponent().GetUnits());
+            if(enemyPos != null) {
+                Unit enemy = GetOponent().GetUnitAt(enemyPos);
+                if (enemy.GetCurrLife() <= 0) {
+                    GetOponent().GetUnitAt(enemyPos).Erase();
+                    GetOponent().RemoveUnitAt(enemyPos);
                 }
-
-                if (enemies.Count > 0) {
-                    target = RoMBoard.SelectPosition(Board, curPlayer.GetCursor(), allyPawn.GetPos(), Commands.ATTACK, attackRange);
-                    Unit enemy = null;
-
-                    for (int i = 0; i < enemies.Count; i++) {
-                        if (enemies[i].InUnit(target)) {
-                            enemy = enemies[i];
-                            break;
-                        }
-                    }
-
-                    if (enemy != null) {
-                        int res = allyPawn.GetAtk() - enemy.GetDef();
-                        if (res > 0) {
-                            enemy.SetCurrLife(enemy.GetCurrLife() - res);
-                            if (enemy.GetCurrLife() > 0) {
-                                Console.WriteLine("You dealt {0} damage", res);
-                            } else {
-                                Console.WriteLine("Killed the enemy!");
-                                Coord ePos = enemy.GetPos();
-                                Board[ePos.X, ePos.Y] = BoardConsts.EMPTY;
-                                GetOponent().RemoveUnitAt(ePos);
-                            }
-                        } else {
-                            Console.WriteLine("The opponent has blocked!");
-                        }
-                    } else {
-                        Console.Write("Invalid unit! Press (C) to exit or (R) to reselect: ");
-                    }
-                } else {
-                    validCmd = false;
-                    Console.Write("This pawn has no enemies in range!");
-                    Console.ReadLine();
-                }
-            } else {
-                validCmd = false;
             }
+            validCmd = enemyPos != null;
         }
 
         private void Move() {
-            bool valid = false;
-            do {
-                valid = curPlayer.PeformMove(Board);
-                Console.ReadLine();
-            } while (!valid);
+            validCmd = curPlayer.PeformMove(Board);
         }
 
         private void Inspect() {

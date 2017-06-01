@@ -104,10 +104,24 @@ namespace RiseOfMitra
             if (pawn != null) {
                 valid = pawn.Move(Cursor);
             } else {
-                Console.WriteLine("This position is not a valid unit!");
+                Console.Write("This position is not a valid unit! ");
             }
 
             return valid;
+        }
+
+        public Coord PerformAttack(string[,] board, List<Unit> enemies) {
+            Coord selPos = RoMBoard.SelectPosition(board, Cursor);
+            ABasicPawn pawn = GetPawnAt(selPos);
+            Coord target = null;
+
+            if (pawn != null) {
+                target = pawn.Attack(Cursor, enemies);
+            } else {
+                Console.Write("This position is not a valid unit! ");
+            }
+
+            return target;
         }
     }
 }

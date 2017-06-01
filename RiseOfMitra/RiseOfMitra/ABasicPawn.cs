@@ -2,6 +2,9 @@
 using Types;
 using Cells;
 using System.Text;
+using System.Collections.Generic;
+using ShortestPath;
+using Consts;
 
 namespace RiseOfMitra
 {
@@ -47,9 +50,48 @@ namespace RiseOfMitra
             }
         }
 
-        public abstract bool Move(Coord target);
+        public virtual Coord Attack(Coord cursor, List<Unit> enemies) {
+            bool validTarget = false;
+            Coord target = null;
+            Dijkstra didi = new Dijkstra(Board, GetPos(), GetAtkRange());
+            List<Coord> attackRange = didi.GetValidPaths(Commands.ATTACK);
+            List<Coord> enemiesInRange = new List<Coord>();
 
-        public abstract bool Attack(Coord target);
+            foreach (Coord cell in attackRange) {
+                foreach (Unit unit in enemies) {
+                    if (unit.InUnit(cell)) {
+                        enemiesInRange.Add(unit.GetPos());
+                        break;
+                    }
+                }
+            }
+
+            if (enemiesInRange.Count > 0) {
+                do {
+                    target = RoMBoard.SelectPosition(Board, cursor, GetPos(), Commands.ATTACK, attackRange);
+
+                    validTarget = enemiesInRange.Contains(target);
+
+                    if (validTarget) {
+                        foreach (Unit unit in enemies) {
+                            if (unit.InUnit(target)) {
+                                int res = GetAtk() - unit.GetDef();
+                                unit.SetCurrLife(unit.GetCurrLife() - res);
+                                break;
+                            }
+                        }
+                    } else {
+                        Console.Write("Invalid target! ");
+                        Console.ReadLine();
+                    }
+                } while (!validTarget);
+            } else {
+                Console.Write("No enemies in range! ");
+            }
+            return target;
+        }
+
+        public abstract bool Move(Coord cursor);
 
         public abstract void Adapt(ETerrain terrain);
     }
