@@ -75,33 +75,33 @@ namespace RiseOfMitra
             return selection;
         }
 
-        public static Coord SelectPosition(string[,] board, Coord pos, Coord prevSelec, string cmd, List<Coord> avaiableCells) {
+        public static Coord SelectPosition(string[,] board, Coord cursor, Coord prevSelec, string cmd, List<Coord> avaiableCells) {
             bool selected = false;
             Coord selection = null;
             do {
                 Console.Clear();
-                RoMBoard.PrintBoard(board, cmd, pos, prevSelec, avaiableCells);
+                RoMBoard.PrintBoard(board, cmd, cursor, prevSelec, avaiableCells);
                 var move = Console.ReadKey(false).Key;
                 switch (move) {
                     case ConsoleKey.Enter:
                         selected = true;
-                        selection = new Coord(pos.X, pos.Y);
+                        selection = new Coord(cursor.X, cursor.Y);
                         break;
                     case ConsoleKey.LeftArrow:
-                        if (pos.Y > 1)
-                            pos.Y--;
+                        if (cursor.Y > 1)
+                            cursor.Y--;
                         break;
                     case ConsoleKey.UpArrow:
-                        if (pos.X > 1)
-                            pos.X--;
+                        if (cursor.X > 1)
+                            cursor.X--;
                         break;
                     case ConsoleKey.RightArrow:
-                        if (pos.Y < BoardConsts.BOARD_COL - 2)
-                            pos.Y++;
+                        if (cursor.Y < BoardConsts.BOARD_COL - 2)
+                            cursor.Y++;
                         break;
                     case ConsoleKey.DownArrow:
-                        if (pos.X < BoardConsts.BOARD_LIN - 2)
-                            pos.X++;
+                        if (cursor.X < BoardConsts.BOARD_LIN - 2)
+                            cursor.X++;
                         break;
                     case ConsoleKey.Escape:
                         selected = true;

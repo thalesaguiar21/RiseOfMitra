@@ -10,6 +10,7 @@ namespace ShortestPath
         private Coord Origin;
         private int MaxDist;
         private List<Coord> validCells;
+        Dictionary<Coord, int> acumDist;
 
         public BFS(string[,] board, Coord origin, int maxDist) {
             Board = board;
@@ -17,9 +18,11 @@ namespace ShortestPath
             MaxDist = maxDist;
             validCells = new List<Coord>();
             validCells.Add(Origin);
+            acumDist = new Dictionary<Coord, int>();
+            acumDist.Add(Origin, 0);
         }
 
-        private bool IsValidMoveNeighbor(Coord np, string cmd) {
+        private bool IsValidMoveNeighbor(Coord origin, Coord np, string cmd) {
             bool isValid = true;
             if (!Coord.IsValid(np))
                 isValid = false;
@@ -27,14 +30,14 @@ namespace ShortestPath
                 isValid = false;
             else if (cmd == Commands.MOVE && Board[np.X, np.Y] != BoardConsts.EMPTY)
                 isValid = false;
-            else if (Coord.Distance(np, Origin) > MaxDist)
+            else if (acumDist[origin] + 1 > MaxDist)
                 isValid = false;
             return isValid;
         }
 
         private List<Coord> GetNeighbors(Coord cell, string cmd) {
             List<Coord> neighbors = new List<Coord>();
-            List<Coord> tmpNeighbors = new List<Coord>();
+            List<Coord> tmpNeighbors = new List<Coord>(); ;
 
             tmpNeighbors.Add(new Coord(cell.X + 1, cell.Y));
             tmpNeighbors.Add(new Coord(cell.X - 1, cell.Y));
@@ -42,8 +45,15 @@ namespace ShortestPath
             tmpNeighbors.Add(new Coord(cell.X, cell.Y + 1));
 
             for (int i = 0; i < tmpNeighbors.Count; i++) {
-                if (IsValidMoveNeighbor(tmpNeighbors[i], cmd))
+                if (IsValidMoveNeighbor(cell, tmpNeighbors[i], cmd)) {
                     neighbors.Add(tmpNeighbors[i]);
+                    if (acumDist.ContainsKey(tmpNeighbors[i])) {
+                        if (acumDist[tmpNeighbors[i]] > acumDist[cell])
+                            acumDist[tmpNeighbors[i]] = acumDist[cell];
+                    } else {
+                        acumDist.Add(tmpNeighbors[i], acumDist[cell] + 1);
+                    }
+                }
             }
 
             return neighbors;
