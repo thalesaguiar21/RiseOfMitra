@@ -4,7 +4,7 @@ using Consts;
 
 namespace ShortestPath
 {
-    public class BFS
+    public class Dijkstra
     {
         private string[,] Board;
         private Coord Origin;
@@ -12,7 +12,7 @@ namespace ShortestPath
         private List<Coord> validCells;
         Dictionary<Coord, int> acumDist;
 
-        public BFS(string[,] board, Coord origin, int maxDist) {
+        public Dijkstra(string[,] board, Coord origin, int maxDist) {
             Board = board;
             Origin = origin;
             MaxDist = maxDist;

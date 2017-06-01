@@ -198,7 +198,7 @@ namespace RiseOfMitra
             ABasicPawn allyPawn = GetAllyPawn();
 
             if (allyPawn != null) {
-                BFS didi = new BFS(Board, allyPawn.GetPos(), allyPawn.GetAtkRange());
+                Dijkstra didi = new Dijkstra(Board, allyPawn.GetPos(), allyPawn.GetAtkRange());
                 List<Coord> attackRange = didi.GetValidPaths(Commands.ATTACK);
                 Coord target = null;
                 List<Unit> enemies = new List<Unit>();
@@ -251,31 +251,11 @@ namespace RiseOfMitra
         }
 
         private void Move() {
-            Console.Write("Select an ally pawn...");
-            Console.ReadLine();
-            bool validSelection = false;
-            ABasicPawn allyPawn = GetAllyPawn();
-            if (allyPawn != null) {
-                Coord pos = allyPawn.GetPos();
-
-                BFS didi = new BFS(Board, pos, allyPawn.GetMovePoints());
-                List<Coord> validCells = didi.GetValidPaths(Commands.MOVE);
-                Coord target;
-
-                validSelection = false;
-                do {
-                    target = RoMBoard.SelectPosition(Board, curPlayer.GetCursor(), pos, Commands.MOVE, validCells);
-                    validSelection = validCells.Contains(target);
-
-                    if (!validSelection) {
-                        Console.Write("Invalid unit!");
-                    }
-                } while (!validSelection);
-
-                curPlayer.GetPawnAt(pos).Move(target);
-            } else {
-                validCmd = false;
-            }
+            bool valid = false;
+            do {
+                valid = curPlayer.PeformMove(Board);
+                Console.ReadLine();
+            } while (!valid);
         }
 
         private void Inspect() {

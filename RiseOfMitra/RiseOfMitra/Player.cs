@@ -96,15 +96,18 @@ namespace RiseOfMitra
             return found;
         }
 
-        public void PeformMove(string[,] board) {
+        public bool PeformMove(string[,] board) {
             Coord selPos = RoMBoard.SelectPosition(board, Cursor);
             ABasicPawn pawn = GetPawnAt(selPos);
+            bool valid = false;
 
             if (pawn != null) {
-                pawn.Attack(Cursor);
+                valid = pawn.Move(Cursor);
             } else {
                 Console.WriteLine("This position is not a valid unit!");
             }
+
+            return valid;
         }
     }
 }

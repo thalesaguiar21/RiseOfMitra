@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "RiseOfMitra\Game.csproj", "{0AC94DF4-D9D1-4F93-A1CC-D55B74BCFDCC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoMUtils", "RoMUtils\RoMUtils.csproj", "{0A198AEA-B29C-44A5-AC8D-F31ECB91F83F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BFS", "Dijkstra\BFS.csproj", "{2E2F913D-1D71-417B-A3C8-9CA7B4436142}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dijkstra", "Dijkstra\Dijkstra.csproj", "{2E2F913D-1D71-417B-A3C8-9CA7B4436142}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Musashi", "Musashi\Musashi.csproj", "{39E8AE0B-64BB-484A-8EAB-DF38FCDB6B44}"
 EndProject
