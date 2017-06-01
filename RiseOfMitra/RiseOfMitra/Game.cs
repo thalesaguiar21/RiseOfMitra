@@ -103,14 +103,14 @@ namespace RiseOfMitra
                 }
                 Console.Clear();
             } while (play);
-            string msg = "";
-            if (curPlayer.GetCenter().GetCurrLife() <= 0) {
+            string winner = "";
+            if (curPlayer.GetCenter() == null || curPlayer.GetCenter().GetCurrLife() <= 0) {
                 if (curPlayer.GetCulture() == ECultures.DALRIONS)
-                    msg = "DALRIONS";
+                    winner = "RAHKARS";
                 else
-                    msg = "RAHKARS";
+                    winner = "DALRIONS";
             }
-            Console.WriteLine(" ARE THE WINNERs!");
+            Console.WriteLine(winner + " ARE THE WINNERs!");
             Console.ReadLine();
         }
 

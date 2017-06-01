@@ -16,7 +16,7 @@ namespace RiseOfMitra
                     center = new CulturalCenter(ECultures.DALRIONS);
                     center.SetBoard(board);
                     center.SetCulture(ECultures.DALRIONS);
-                    center.SetCurrLife(100);
+                    center.SetCurrLife(1);
                     center.SetTotalLife(100);
                     center.SetDef(3);
                     center.SetLifePerSec(2);
@@ -27,7 +27,7 @@ namespace RiseOfMitra
                     center = new CulturalCenter(ECultures.RAHKARS);
                     center.SetBoard(board);
                     center.SetCulture(ECultures.RAHKARS);
-                    center.SetCurrLife(130);
+                    center.SetCurrLife(1);
                     center.SetTotalLife(130);
                     center.SetDef(2);
                     center.SetLifePerSec(1);

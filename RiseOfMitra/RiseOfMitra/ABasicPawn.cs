@@ -10,9 +10,9 @@ namespace RiseOfMitra
         private int MovePoints;
         private int Atk;
         private int AtkRange;
-        private const int MAX_MOVE = 10;
+        private const int MAX_MOVE = 20;
         private const int MAX_RANGE = 5;
-        private const int MAX_ATK = 10;
+        private const int MAX_ATK = 20;
 
         public new string GetStatus() {
             StringBuilder msg = new StringBuilder(base.GetStatus());
