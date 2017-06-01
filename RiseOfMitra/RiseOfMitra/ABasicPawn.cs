@@ -14,8 +14,7 @@ namespace RiseOfMitra
         private const int MAX_RANGE = 5;
         private const int MAX_ATK = 10;
 
-        public new string GetStatus()
-        {
+        public new string GetStatus() {
             StringBuilder msg = new StringBuilder(base.GetStatus());
             msg.Append("Mov: " + MovePoints + "\n");
             msg.Append("Atk: " + Atk + "\n");
@@ -27,28 +26,23 @@ namespace RiseOfMitra
         public int GetAtk() { return Atk; }
         public int GetAtkRange() { return AtkRange; }
 
-        public void SetAtkRange(int atkRange)
-        {
+        public void SetAtkRange(int atkRange) {
             if (atkRange > 0 && atkRange <= MAX_RANGE)
                 AtkRange = atkRange;
         }
 
-        public void SetMovePoints(int movePoints)
-        {
+        public void SetMovePoints(int movePoints) {
             if (movePoints < 1 || movePoints > MAX_MOVE)
                 Console.WriteLine(movePoints + " isn't a valid movement point!");
-            else
-            {
+            else {
                 MovePoints = movePoints;
             }
         }
 
-        public void SetAtk(int atk)
-        {
+        public void SetAtk(int atk) {
             if (atk < 0 || atk > MAX_ATK)
                 Console.WriteLine(atk + " isn't a valid atack point!");
-            else
-            {
+            else {
                 Atk = atk;
             }
         }

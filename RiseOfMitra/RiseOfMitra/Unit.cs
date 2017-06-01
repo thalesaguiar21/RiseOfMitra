@@ -22,8 +22,7 @@ namespace RiseOfMitra
 
 
 
-        public virtual string GetStatus()
-        {
+        public virtual string GetStatus() {
             StringBuilder msg = new StringBuilder();
             msg.Append("Life: " + CurrLife + "/" + TotalLife + "\n");
             msg.Append("Def: " + Def + "\n");
@@ -34,12 +33,9 @@ namespace RiseOfMitra
         }
 
         // Verify if the target is contained in the Unit
-        public bool InUnit(Coord target)
-        {
-            for (int i = 0; i < Size; i++)
-            {
-                for (int j = 0; j < Size; j++)
-                {
+        public bool InUnit(Coord target) {
+            for (int i = 0; i < Size; i++) {
+                for (int j = 0; j < Size; j++) {
                     if (Pos.X + i == target.X && Pos.Y + j == target.Y)
                         return true;
                 }
@@ -47,8 +43,7 @@ namespace RiseOfMitra
             return false;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return BOARD_CHAR;
         }
 
@@ -60,63 +55,50 @@ namespace RiseOfMitra
         public ECultures NativeOf() { return native; }
         public string[,] GetBoard() { return Board; }
 
-        public void SetCurrLife(int life)
-        {
-            if(life > MAX_LIFE)
-            {
+        public void SetCurrLife(int life) {
+            if (life > MAX_LIFE) {
                 Console.WriteLine("Unit life can't exceed " + MAX_LIFE);
-            }
-            else
-            {
+            } else {
                 CurrLife = life;
             }
         }
 
-        public void SetTotalLife(int totalLife)
-        {
+        public void SetTotalLife(int totalLife) {
             if (totalLife >= 0 && totalLife <= MAX_LIFE)
                 TotalLife = totalLife;
         }
 
-        public void SetDef(int def)
-        {
+        public void SetDef(int def) {
             if (def > MAX_DEF || def < 0)
                 Console.WriteLine("Unit's defense can't exceed " + MAX_DEF + " or be lower than 0!");
-            else
-            {
+            else {
                 Def = def;
             }
         }
 
-        public void SetPos(Coord pos)
-        {
+        public void SetPos(Coord pos) {
             if (pos.X >= BoardConsts.BOARD_LIN || pos.X < 0
                 || pos.Y >= BoardConsts.BOARD_COL || pos.Y < 0)
                 Console.WriteLine(pos + " isn't a valid position!");
-            else
-            {
+            else {
                 Pos = pos;
             }
         }
 
-        public void SetSize(int size)
-        {
+        public void SetSize(int size) {
             if (size <= 0 || size > MAX_SIZE)
                 Console.WriteLine(size + " isn't a valid size!");
-            else
-            {
+            else {
                 Size = size;
             }
         }
 
-        public void SetCulture(ECultures culture)
-        {
+        public void SetCulture(ECultures culture) {
             native = culture;
         }
 
-        public void SetBoard(string[,] board)
-        {
-            if(board != null 
+        public void SetBoard(string[,] board) {
+            if (board != null
                 && board.GetLength(0) == BoardConsts.BOARD_LIN
                 && board.GetLength(1) == BoardConsts.BOARD_COL)
                 Board = board;

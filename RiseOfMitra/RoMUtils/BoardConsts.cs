@@ -23,23 +23,19 @@ namespace Consts
         private string[] RAHKAR_UNITS = { "#", "%" };
 
 
-        public bool IsDalrion(string cell)
-        {
+        public bool IsDalrion(string cell) {
             return DALRION_UNITS.Contains(cell);
         }
 
-        public bool IsRahkar(string cell)
-        {
+        public bool IsRahkar(string cell) {
             return RAHKAR_UNITS.Contains(cell);
         }
 
-        public bool IsValid(string cell)
-        {
+        public bool IsValid(string cell) {
             return IsRahkar(cell) || IsDalrion(cell);
         }
 
-        public ECultures ToCulture(string msg)
-        {
+        public ECultures ToCulture(string msg) {
             if (IsDalrion(msg)) return ECultures.DALRIONS;
             else if (IsRahkar(msg)) return ECultures.RAHKARS;
             return ECultures.DEFAULT;

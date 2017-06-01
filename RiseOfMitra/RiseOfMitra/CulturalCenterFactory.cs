@@ -6,11 +6,9 @@ namespace RiseOfMitra
 {
     class CulturalCenterFactory
     {
-        public ABuilding Create(ECultures native, string[,] board)
-        {
+        public ABuilding Create(ECultures native, string[,] board) {
             CulturalCenter center = null;
-            switch (native)
-            {
+            switch (native) {
                 case ECultures.DEFAULT:
                     Console.WriteLine("Can't create default Cultural Centers!");
                     break;

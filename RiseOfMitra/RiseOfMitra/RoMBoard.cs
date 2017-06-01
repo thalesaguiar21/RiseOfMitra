@@ -35,18 +35,15 @@ namespace RiseOfMitra
             "Blocked cell: "    + BoardConsts.BLOCKED,
         };
 
-        public static Coord SelectPosition(string[,] board, Coord pos)
-        {
+        public static Coord SelectPosition(string[,] board, Coord pos) {
             bool selected = false;
             Coord selection = null;
-            do
-            {
+            do {
                 Console.Clear();
                 PrintBoard(board, pos);
 
                 var move = Console.ReadKey(false).Key;
-                switch (move)
-                {
+                switch (move) {
                     case ConsoleKey.Enter:
                         selected = true;
                         selection = new Coord(pos.X, pos.Y);
@@ -78,17 +75,14 @@ namespace RiseOfMitra
             return selection;
         }
 
-        public static Coord SelectPosition(string[,] board, Coord pos, Coord prevSelec, string cmd, List<Coord> avaiableCells)
-        {
+        public static Coord SelectPosition(string[,] board, Coord pos, Coord prevSelec, string cmd, List<Coord> avaiableCells) {
             bool selected = false;
             Coord selection = null;
-            do
-            {
+            do {
                 Console.Clear();
                 RoMBoard.PrintBoard(board, cmd, pos, prevSelec, avaiableCells);
                 var move = Console.ReadKey(false).Key;
-                switch (move)
-                {
+                switch (move) {
                     case ConsoleKey.Enter:
                         selected = true;
                         selection = new Coord(pos.X, pos.Y);
@@ -120,17 +114,13 @@ namespace RiseOfMitra
             return selection;
         }
 
-        public static void PrintBoard(string[,] board, string cmd, Coord cursor, Coord selection, List<Coord> avaiableCells)
-        {
+        public static void PrintBoard(string[,] board, string cmd, Coord cursor, Coord selection, List<Coord> avaiableCells) {
             BoardConsts consts = new BoardConsts();
             Console.WriteLine();
-            for (int i = 0; i < BoardConsts.BOARD_LIN; i++)
-            {
-                for (int j = 0; j < BoardConsts.BOARD_COL; j++)
-                {
+            for (int i = 0; i < BoardConsts.BOARD_LIN; i++) {
+                for (int j = 0; j < BoardConsts.BOARD_COL; j++) {
                     ECultures cult = consts.ToCulture(board[i, j]);
-                    if (selection != null && avaiableCells.Contains(new Coord(i, j)))
-                    {
+                    if (selection != null && avaiableCells.Contains(new Coord(i, j))) {
                         if (Commands.MOVE == cmd)
                             Console.BackgroundColor = ConsoleColor.DarkGreen;
                         else if (Commands.ATTACK == cmd)
@@ -148,31 +138,23 @@ namespace RiseOfMitra
                 Console.Write("\t");
 
                 if (i == 0) Console.Write("Commands: ");
-                else if (i - 1 < Cmds.Count)
-                {
+                else if (i - 1 < Cmds.Count) {
                     string cCmd = Cmds.Keys.ToArray()[i - 1];
                     ColoredPrint("- " + cCmd, (Cmds[cCmd]) ? (ConsoleColor.Green) : (ConsoleColor.Red));
-                }
-                else if (i - 1 == Cmds.Count)
-                {
+                } else if (i - 1 == Cmds.Count) {
                     Console.Write("Legenda:");
-                }
-                else if (i - 2 - Cmds.Count < Legend.Length)
-                {
+                } else if (i - 2 - Cmds.Count < Legend.Length) {
                     ColoredPrint("- " + Legend[i - 2 - Cmds.Count], ConsoleColor.DarkMagenta);
                 }
                 Console.Write("\n");
             }
         }
 
-        public static void PrintBoard(string[,] board, Coord cursorPos)
-        {
+        public static void PrintBoard(string[,] board, Coord cursorPos) {
             BoardConsts consts = new BoardConsts();
             Console.WriteLine();
-            for (int i = 0; i < BoardConsts.BOARD_LIN; i++)
-            {
-                for (int j = 0; j < BoardConsts.BOARD_COL; j++)
-                {
+            for (int i = 0; i < BoardConsts.BOARD_LIN; i++) {
+                for (int j = 0; j < BoardConsts.BOARD_COL; j++) {
                     ECultures cult = consts.ToCulture(board[i, j]);
                     if (cursorPos != null && cursorPos.Equals(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
@@ -186,25 +168,19 @@ namespace RiseOfMitra
                 Console.Write("\t");
 
                 if (i == 0) Console.Write("Commands: ");
-                else if (i - 1 < Cmds.Count)
-                {
+                else if (i - 1 < Cmds.Count) {
                     string cCmd = Cmds.Keys.ToArray()[i - 1];
                     ColoredPrint("- " + cCmd, (Cmds[cCmd]) ? (ConsoleColor.Green) : (ConsoleColor.Red));
-                }
-                else if (i - 1 == Cmds.Count)
-                {
+                } else if (i - 1 == Cmds.Count) {
                     Console.Write("Legenda:");
-                }
-                else if (i - 2 - Cmds.Count < Legend.Length)
-                {
+                } else if (i - 2 - Cmds.Count < Legend.Length) {
                     ColoredPrint("- " + Legend[i - 2 - Cmds.Count], ConsoleColor.DarkMagenta);
                 }
                 Console.Write("\n");
             }
         }
 
-        private static void ColoredPrint(string msg, ConsoleColor color)
-        {
+        private static void ColoredPrint(string msg, ConsoleColor color) {
             Console.ForegroundColor = color;
             Console.Write(msg);
             Console.ResetColor();

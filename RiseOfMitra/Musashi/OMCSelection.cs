@@ -8,8 +8,7 @@ namespace Musashi
 {
     class OMCSelection : SelectionStrategy
     {
-        public double execute()
-        {
+        public double execute() {
             throw new NotImplementedException();
         }
     }

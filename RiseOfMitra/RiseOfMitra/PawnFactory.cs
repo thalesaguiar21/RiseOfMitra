@@ -6,11 +6,9 @@ namespace RiseOfMitra
 {
     class PawnFactory
     {
-        public ABasicPawn Create(ECultures nature, string[,] board)
-        {
+        public ABasicPawn Create(ECultures nature, string[,] board) {
             ABasicPawn pawn = null;
-            switch (nature)
-            {
+            switch (nature) {
                 case ECultures.DALRIONS:
                     pawn = new DalrionPawn();
                     pawn.SetBoard(board);
@@ -51,11 +49,9 @@ namespace RiseOfMitra
         }
 
 
-        private bool ValidatePawn(ABasicPawn pawn)
-        {
+        private bool ValidatePawn(ABasicPawn pawn) {
             bool isValid = true;
-            if(pawn.NativeOf() == ECultures.DALRIONS)
-            {
+            if (pawn.NativeOf() == ECultures.DALRIONS) {
                 isValid &= pawn.GetCurrLife() == 10;
                 isValid &= pawn.GetTotalLife() == 10;
                 isValid &= pawn.GetAtk() == 3;
@@ -65,9 +61,7 @@ namespace RiseOfMitra
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
                 isValid &= (pawn.GetBoard() != null);
-            }
-            else if (pawn.NativeOf() == ECultures.RAHKARS)
-            {
+            } else if (pawn.NativeOf() == ECultures.RAHKARS) {
                 isValid &= pawn.GetAtk() == 5;
                 isValid &= pawn.GetAtkRange() == 5;
                 isValid &= pawn.GetCurrLife() == 12;

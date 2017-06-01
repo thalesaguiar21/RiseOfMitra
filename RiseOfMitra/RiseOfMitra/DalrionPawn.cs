@@ -8,8 +8,7 @@ namespace RiseOfMitra
 {
     class DalrionPawn : ABasicPawn
     {
-        public DalrionPawn()
-        {
+        public DalrionPawn() {
             Board = null;
             BOARD_CHAR = BoardConsts.DALRION_PAWN;
             SetCurrLife(0);
@@ -23,15 +22,12 @@ namespace RiseOfMitra
             SetSize(1);
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return BOARD_CHAR;
         }
 
-        public override void Adapt(ETerrain terrain)
-        {
-            switch (terrain)
-            {
+        public override void Adapt(ETerrain terrain) {
+            switch (terrain) {
                 case ETerrain.MOUNTAIN:
                     SetMovePoints(GetMovePoints() - 1);
                     break;
@@ -58,15 +54,13 @@ namespace RiseOfMitra
             }
         }
 
-        public override void Move(Coord target)
-        {
+        public override void Move(Coord target) {
             Board[GetPos().X, GetPos().Y] = BoardConsts.EMPTY;
             Board[target.X, target.Y] = BoardConsts.DALRION_PAWN;
             SetPos(target);
         }
 
-        public override void Attack(Coord target)
-        {
+        public override void Attack(Coord target) {
             throw new NotImplementedException();
         }
     }

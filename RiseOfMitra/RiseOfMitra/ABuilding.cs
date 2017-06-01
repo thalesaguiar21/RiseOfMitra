@@ -8,8 +8,7 @@ namespace RiseOfMitra
         private int LifePerSec;
         private const int MAX_LIFEPERSEC = 3;
 
-        public new string GetStatus()
-        {
+        public new string GetStatus() {
             StringBuilder msg = new StringBuilder(base.GetStatus());
             msg.Append("Life/sec: " + LifePerSec + "\n");
             return msg.ToString();
@@ -17,18 +16,15 @@ namespace RiseOfMitra
 
         public int GetLifePerSec() { return LifePerSec; }
 
-        public void SetLifePerSec(int lifePerSec)
-        {
+        public void SetLifePerSec(int lifePerSec) {
             if (lifePerSec < 0 || lifePerSec > MAX_LIFEPERSEC)
                 Console.WriteLine(lifePerSec + " isn't a valid regen rate!");
-            else
-            {
+            else {
                 LifePerSec = lifePerSec;
             }
         }
 
-        protected void Regen()
-        {
+        protected void Regen() {
             SetCurrLife(GetCurrLife() + LifePerSec);
         }
     }

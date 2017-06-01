@@ -8,8 +8,7 @@ namespace Musashi
 {
     class UCTSelection : SelectionStrategy
     {
-        public double execute()
-        {
+        public double execute() {
             throw new NotImplementedException();
         }
     }

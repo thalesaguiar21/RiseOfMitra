@@ -17,8 +17,7 @@ namespace Consts
         public const string GET_PAWN = "GET PAWN";
         public const string GET_POS = "GET POS";
 
-        public static List<string> GetCommands()
-        {
+        public static List<string> GetCommands() {
             return new List<string>() { ATTACK, MOVE, INSPECT, CONQUER, EXIT };
         }
     }

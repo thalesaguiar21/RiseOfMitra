@@ -8,9 +8,8 @@ namespace RiseOfMitra
     class CulturalCenter : ABuilding
     {
         private int unitsPerSec;
-        
-        public CulturalCenter(ECultures native)
-        {
+
+        public CulturalCenter(ECultures native) {
             if (native == ECultures.DALRIONS) BOARD_CHAR = BoardConsts.DALRION_CENTER;
             else if (native == ECultures.RAHKARS) BOARD_CHAR = BoardConsts.RAHKAR_CENTER;
             SetCulture(ECultures.DEFAULT);
@@ -22,10 +21,8 @@ namespace RiseOfMitra
             unitsPerSec = 0;
         }
 
-        public void GeneratePawn(ECultures pawnCulture)
-        {
-            switch (pawnCulture)
-            {
+        public void GeneratePawn(ECultures pawnCulture) {
+            switch (pawnCulture) {
                 case ECultures.DEFAULT:
                     break;
                 case ECultures.DALRIONS:

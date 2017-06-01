@@ -11,8 +11,7 @@ namespace ShortestPath
         private int MaxDist;
         private List<Coord> validCells;
 
-        public BFS(string[,] board, Coord origin, int maxDist)
-        {
+        public BFS(string[,] board, Coord origin, int maxDist) {
             Board = board;
             Origin = origin;
             MaxDist = maxDist;
@@ -20,8 +19,7 @@ namespace ShortestPath
             validCells.Add(Origin);
         }
 
-        private bool IsValidMoveNeighbor(Coord np, string cmd)
-        {
+        private bool IsValidMoveNeighbor(Coord np, string cmd) {
             bool isValid = true;
             if (!Coord.IsValid(np))
                 isValid = false;
@@ -34,8 +32,7 @@ namespace ShortestPath
             return isValid;
         }
 
-        private List<Coord> GetNeighbors(Coord cell, string cmd)
-        {
+        private List<Coord> GetNeighbors(Coord cell, string cmd) {
             List<Coord> neighbors = new List<Coord>();
             List<Coord> tmpNeighbors = new List<Coord>();
 
@@ -44,8 +41,7 @@ namespace ShortestPath
             tmpNeighbors.Add(new Coord(cell.X, cell.Y - 1));
             tmpNeighbors.Add(new Coord(cell.X, cell.Y + 1));
 
-            for (int i = 0; i < tmpNeighbors.Count; i++)
-            {
+            for (int i = 0; i < tmpNeighbors.Count; i++) {
                 if (IsValidMoveNeighbor(tmpNeighbors[i], cmd))
                     neighbors.Add(tmpNeighbors[i]);
             }
@@ -53,15 +49,12 @@ namespace ShortestPath
             return neighbors;
         }
 
-        public List<Coord> GetValidPaths(string cmd)
-        {
+        public List<Coord> GetValidPaths(string cmd) {
             List<Coord> tmpValidCells = new List<Coord>();
             tmpValidCells.Add(Origin);
-            while (tmpValidCells.Count > 0)
-            {
+            while (tmpValidCells.Count > 0) {
                 List<Coord> validNeighbors = GetNeighbors(tmpValidCells[0], cmd);
-                for (int i = 0; i < validNeighbors.Count; i++)
-                {
+                for (int i = 0; i < validNeighbors.Count; i++) {
                     tmpValidCells.Add(validNeighbors[i]);
                     validCells.Add(validNeighbors[i]);
                 }
