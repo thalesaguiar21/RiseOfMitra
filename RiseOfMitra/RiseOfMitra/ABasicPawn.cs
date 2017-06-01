@@ -16,7 +16,7 @@ namespace RiseOfMitra
 
         public new string GetStatus()
         {
-            StringBuilder msg = base.GetStatus();
+            StringBuilder msg = new StringBuilder(base.GetStatus());
             msg.Append("Mov: " + MovePoints + "\n");
             msg.Append("Atk: " + Atk + "\n");
             msg.Append("Atk range: " + AtkRange + "\n");

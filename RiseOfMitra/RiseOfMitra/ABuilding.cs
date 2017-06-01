@@ -10,7 +10,7 @@ namespace RiseOfMitra
 
         public new string GetStatus()
         {
-            StringBuilder msg = base.GetStatus();
+            StringBuilder msg = new StringBuilder(base.GetStatus());
             msg.Append("Life/sec: " + LifePerSec + "\n");
             return msg.ToString();
         }

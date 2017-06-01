@@ -4,14 +4,14 @@ using Consts;
 
 namespace ShortestPath
 {
-    public class Dijkstra
+    public class BFS
     {
         private string[,] Board;
         private Coord Origin;
         private int MaxDist;
         private List<Coord> validCells;
 
-        public Dijkstra(string[,] board, Coord origin, int maxDist)
+        public BFS(string[,] board, Coord origin, int maxDist)
         {
             Board = board;
             Origin = origin;

@@ -27,7 +27,7 @@ namespace Cells
                 return false;
             else if (pos.X <= 0 || pos.Y <= 0)
                 return false;
-            else if (pos.X >= BoardConsts.BOARD_LIN || pos.Y >= BoardConsts.BOARD_COL)
+            else if (pos.X >= BoardConsts.BOARD_LIN - 1 || pos.Y >= BoardConsts.BOARD_COL - 1)
                 return false;
             return true;
         }

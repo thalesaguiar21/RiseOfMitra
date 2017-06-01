@@ -22,7 +22,7 @@ namespace RiseOfMitra
 
 
 
-        protected virtual StringBuilder GetStatus()
+        public virtual string GetStatus()
         {
             StringBuilder msg = new StringBuilder();
             msg.Append("Life: " + CurrLife + "/" + TotalLife + "\n");
@@ -30,7 +30,7 @@ namespace RiseOfMitra
             msg.Append("Position: " + Pos + "\n");
             msg.Append("Size: " + Size + "\n");
             msg.Append("Culture: " + native + "\n");
-            return msg;
+            return msg.ToString();
         }
 
         // Verify if the target is contained in the Unit
