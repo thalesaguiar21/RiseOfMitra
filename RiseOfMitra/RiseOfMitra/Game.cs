@@ -71,23 +71,11 @@ namespace RiseOfMitra
 
         private void PlaceUnits() {
             foreach (Player it in players) {
-                foreach (Unit unit in it.GetPawns()) {
-                    PlaceUnit(unit, unit.GetPos());
-                }
-                PlaceUnit(it.GetCenter(), it.GetCenter().GetPos());
-            }
-        }
-
-        private void PlaceUnit(Unit unit, Coord init) {
-            for (int i = 0; i < unit.GetSize(); i++) {
-                for (int k = 0; k < unit.GetSize(); k++) {
-                    int cX = init.X + i;
-                    int cY = init.Y + k;
-                    Board[cX, cY] = unit.ToString();
+                foreach (Unit unit in it.GetUnits()) {
+                    unit.Place();
                 }
             }
         }
-
 
         public void Start() {
             do {
@@ -157,42 +145,6 @@ namespace RiseOfMitra
                     Console.WriteLine(userCmd + " isn't a valid command!");
                     break;
             }
-        }
-
-        private ABasicPawn GetAllyPawn() {
-            ABasicPawn pawn = null;
-            bool isAlly = false;
-
-            while (!isAlly) {
-                Coord pos = RoMBoard.SelectPosition(Board, curPlayer.GetCursor());
-                pawn = curPlayer.GetPawnAt(pos);
-                BoardConsts consts = new BoardConsts();
-
-                if (consts.ToCulture(Board[pos.X, pos.Y]) == curPlayer.GetCulture() && pawn != null)
-                    isAlly = true;
-                else {
-                    Console.Write("Invalid unit! Press (C) to exit or (R) to reselect: ");
-
-                    bool valid;
-                    do {
-                        valid = true;
-                        var move = Console.ReadKey(false).Key;
-                        switch (move) {
-                            case ConsoleKey.C:
-                                pawn = null;
-                                isAlly = true;
-                                break;
-                            case ConsoleKey.R:
-                                isAlly = false;
-                                break;
-                            default:
-                                valid = false;
-                                break;
-                        }
-                    } while (!valid);
-                }
-            }
-            return pawn;
         }
 
         private void Attack() {
