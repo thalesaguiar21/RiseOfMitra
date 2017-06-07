@@ -34,12 +34,6 @@ namespace Consts
         public bool IsValid(string cell) {
             return IsRahkar(cell) || IsDalrion(cell);
         }
-
-        public ECultures ToCulture(string msg) {
-            if (IsDalrion(msg)) return ECultures.DALRIONS;
-            else if (IsRahkar(msg)) return ECultures.RAHKARS;
-            return ECultures.DEFAULT;
-        }
     }
 }
 

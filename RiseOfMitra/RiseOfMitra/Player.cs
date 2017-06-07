@@ -12,8 +12,8 @@ namespace RiseOfMitra
         private CulturalCenter Center;
         private Coord Cursor;
 
-        public Player() {
-            Culture = ECultures.DEFAULT;
+        public Player(ECultures native) {
+            Culture = native;
             Pawns = new List<ABasicPawn>();
             Center = null;
             Cursor = new Coord(1, 1);

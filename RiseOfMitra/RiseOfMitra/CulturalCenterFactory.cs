@@ -9,9 +9,6 @@ namespace RiseOfMitra
         public ABuilding Create(ECultures native, string[,] board) {
             CulturalCenter center = null;
             switch (native) {
-                case ECultures.DEFAULT:
-                    Console.WriteLine("Can't create default Cultural Centers!");
-                    break;
                 case ECultures.DALRIONS:
                     center = new CulturalCenter(ECultures.DALRIONS);
                     center.SetBoard(board);

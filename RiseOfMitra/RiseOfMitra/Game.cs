@@ -29,10 +29,8 @@ namespace RiseOfMitra
 
         private void InitPlayers() {
             players = new Player[2];
-            players[0] = new Player();
-            players[1] = new Player();
-            players[0].SetCulture(ECultures.DALRIONS);
-            players[1].SetCulture(ECultures.RAHKARS);
+            players[0] = new Player(ECultures.DALRIONS);
+            players[1] = new Player(ECultures.RAHKARS);
 
             players[1].SetCursor(new Coord(BoardConsts.BOARD_LIN - 2, BoardConsts.BOARD_COL - 2));
             curPlayer = players[0];
@@ -101,21 +99,6 @@ namespace RiseOfMitra
             }
             Console.WriteLine(winner + " ARE THE WINNERs!");
             Console.ReadLine();
-        }
-
-        public bool ConfirmSelection() {
-            bool confirmed = false;
-            Console.WriteLine("Press (C) to confirm or (R) to select another pawn...");
-            ConsoleKey pressedKey;
-            do {
-                pressedKey = Console.ReadKey(false).Key;
-                if (pressedKey == ConsoleKey.S)
-                    confirmed = true;
-                else if (pressedKey == ConsoleKey.C)
-                    confirmed = false;
-            } while (pressedKey != ConsoleKey.S && pressedKey != ConsoleKey.C);
-
-            return confirmed;
         }
 
         private void GetUserCmd() {

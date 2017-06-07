@@ -119,7 +119,6 @@ namespace RiseOfMitra
             Console.WriteLine();
             for (int i = 0; i < BoardConsts.BOARD_LIN; i++) {
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++) {
-                    ECultures cult = consts.ToCulture(board[i, j]);
                     if (selection != null && avaiableCells.Contains(new Coord(i, j))) {
                         if (Commands.MOVE == cmd)
                             Console.BackgroundColor = ConsoleColor.DarkGreen;
@@ -128,9 +127,9 @@ namespace RiseOfMitra
                     }
                     if (cursor != null && cursor.Equals(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
-                    if (cult == ECultures.DALRIONS)
+                    if ( consts.IsDalrion(board[i, j]) )
                         ColoredPrint(board[i, j] + " ", CultColors[ECultures.DALRIONS]);
-                    else if (cult == ECultures.RAHKARS)
+                    else if ( consts.IsRahkar(board[i, j]) )
                         ColoredPrint(board[i, j] + " ", CultColors[ECultures.RAHKARS]);
                     else Console.Write(board[i, j] + " ");
                     Console.ResetColor();
@@ -150,17 +149,16 @@ namespace RiseOfMitra
             }
         }
 
-        public static void PrintBoard(string[,] board, Coord cursorPos) {
+        public static void PrintBoard(string[,] board, Coord cursor) {
             BoardConsts consts = new BoardConsts();
             Console.WriteLine();
             for (int i = 0; i < BoardConsts.BOARD_LIN; i++) {
                 for (int j = 0; j < BoardConsts.BOARD_COL; j++) {
-                    ECultures cult = consts.ToCulture(board[i, j]);
-                    if (cursorPos != null && cursorPos.Equals(new Coord(i, j)))
+                    if (cursor != null && cursor.Equals(new Coord(i, j)))
                         Console.BackgroundColor = ConsoleColor.Cyan;
-                    if (cult == ECultures.DALRIONS)
+                    if (consts.IsDalrion(board[i, j]))
                         ColoredPrint(board[i, j] + " ", CultColors[ECultures.DALRIONS]);
-                    else if (cult == ECultures.RAHKARS)
+                    else if (consts.IsRahkar(board[i, j]))
                         ColoredPrint(board[i, j] + " ", CultColors[ECultures.RAHKARS]);
                     else Console.Write(board[i, j] + " ");
                     Console.ResetColor();

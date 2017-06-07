@@ -2,7 +2,6 @@
 {
     public enum ECultures
     {
-        DEFAULT,
         DALRIONS,
         RAHKARS
     }
