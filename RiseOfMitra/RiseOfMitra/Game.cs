@@ -14,12 +14,14 @@ namespace RiseOfMitra
         private bool play;
         private bool validCmd;
         private string[,] Board;
+        private int[] pTurns;
 
         public Game() {
             InitPlayers();
             play = true;
             validCmd = false;
             Board = new string[BoardConsts.BOARD_LIN, BoardConsts.BOARD_COL];
+            pTurns = new int[] { 0, 0 };
 
             // Adding units
             ClearBoard();
@@ -184,10 +186,17 @@ namespace RiseOfMitra
         }
 
         private void SetNextPlayer() {
-            if (curPlayer == players[0])
+            if (curPlayer == players[0]) {
                 curPlayer = players[1];
-            else
+                pTurns[0] = (pTurns[0] + 1) % 2;
+                if (pTurns[0] == 0)
+                    players[0].GetCenter().SetTurn();
+            } else {
                 curPlayer = players[0];
+                pTurns[1] = (pTurns[1] + 1) % 2;
+                if (pTurns[1] == 0)
+                    players[1].GetCenter().SetTurn();
+            }
         }
 
         private Player GetOponent() {

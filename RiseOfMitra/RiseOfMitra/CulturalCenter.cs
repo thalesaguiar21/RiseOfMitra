@@ -2,12 +2,14 @@
 using Types;
 using Consts;
 using Cells;
+using System;
 
 namespace RiseOfMitra
 {
     class CulturalCenter : ABuilding
     {
-        private int unitsPerSec;
+        private int turn;
+        private int unitPerTurn;
 
         public CulturalCenter(ECultures native) {
             if (native == ECultures.DALRIONS) BOARD_CHAR = BoardConsts.DALRION_CENTER;
@@ -18,18 +20,29 @@ namespace RiseOfMitra
             SetLifePerSec(0);
             SetPos(new Coord(0, 0));
             SetSize(5);
-            unitsPerSec = 0;
+            turn = 0;
+            unitPerTurn = 3;
         }
 
         public void GeneratePawn(ECultures pawnCulture) {
             switch (pawnCulture) {
                 case ECultures.DALRIONS:
+                    Console.Write("Creating DALRION");
                     break;
                 case ECultures.RAHKARS:
+                    Console.Write("Creating RAHKAR");
                     break;
                 default:
+                    Console.Write("ERROR!");
                     break;
             }
+            Console.ReadLine();
+        }
+
+        public void SetTurn() {
+            turn = (turn + 1) % unitPerTurn;
+            if (turn == 0)
+                GeneratePawn(NativeOf());
         }
     }
 }
