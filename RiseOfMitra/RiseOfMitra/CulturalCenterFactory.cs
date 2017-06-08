@@ -18,7 +18,6 @@ namespace RiseOfMitra
                     center.SetDef(3);
                     center.SetLifePerSec(2);
                     center.SetPos(new Coord(1, 1));
-                    center.SetSize(5);
                     center.SetSpawnPoint(new Coord(center.GetPos().X, center.GetPos().Y + center.GetSize()));
                     break;
                 case ECultures.RAHKARS:
@@ -32,7 +31,6 @@ namespace RiseOfMitra
                     int buildSize = center.GetSize() + 1;
                     center.SetPos(new Coord(BoardConsts.BOARD_LIN - buildSize, BoardConsts.BOARD_COL - buildSize));
                     center.SetSpawnPoint(new Coord(center.GetPos().X, center.GetPos().Y - 1));
-                    center.SetSize(5);
                     break;
                 default:
                     Console.WriteLine("Invalid culture. Can't create cultural center!");

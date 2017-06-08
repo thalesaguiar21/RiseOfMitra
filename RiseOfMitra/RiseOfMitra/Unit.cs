@@ -20,8 +20,6 @@ namespace RiseOfMitra
         private const int MAX_DEF = 30;
         private const int MAX_SIZE = 5;
 
-
-
         public virtual string GetStatus() {
             StringBuilder msg = new StringBuilder();
             msg.Append("Life: " + CurrLife + "/" + TotalLife + "\n");
@@ -31,8 +29,7 @@ namespace RiseOfMitra
             msg.Append("Culture: " + native + "\n");
             return msg.ToString();
         }
-
-        // Verify if the target is contained in the Unit
+        
         public bool InUnit(Coord target) {
             for (int i = 0; i < Size; i++) {
                 for (int j = 0; j < Size; j++) {
@@ -105,7 +102,7 @@ namespace RiseOfMitra
             }
         }
 
-        public void SetSize(int size) {
+        protected void SetSize(int size) {
             if (size <= 0 || size > MAX_SIZE)
                 Console.WriteLine(size + " isn't a valid size!");
             else {

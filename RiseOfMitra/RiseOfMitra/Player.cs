@@ -11,6 +11,7 @@ namespace RiseOfMitra
         private List<ABasicPawn> Pawns;
         private CulturalCenter Center;
         private Coord Cursor;
+        private int Turn;
 
         public Player(ECultures native) {
             Culture = native;
@@ -26,11 +27,6 @@ namespace RiseOfMitra
             }
             return null;
         }
-
-        public ECultures GetCulture() { return Culture; }
-        public List<ABasicPawn> GetPawns() { return Pawns; }
-        public CulturalCenter GetCenter() { return Center; }
-        public Coord GetCursor() { return Cursor; }
 
         public List<Unit> GetUnits() {
             List<Unit> playerUnits = new List<Unit>();
@@ -52,25 +48,6 @@ namespace RiseOfMitra
                 }
             }
             return unit;
-        }
-
-        public void SetCulture(ECultures cult) {
-            Culture = cult;
-        }
-
-        public void SetPawns(List<ABasicPawn> pawns) {
-            if (pawns != null)
-                Pawns = pawns;
-        }
-
-        public void SetCulturalCenter(CulturalCenter center) {
-            if (center != null)
-                Center = center;
-        }
-
-        public void SetCursor(Coord nCursor) {
-            if (Coord.IsValid(nCursor))
-                Cursor = nCursor;
         }
 
         public void AddPawn(ABasicPawn pawn) {
@@ -121,6 +98,48 @@ namespace RiseOfMitra
             }
 
             return target;
+        }
+
+        public void ExecuteTurnEvents(string[,] board) {
+            Center.Regen();
+            if (Turn % Center.GetUnitsPerTurn() == 0) {
+                ABasicPawn pawn = Center.GeneratePawn();
+                if(pawn != null) {
+                    pawn.Place();
+                    AddPawn(pawn);
+                } else {
+                    Console.Write("Can not create more pawns!");
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        public ECultures GetCulture() { return Culture; }
+        public List<ABasicPawn> GetPawns() { return Pawns; }
+        public CulturalCenter GetCenter() { return Center; }
+        public Coord GetCursor() { return Cursor; }
+
+        public void SetCulture(ECultures cult) {
+            Culture = cult;
+        }
+
+        public void SetPawns(List<ABasicPawn> pawns) {
+            if (pawns != null)
+                Pawns = pawns;
+        }
+
+        public void SetCulturalCenter(CulturalCenter center) {
+            if (center != null)
+                Center = center;
+        }
+
+        public void SetCursor(Coord nCursor) {
+            if (Coord.IsValid(nCursor))
+                Cursor = nCursor;
+        }
+
+        public void SetTurn() {
+            Turn += 1;
         }
     }
 }

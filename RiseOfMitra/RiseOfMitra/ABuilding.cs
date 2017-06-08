@@ -14,6 +14,10 @@ namespace RiseOfMitra
             return msg.ToString();
         }
 
+        public void Regen() {
+            SetCurrLife(GetCurrLife() + LifePerSec);
+        }
+
         public int GetLifePerSec() { return LifePerSec; }
 
         public void SetLifePerSec(int lifePerSec) {
@@ -22,10 +26,6 @@ namespace RiseOfMitra
             else {
                 LifePerSec = lifePerSec;
             }
-        }
-
-        protected void Regen() {
-            SetCurrLife(GetCurrLife() + LifePerSec);
         }
     }
 }

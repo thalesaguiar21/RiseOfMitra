@@ -69,6 +69,7 @@
     <Compile Include="PawnFactory.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="RahkarPawn.cs" />
+    <Compile Include="Temple.cs" />
     <Compile Include="Unit.cs" />
     <Compile Include="ABasicPawn.cs" />
     <Compile Include="Game.cs" />

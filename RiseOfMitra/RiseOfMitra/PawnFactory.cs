@@ -20,7 +20,6 @@ namespace RiseOfMitra
                     pawn.SetDef(3);
                     pawn.SetMovePoints(20);
                     pawn.SetPos(new Coord(0, 0));
-                    pawn.SetSize(1);
 
                     if (!ValidatePawn(pawn))
                         pawn = null;
@@ -37,7 +36,6 @@ namespace RiseOfMitra
                     pawn.SetDef(2);
                     pawn.SetMovePoints(20);
                     pawn.SetPos(new Coord(0, 0));
-                    pawn.SetSize(1);
                     if (!ValidatePawn(pawn))
                         pawn = null;
                     break;

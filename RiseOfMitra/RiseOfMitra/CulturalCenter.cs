@@ -52,7 +52,6 @@ namespace RiseOfMitra
             return spawnPoint;
         }
 
-
         public int GetUnitsPerTurn() { return UnitPerTurn; }
         public Coord GetSpawnPoint() { return SpawnPoint; }
 

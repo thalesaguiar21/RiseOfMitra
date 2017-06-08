@@ -25,31 +25,6 @@ namespace RiseOfMitra
             return msg.ToString();
         }
 
-        public int GetMovePoints() { return MovePoints; }
-        public int GetAtk() { return Atk; }
-        public int GetAtkRange() { return AtkRange; }
-
-        public void SetAtkRange(int atkRange) {
-            if (atkRange > 0 && atkRange <= MAX_RANGE)
-                AtkRange = atkRange;
-        }
-
-        public void SetMovePoints(int movePoints) {
-            if (movePoints < 1 || movePoints > MAX_MOVE)
-                Console.WriteLine(movePoints + " isn't a valid movement point!");
-            else {
-                MovePoints = movePoints;
-            }
-        }
-
-        public void SetAtk(int atk) {
-            if (atk < 0 || atk > MAX_ATK)
-                Console.WriteLine(atk + " isn't a valid atack point!");
-            else {
-                Atk = atk;
-            }
-        }
-
         public virtual Coord Attack(Coord cursor, List<Unit> enemies) {
             bool validTarget = false;
             Coord target = null;
@@ -94,5 +69,30 @@ namespace RiseOfMitra
         public abstract bool Move(Coord cursor);
 
         public abstract void Adapt(ETerrain terrain);
+
+        public int GetMovePoints() { return MovePoints; }
+        public int GetAtk() { return Atk; }
+        public int GetAtkRange() { return AtkRange; }
+
+        public void SetAtkRange(int atkRange) {
+            if (atkRange > 0 && atkRange <= MAX_RANGE)
+                AtkRange = atkRange;
+        }
+
+        public void SetMovePoints(int movePoints) {
+            if (movePoints < 1 || movePoints > MAX_MOVE)
+                Console.WriteLine(movePoints + " isn't a valid movement point!");
+            else {
+                MovePoints = movePoints;
+            }
+        }
+
+        public void SetAtk(int atk) {
+            if (atk < 0 || atk > MAX_ATK)
+                Console.WriteLine(atk + " isn't a valid atack point!");
+            else {
+                Atk = atk;
+            }
+        }
     }
 }
