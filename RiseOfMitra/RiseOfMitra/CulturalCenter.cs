@@ -8,8 +8,9 @@ namespace RiseOfMitra
 {
     class CulturalCenter : ABuilding
     {
-        private int turn;
-        private int unitPerTurn;
+        private int UnitPerTurn;
+        private Coord SpawnPoint;
+        private int SpawnRange;
 
         public CulturalCenter(ECultures native) {
             if (native == ECultures.DALRIONS) BOARD_CHAR = BoardConsts.DALRION_CENTER;
@@ -20,29 +21,50 @@ namespace RiseOfMitra
             SetLifePerSec(0);
             SetPos(new Coord(0, 0));
             SetSize(5);
-            turn = 0;
-            unitPerTurn = 3;
+            UnitPerTurn = 2;
+            SpawnPoint = new Coord(0, 0);
+            SpawnRange = 4;
         }
 
-        public void GeneratePawn(ECultures pawnCulture) {
-            switch (pawnCulture) {
-                case ECultures.DALRIONS:
-                    Console.Write("Creating DALRION");
-                    break;
-                case ECultures.RAHKARS:
-                    Console.Write("Creating RAHKAR");
-                    break;
-                default:
-                    Console.Write("ERROR!");
-                    break;
+        public ABasicPawn GeneratePawn() {
+            PawnFactory factory = new PawnFactory();
+            ABasicPawn pawn = factory.Create(NativeOf(), Board);
+            Coord pos = GetPlacementPosition();
+            if (pos == null) {
+                Console.Write("Can not generate more pawns!");
+                return null;
+            } else {
+                pawn.SetPos(pos);
+                return pawn;
             }
-            Console.ReadLine();
+            
         }
 
-        public void SetTurn() {
-            turn = (turn + 1) % unitPerTurn;
-            if (turn == 0)
-                GeneratePawn(NativeOf());
+        private Coord GetPlacementPosition() {
+            Coord spawnPoint = null;
+            for(int i = 0; i < BoardConsts.BOARD_LIN; i++) {
+                for(int j=0; j < BoardConsts.BOARD_COL; j++) {
+                    if (Board[i, j] == BoardConsts.EMPTY && Coord.Distance(SpawnPoint, new Coord(i, j)) <= SpawnRange) {
+                        spawnPoint = new Coord(i, j);
+                    }
+                }
+            }
+            return spawnPoint;
+        }
+
+
+        public int GetUnitsPerTurn() { return UnitPerTurn; }
+        public Coord GetSpawnPoint() { return SpawnPoint; }
+
+        public void SetunitPerTurn(int value) {
+            if (value >= 0)
+                UnitPerTurn = value;
+        }
+
+        public void SetSpawnPoint(Coord cell) {
+            if(cell != null && Board[cell.X, cell.Y] == BoardConsts.EMPTY) {
+                SpawnPoint = cell;
+            }
         }
     }
 }

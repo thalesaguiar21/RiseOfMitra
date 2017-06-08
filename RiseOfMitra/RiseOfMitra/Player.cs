@@ -106,7 +106,6 @@ namespace RiseOfMitra
             } else {
                 Console.Write("This position is not a valid unit! ");
             }
-
             return valid;
         }
 

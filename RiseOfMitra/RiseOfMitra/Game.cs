@@ -60,10 +60,7 @@ namespace RiseOfMitra
 
             CulturalCenterFactory centFac = new CulturalCenterFactory();
             ABuilding dCenter = centFac.Create(ECultures.DALRIONS, Board);
-            ABuilding rCenter = centFac.Create(ECultures.RAHKARS, Board);
-            dCenter.SetPos(new Coord(1, 1));
-            int buildSize = rCenter.GetSize() + 1;
-            rCenter.SetPos(new Coord(BoardConsts.BOARD_LIN - buildSize, BoardConsts.BOARD_COL - buildSize));
+            ABuilding rCenter = centFac.Create(ECultures.RAHKARS, Board);           
 
             players[0].SetCulturalCenter((CulturalCenter)dCenter);
             players[1].SetCulturalCenter((CulturalCenter)rCenter);
@@ -188,14 +185,25 @@ namespace RiseOfMitra
         private void SetNextPlayer() {
             if (curPlayer == players[0]) {
                 curPlayer = players[1];
-                pTurns[0] = (pTurns[0] + 1) % 2;
-                if (pTurns[0] == 0)
-                    players[0].GetCenter().SetTurn();
+                pTurns[0] = (pTurns[0] + 1) % players[0].GetCenter().GetUnitsPerTurn();
+                if (pTurns[0] == 0) {
+                    ABasicPawn nPawn = players[0].GetCenter().GeneratePawn();
+                    if(nPawn != null) {
+                        nPawn.Place();
+                        players[0].AddPawn(nPawn);
+                    }
+                }
             } else {
                 curPlayer = players[0];
-                pTurns[1] = (pTurns[1] + 1) % 2;
-                if (pTurns[1] == 0)
-                    players[1].GetCenter().SetTurn();
+                pTurns[1] = (pTurns[1] + 1) % players[1].GetCenter().GetUnitsPerTurn();
+                if (pTurns[1] == 0) {
+                    ABasicPawn nPawn = players[1].GetCenter().GeneratePawn();
+                    if (nPawn != null) {
+                        nPawn.Place();
+                        players[1].AddPawn(nPawn);
+                    }
+                }
+                    
             }
         }
 
