@@ -75,12 +75,14 @@ namespace RiseOfMitra
             return selection;
         }
 
-        public static Coord SelectPosition(string[,] board, Coord cursor, Coord prevSelec, string cmd, List<Coord> avaiableCells) {
+        public static Coord SelectPosition(ETerrain[,] terrains, string[,] board, Coord cursor, Coord prevSelec, string cmd, List<Coord> avaiableCells) {
             bool selected = false;
             Coord selection = null;
             do {
                 Console.Clear();
                 RoMBoard.PrintBoard(board, cmd, cursor, prevSelec, avaiableCells);
+                if (cmd == Commands.MOVE)
+                    Console.Write("TERRAIN IS " + terrains[cursor.X, cursor.Y].Convert());
                 var move = Console.ReadKey(false).Key;
                 switch (move) {
                     case ConsoleKey.Enter:
@@ -125,8 +127,9 @@ namespace RiseOfMitra
                         else if (Commands.ATTACK == cmd)
                             Console.BackgroundColor = ConsoleColor.DarkRed;
                     }
-                    if (cursor != null && cursor.Equals(new Coord(i, j)))
+                    if (cursor != null && cursor.Equals(new Coord(i, j))) {
                         Console.BackgroundColor = ConsoleColor.Cyan;
+                    }
                     if ( consts.IsDalrion(board[i, j]) )
                         ColoredPrint(board[i, j] + " ", CultColors[ECultures.DALRIONS]);
                     else if ( consts.IsRahkar(board[i, j]) )

@@ -43,7 +43,7 @@ namespace RiseOfMitra
 
             if (enemiesInRange.Count > 0) {
                 do {
-                    target = RoMBoard.SelectPosition(Board, cursor, GetPos(), Commands.ATTACK, attackRange);
+                    target = RoMBoard.SelectPosition(Terrains, Board, cursor, GetPos(), Commands.ATTACK, attackRange);
 
                     validTarget = enemiesInRange.Contains(target);
 

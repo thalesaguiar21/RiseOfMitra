@@ -97,7 +97,7 @@ namespace RiseOfMitra
             List<Coord> moveRange = didi.GetValidPaths(Commands.MOVE);
             if (moveRange.Count > 0) {
                 do {
-                    Coord target = RoMBoard.SelectPosition(Board, cursor, GetPos(), Commands.MOVE, moveRange);
+                    Coord target = RoMBoard.SelectPosition(Terrains, Board, cursor, GetPos(), Commands.MOVE, moveRange);
                     validTarget = moveRange.Contains(target);
 
                     if (validTarget) {
