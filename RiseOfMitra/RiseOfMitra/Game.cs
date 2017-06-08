@@ -14,17 +14,30 @@ namespace RiseOfMitra
         private bool play;
         private bool validCmd;
         private string[,] Board;
+        private ETerrain[,] Terrains;
 
         public Game() {
             InitPlayers();
             play = true;
             validCmd = false;
             Board = new string[BoardConsts.BOARD_LIN, BoardConsts.BOARD_COL];
+            Terrains = new ETerrain[BoardConsts.BOARD_LIN, BoardConsts.BOARD_COL];
+            InitTerrains();
 
             // Adding units
             ClearBoard();
             CreateUnits();
             PlaceUnits();
+        }
+
+        private void InitTerrains() {
+            Random rand = new Random();
+            for (int i = 1; i < BoardConsts.BOARD_LIN - 1; i++) {
+                for (int j = 0; j < BoardConsts.BOARD_COL - 1; j++) {
+                    Array terrainValues = Enum.GetValues(typeof(ETerrain));
+                    Terrains[i, j] = (ETerrain) terrainValues.GetValue(rand.Next(terrainValues.Length));
+                }
+            }
         }
 
         private void InitPlayers() {
@@ -47,11 +60,11 @@ namespace RiseOfMitra
         private void CreateUnits() {
             PawnFactory pawnFac = new PawnFactory();
             for (int i = 0; i < BoardConsts.INITIAL_PAWNS; i++) {
-                ABasicPawn dPawn = pawnFac.Create(ECultures.DALRIONS, Board);
+                ABasicPawn dPawn = pawnFac.Create(ECultures.DALRIONS, Board, Terrains);
                 dPawn.SetPos(new Coord(1 + i, 7));
                 players[0].AddPawn(dPawn);
 
-                ABasicPawn rPawn = pawnFac.Create(ECultures.RAHKARS, Board);
+                ABasicPawn rPawn = pawnFac.Create(ECultures.RAHKARS, Board, Terrains);
                 rPawn.SetPos(new Coord(BoardConsts.BOARD_LIN - 2 - i, BoardConsts.BOARD_COL - 8));
                 players[1].AddPawn(rPawn);
             }

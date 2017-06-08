@@ -28,7 +28,7 @@ namespace RiseOfMitra
 
         public ABasicPawn GeneratePawn() {
             PawnFactory factory = new PawnFactory();
-            ABasicPawn pawn = factory.Create(NativeOf(), Board);
+            ABasicPawn pawn = factory.Create(NativeOf(), Board, Terrains);
             Coord pos = GetPlacementPosition();
             if (pos == null) {
                 Console.Write("Can not generate more pawns!");

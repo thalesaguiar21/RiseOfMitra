@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Gaia
 {
-    interface SonOfGaia
+    abstract class ATerrain : SonOfGaia
     {
-        void ReceiveBlessing();
-        void ReceiveMalediction();
+        public abstract void ReceiveBlessing();
+        public abstract void ReceiveMalediction();
     }
 }

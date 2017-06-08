@@ -28,32 +28,67 @@ namespace RiseOfMitra
             return BOARD_CHAR;
         }
 
-        public override void Adapt(ETerrain terrain) {
-            switch (terrain) {
+        public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
+            string msg = "Adapting for ";
+            switch (prevTerrain) {
                 case ETerrain.MOUNTAIN:
                     SetMovePoints(GetMovePoints() + 1);
                     break;
                 case ETerrain.PLAIN:
-                    SetDef(GetDef() - 1);
-                    break;
-                case ETerrain.RIVER:
-                    SetMovePoints(GetMovePoints() - 1);
-                    break;
-                case ETerrain.FIELD:
                     SetDef(GetDef() + 1);
                     break;
+                case ETerrain.RIVER:
+                    SetMovePoints(GetMovePoints() + 1);
+                    break;
+                case ETerrain.FIELD:
+                    SetDef(GetDef() - 1);
+                    break;
                 case ETerrain.MARSH:
-                    SetAtk(GetAtk() + 2);
+                    SetAtk(GetAtk() - 2);
                     break;
                 case ETerrain.FOREST:
-                    SetAtk(GetAtk() + 1);
+                    SetAtk(GetAtk() - 1);
                     break;
                 case ETerrain.DESERT:
-                    SetAtk(GetAtk() - 1);
+                    SetAtk(GetAtk() + 1);
                     break;
                 default:
                     break;
             }
+
+            switch (curTerrain) {
+                case ETerrain.MOUNTAIN:
+                    SetMovePoints(GetMovePoints() + 1);
+                    msg += "Mountain";
+                    break;
+                case ETerrain.PLAIN:
+                    SetDef(GetDef() - 1);
+                    msg += "Plain";
+                    break;
+                case ETerrain.RIVER:
+                    SetMovePoints(GetMovePoints() - 1);
+                    msg += "River";
+                    break;
+                case ETerrain.FIELD:
+                    SetDef(GetDef() + 1);
+                    msg += "Field";
+                    break;
+                case ETerrain.MARSH:
+                    SetAtk(GetAtk() + 2);
+                    msg += "Marsh";
+                    break;
+                case ETerrain.FOREST:
+                    SetAtk(GetAtk() + 1);
+                    msg += "Forest";
+                    break;
+                case ETerrain.DESERT:
+                    SetAtk(GetAtk() - 1);
+                    msg += "Desert";
+                    break;
+                default:
+                    break;
+            }
+            Console.WriteLine(msg);
         }
 
         public override bool Move(Coord cursor) {
@@ -68,6 +103,7 @@ namespace RiseOfMitra
                     if (validTarget) {
                         Board[GetPos().X, GetPos().Y] = BoardConsts.EMPTY;
                         Board[target.X, target.Y] = BoardConsts.RAHKAR_PAWN;
+                        Adapt(Terrains[GetPos().X, GetPos().Y], Terrains[target.X, target.Y]);
                         SetPos(target);
                     } else {
                         Console.Write("Invalid target! ");

@@ -8,7 +8,7 @@ namespace RiseOfMitra
         private int LifePerSec;
         private const int MAX_LIFEPERSEC = 3;
 
-        public new string GetStatus() {
+        public override string GetStatus() {
             StringBuilder msg = new StringBuilder(base.GetStatus());
             msg.Append("Life/sec: " + LifePerSec + "\n");
             return msg.ToString();

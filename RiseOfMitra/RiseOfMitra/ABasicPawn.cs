@@ -13,11 +13,11 @@ namespace RiseOfMitra
         private int MovePoints;
         private int Atk;
         private int AtkRange;
-        private const int MAX_MOVE = 20;
+        private const int MAX_MOVE = 25;
         private const int MAX_RANGE = 5;
-        private const int MAX_ATK = 20;
+        private const int MAX_ATK = 25;
 
-        public new string GetStatus() {
+        public override string GetStatus() {
             StringBuilder msg = new StringBuilder(base.GetStatus());
             msg.Append("Mov: " + MovePoints + "\n");
             msg.Append("Atk: " + Atk + "\n");
@@ -68,7 +68,7 @@ namespace RiseOfMitra
 
         public abstract bool Move(Coord cursor);
 
-        public abstract void Adapt(ETerrain terrain);
+        public abstract void Adapt(ETerrain prevTerrain, ETerrain curTerrain);
 
         public int GetMovePoints() { return MovePoints; }
         public int GetAtk() { return Atk; }

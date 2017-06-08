@@ -9,6 +9,7 @@ namespace RiseOfMitra
     class Unit
     {
         protected string[,] Board;
+        protected ETerrain[,] Terrains;
         protected string BOARD_CHAR;
         private int CurrLife;
         private int TotalLife;
@@ -119,6 +120,11 @@ namespace RiseOfMitra
                 && board.GetLength(0) == BoardConsts.BOARD_LIN
                 && board.GetLength(1) == BoardConsts.BOARD_COL)
                 Board = board;
+        }
+
+        public void SetTerrain(ETerrain[,] terrains) {
+            if (terrains != null)
+                Terrains = terrains;
         }
     }
 }

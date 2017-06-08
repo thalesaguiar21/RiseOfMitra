@@ -13,9 +13,9 @@ namespace RiseOfMitra
                 case ECultures.DALRIONS:
                     center = new CulturalCenter(ECultures.DALRIONS);
                     center.SetBoard(board);
-                    center.SetCurrLife(1);
-                    center.SetTotalLife(100);
-                    center.SetDef(3);
+                    center.SetCurrLife(30);
+                    center.SetTotalLife(30);
+                    center.SetDef(2);
                     center.SetLifePerSec(2);
                     center.SetPos(new Coord(1, 1));
                     center.SetSpawnPoint(new Coord(center.GetPos().X, center.GetPos().Y + center.GetSize()));
@@ -23,10 +23,9 @@ namespace RiseOfMitra
                 case ECultures.RAHKARS:
                     center = new CulturalCenter(ECultures.RAHKARS);
                     center.SetBoard(board);
-                    center.SetCulture(ECultures.RAHKARS);
-                    center.SetCurrLife(1);
-                    center.SetTotalLife(130);
-                    center.SetDef(2);
+                    center.SetCurrLife(35);
+                    center.SetTotalLife(35);
+                    center.SetDef(1);
                     center.SetLifePerSec(1);
                     int buildSize = center.GetSize() + 1;
                     center.SetPos(new Coord(BoardConsts.BOARD_LIN - buildSize, BoardConsts.BOARD_COL - buildSize));

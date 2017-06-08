@@ -6,12 +6,13 @@ namespace RiseOfMitra
 {
     class PawnFactory
     {
-        public ABasicPawn Create(ECultures nature, string[,] board) {
+        public ABasicPawn Create(ECultures nature, string[,] board, ETerrain[,] terrains) {
             ABasicPawn pawn = null;
             switch (nature) {
                 case ECultures.DALRIONS:
                     pawn = new DalrionPawn();
                     pawn.SetBoard(board);
+                    pawn.SetTerrain(terrains);
                     pawn.SetCurrLife(1);
                     pawn.SetTotalLife(10);
                     pawn.SetAtk(20);
@@ -28,6 +29,7 @@ namespace RiseOfMitra
                 case ECultures.RAHKARS:
                     pawn = new RahkarPawn();
                     pawn.SetBoard(board);
+                    pawn.SetTerrain(terrains);
                     pawn.SetCurrLife(1);
                     pawn.SetTotalLife(12);
                     pawn.SetAtk(20);

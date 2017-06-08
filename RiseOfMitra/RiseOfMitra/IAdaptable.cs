@@ -4,6 +4,6 @@ namespace RiseOfMitra
 {
     interface IAdaptable
     {
-        void Adapt(ETerrain terrain);
+        void Adapt(ETerrain prevTerrain, ETerrain nextTerrain);
     }
 }
