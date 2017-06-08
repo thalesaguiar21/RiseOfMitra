@@ -82,7 +82,7 @@ namespace RiseOfMitra
                 Console.Clear();
                 RoMBoard.PrintBoard(board, cmd, cursor, prevSelec, avaiableCells);
                 if (cmd == Commands.MOVE)
-                    Console.Write("TERRAIN IS asdasaeHOOO " + terrains[cursor.X, cursor.Y].Convert());
+                    Console.Write("TERRAIN IS " + terrains[cursor.X, cursor.Y].Convert());
                 var move = Console.ReadKey(false).Key;
                 switch (move) {
                     case ConsoleKey.Enter:

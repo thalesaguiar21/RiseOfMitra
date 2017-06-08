@@ -42,10 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MonteCarloTreeSearch.cs" />
     <Compile Include="OMCSelection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectionStrategy.cs" />
+    <Compile Include="SimulationStrategy.cs" />
     <Compile Include="UCTSelection.cs" />
   </ItemGroup>
   <ItemGroup>

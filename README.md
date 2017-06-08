@@ -16,3 +16,8 @@ Rise of Mitra tells the history of a battle for resources between two races in t
 I*.class -> Interface</br>
 A*.class -> Abstract</br>
 E*.class -> Enum</br>
+
+# Execution Steps
+## Linux
+If you have a Linux environment, plase check [this](https://www.vivaolinux.com.br/artigo/Mono-e-C-(parte-1)) tutorial about how to compile/run C# on it.
+## Visual Studio
