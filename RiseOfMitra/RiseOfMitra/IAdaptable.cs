@@ -1,6 +1,6 @@
 ﻿using Types;
 
-namespace RiseOfMitra
+namespace Game
 {
     interface IAdaptable
     {

@@ -6,8 +6,8 @@ namespace Consts
     public class BoardConsts
     {
         // Limits
-        public const int BOARD_LIN = 35;
-        public const int BOARD_COL = 45;
+        public const int MAX_LIN = 35;
+        public const int MAX_COL = 45;
         public const int INITIAL_PAWNS = 6;
 
         // Strings

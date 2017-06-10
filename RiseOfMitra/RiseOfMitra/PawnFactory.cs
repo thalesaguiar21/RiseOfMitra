@@ -2,17 +2,16 @@
 using Types;
 using Cells;
 
-namespace RiseOfMitra
+namespace Game
 {
     class PawnFactory
     {
-        public ABasicPawn Create(ECultures nature, string[,] board, ETerrain[,] terrains) {
-            ABasicPawn pawn = null;
+        public APawn Create(ECultures nature, Board boards) {
+            APawn pawn = null;
             switch (nature) {
                 case ECultures.DALRIONS:
                     pawn = new DalrionPawn();
-                    pawn.SetBoard(board);
-                    pawn.SetTerrain(terrains);
+                    pawn.SetBoards(boards);
                     pawn.SetCurrLife(1);
                     pawn.SetTotalLife(10);
                     pawn.SetAtk(20);
@@ -28,8 +27,7 @@ namespace RiseOfMitra
 
                 case ECultures.RAHKARS:
                     pawn = new RahkarPawn();
-                    pawn.SetBoard(board);
-                    pawn.SetTerrain(terrains);
+                    pawn.SetBoards(boards);
                     pawn.SetCurrLife(1);
                     pawn.SetTotalLife(12);
                     pawn.SetAtk(20);
@@ -49,7 +47,7 @@ namespace RiseOfMitra
         }
 
 
-        private bool ValidatePawn(ABasicPawn pawn) {
+        private bool ValidatePawn(APawn pawn) {
             bool isValid = true;
             if (pawn.NativeOf() == ECultures.DALRIONS) {
                 isValid &= pawn.GetCurrLife() == 1;
@@ -60,7 +58,7 @@ namespace RiseOfMitra
                 isValid &= pawn.GetMovePoints() == 20;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
-                isValid &= (pawn.GetBoard() != null);
+                isValid &= (pawn.GetBoards() != null);
             } else if (pawn.NativeOf() == ECultures.RAHKARS) {
                 isValid &= pawn.GetAtk() == 20;
                 isValid &= pawn.GetAtkRange() == 5;
@@ -69,7 +67,7 @@ namespace RiseOfMitra
                 isValid &= pawn.GetMovePoints() == 20;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
-                isValid &= (pawn.GetBoard() != null);
+                isValid &= (pawn.GetBoards() != null);
             }
             return isValid;
         }

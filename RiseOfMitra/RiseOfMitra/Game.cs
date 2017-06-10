@@ -3,82 +3,38 @@ using System.Collections.Generic;
 using Types;
 using Cells;
 using Consts;
-using ShortestPath;
+using System.IO;
 
-namespace RiseOfMitra
+namespace Game
 {
     class Game
     {
-        private Player[] players;
-        private Player curPlayer;
-        private bool play;
-        private bool validCmd;
-        private string[,] Board;
-        private ETerrain[,] Terrains;
+        private Player[] Players;
+        private Player CurPlayer;
+        private bool Play;
+        private bool ValidCmd;
+        private Board Boards;
 
         public Game() {
             InitPlayers();
-            play = true;
-            validCmd = false;
-            Board = new string[BoardConsts.BOARD_LIN, BoardConsts.BOARD_COL];
-            Terrains = new ETerrain[BoardConsts.BOARD_LIN, BoardConsts.BOARD_COL];
-            InitTerrains();
-
+            Play = true;
+            ValidCmd = false;
+            Boards = new Board(Players);
             // Adding units
-            ClearBoard();
-            CreateUnits();
             PlaceUnits();
         }
 
-        private void InitTerrains() {
-            Random rand = new Random();
-            for (int i = 1; i < BoardConsts.BOARD_LIN - 1; i++) {
-                for (int j = 0; j < BoardConsts.BOARD_COL - 1; j++) {
-                    Array terrainValues = Enum.GetValues(typeof(ETerrain));
-                    Terrains[i, j] = (ETerrain) terrainValues.GetValue(rand.Next(terrainValues.Length));
-                }
-            }
-        }
-
         private void InitPlayers() {
-            players = new Player[2];
-            players[0] = new Player(ECultures.DALRIONS);
-            players[1] = new Player(ECultures.RAHKARS);
+            Players = new Player[2];
+            Players[0] = new Player(ECultures.DALRIONS);
+            Players[1] = new Player(ECultures.RAHKARS);
 
-            players[1].SetCursor(new Coord(BoardConsts.BOARD_LIN - 2, BoardConsts.BOARD_COL - 2));
-            curPlayer = players[0];
-        }
-
-        private void ClearBoard() {
-            for (int i = 0; i < BoardConsts.BOARD_LIN; i++) {
-                for (int j = 0; j < BoardConsts.BOARD_COL; j++) {
-                    Board[i, j] = BoardConsts.EMPTY;
-                }
-            }
-        }
-
-        private void CreateUnits() {
-            PawnFactory pawnFac = new PawnFactory();
-            for (int i = 0; i < BoardConsts.INITIAL_PAWNS; i++) {
-                ABasicPawn dPawn = pawnFac.Create(ECultures.DALRIONS, Board, Terrains);
-                dPawn.SetPos(new Coord(1 + i, 7));
-                players[0].AddPawn(dPawn);
-
-                ABasicPawn rPawn = pawnFac.Create(ECultures.RAHKARS, Board, Terrains);
-                rPawn.SetPos(new Coord(BoardConsts.BOARD_LIN - 2 - i, BoardConsts.BOARD_COL - 8));
-                players[1].AddPawn(rPawn);
-            }
-
-            CulturalCenterFactory centFac = new CulturalCenterFactory();
-            ABuilding dCenter = centFac.Create(ECultures.DALRIONS, Board);
-            ABuilding rCenter = centFac.Create(ECultures.RAHKARS, Board);           
-
-            players[0].SetCulturalCenter((CulturalCenter)dCenter);
-            players[1].SetCulturalCenter((CulturalCenter)rCenter);
+            Players[1].SetCursor(new Coord(BoardConsts.MAX_LIN - 2, BoardConsts.MAX_COL - 2));
+            CurPlayer = Players[0];
         }
 
         private void PlaceUnits() {
-            foreach (Player it in players) {
+            foreach (Player it in Players) {
                 foreach (Unit unit in it.GetUnits()) {
                     unit.Place();
                 }
@@ -87,22 +43,22 @@ namespace RiseOfMitra
 
         public void Start() {
             do {
-                RoMBoard.PrintBoard(Board, null);
+                Boards.PrintBoard();
                 GetUserCmd();
                 Console.Write("Press enter to continue...");
                 Console.ReadLine();
-                if (validCmd)
+                if (ValidCmd)
                     SetNextPlayer();
 
-                foreach (Player player in players) {
+                foreach (Player player in Players) {
                     if (player.GetCenter() == null || player.GetCenter().GetCurrLife() <= 0)
-                        play = false;
+                        Play = false;
                 }
                 Console.Clear();
-            } while (play);
+            } while (Play);
             string winner = "";
-            if (curPlayer.GetCenter() == null || curPlayer.GetCenter().GetCurrLife() <= 0) {
-                if (curPlayer.GetCulture() == ECultures.DALRIONS)
+            if (CurPlayer.GetCenter() == null || CurPlayer.GetCenter().GetCurrLife() <= 0) {
+                if (CurPlayer.GetCulture() == ECultures.DALRIONS)
                     winner = "RAHKARS";
                 else
                     winner = "DALRIONS";
@@ -112,10 +68,10 @@ namespace RiseOfMitra
         }
 
         private void GetUserCmd() {
-            string msg = String.Format("{0} TURN.\nType in a command: ", curPlayer.GetCulture());
+            string msg = String.Format("{0} TURN.\nType in a command: ", CurPlayer.GetCulture());
             Console.Write(msg);
             string userCmd = Console.ReadLine().Trim().ToUpper();
-            validCmd = true;
+            ValidCmd = true;
 
             switch (userCmd) {
                 case Commands.ATTACK:
@@ -131,10 +87,10 @@ namespace RiseOfMitra
                     Inspect();
                     break;
                 case Commands.EXIT:
-                    play = false;
+                    Play = false;
                     break;
                 default:
-                    validCmd = false;
+                    ValidCmd = false;
                     Console.WriteLine(userCmd + " isn't a valid command!");
                     break;
             }
@@ -143,7 +99,7 @@ namespace RiseOfMitra
         private void Attack() {
 
             Coord enemyPos = null;
-            enemyPos = curPlayer.PerformAttack(Board, GetOponent().GetUnits());
+            enemyPos = CurPlayer.PerformAttack(Boards, GetOponent().GetUnits());
             if(enemyPos != null) {
                 Unit enemy = GetOponent().GetUnitAt(enemyPos);
                 if (enemy.GetCurrLife() <= 0) {
@@ -151,11 +107,11 @@ namespace RiseOfMitra
                     GetOponent().RemoveUnitAt(enemyPos);
                 }
             }
-            validCmd = enemyPos != null;
+            ValidCmd = enemyPos != null;
         }
 
         private void Move() {
-            validCmd = curPlayer.PeformMove(Board);
+            ValidCmd = CurPlayer.PeformMove(Boards);
         }
 
         private void Inspect() {
@@ -163,20 +119,20 @@ namespace RiseOfMitra
             Console.ReadLine();
             Coord selPos = null;
             bool isUnit = false;
-            validCmd = false;
+            ValidCmd = false;
             BoardConsts consts = new BoardConsts();
 
             do {
-                selPos = RoMBoard.SelectPosition(Board, curPlayer.GetCursor());
+                selPos = Boards.SelectPosition(CurPlayer.GetCursor());
                 Unit unit = null;
 
-                foreach (Player it in players) {
+                foreach (Player it in Players) {
                     unit = it.GetUnitAt(selPos);
                     if (unit != null)
                         break;
                 }
 
-                isUnit = consts.IsValid(Board[selPos.X, selPos.Y]) && unit != null;
+                isUnit = consts.IsValid(Boards.CellAt(selPos)) && unit != null;
                 string msg = "";
 
                 if (isUnit)
@@ -194,26 +150,38 @@ namespace RiseOfMitra
         }
 
         private void SetNextPlayer() {
-            curPlayer.SetTurn();
-            curPlayer.ExecuteTurnEvents(Board);
+            CurPlayer.SetTurn();
+            CurPlayer.ExecuteTurnEvents(Boards.GetBoard());
 
-            if (curPlayer == players[0]) {
-                curPlayer = players[1];
+            if (CurPlayer == Players[0]) {
+                CurPlayer = Players[1];
             } else {
-                curPlayer = players[0];   
+                CurPlayer = Players[0];   
             }
         }
 
         private Player GetOponent() {
-            if (curPlayer == players[0])
-                return players[1];
+            if (CurPlayer == Players[0])
+                return Players[1];
             else
-                return players[0];
+                return Players[0];
         }
 
         static void Main(string[] args) {
-            Game rom = new Game();
-            rom.Start();
+
+            try {
+                Game rom = new Game();
+                rom.Start();
+            } catch (FormatException) {
+                Console.WriteLine("Invalid Terrain file format!");
+            } catch (IOException) {
+                Console.WriteLine("Could not find Terrain file!");
+            } catch (ArgumentException ae) {
+                Console.WriteLine(ae.Message);
+            }  finally {
+                Console.ReadLine();
+            }
+            
         }
     }
 }

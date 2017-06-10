@@ -26,9 +26,9 @@ namespace RiseOfMitra
             SpawnRange = 4;
         }
 
-        public ABasicPawn GeneratePawn() {
+        public APawn GeneratePawn() {
             PawnFactory factory = new PawnFactory();
-            ABasicPawn pawn = factory.Create(NativeOf(), Board, Terrains);
+            APawn pawn = factory.Create(NativeOf(), Boards);
             Coord pos = GetPlacementPosition();
             if (pos == null) {
                 Console.Write("Can not generate more pawns!");
@@ -42,9 +42,9 @@ namespace RiseOfMitra
 
         private Coord GetPlacementPosition() {
             Coord spawnPoint = null;
-            for(int i = 0; i < BoardConsts.BOARD_LIN; i++) {
-                for(int j=0; j < BoardConsts.BOARD_COL; j++) {
-                    if (Board[i, j] == BoardConsts.EMPTY && Coord.Distance(SpawnPoint, new Coord(i, j)) <= SpawnRange) {
+            for(int i = 0; i < BoardConsts.MAX_LIN; i++) {
+                for(int j=0; j < BoardConsts.MAX_COL; j++) {
+                    if (Boards.GetBoard()[i, j] == BoardConsts.EMPTY && Coord.Distance(SpawnPoint, new Coord(i, j)) <= SpawnRange) {
                         spawnPoint = new Coord(i, j);
                     }
                 }
@@ -61,7 +61,7 @@ namespace RiseOfMitra
         }
 
         public void SetSpawnPoint(Coord cell) {
-            if(cell != null && Board[cell.X, cell.Y] == BoardConsts.EMPTY) {
+            if(cell != null && Boards.CellAt(cell) == BoardConsts.EMPTY) {
                 SpawnPoint = cell;
             }
         }

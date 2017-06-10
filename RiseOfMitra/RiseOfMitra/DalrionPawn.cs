@@ -6,12 +6,12 @@ using Cells;
 using ShortestPath;
 using System.Collections.Generic;
 
-namespace RiseOfMitra
+namespace Game
 {
-    class DalrionPawn : ABasicPawn
+    class DalrionPawn : APawn
     {
         public DalrionPawn() {
-            Board = null;
+            Boards = null;
             BOARD_CHAR = BoardConsts.DALRION_PAWN;
             SetCurrLife(0);
             SetTotalLife(0);
@@ -29,13 +29,11 @@ namespace RiseOfMitra
         }
 
         public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
-            string msg = "Adapting for ";
             switch (prevTerrain) {
                 case ETerrain.MOUNTAIN:
                     SetMovePoints(GetMovePoints() + 1);
                     break;
                 case ETerrain.PLAIN:
-                    SetAtk(GetAtk() - 1);
                     break;
                 case ETerrain.RIVER:
                     SetAtk(GetAtk() - 1);
@@ -59,51 +57,43 @@ namespace RiseOfMitra
             switch (curTerrain) {
                 case ETerrain.MOUNTAIN:
                     SetMovePoints(GetMovePoints() - 1);
-                    msg += "Mountain";
                     break;
                 case ETerrain.PLAIN:
                     SetAtk(GetAtk() + 1);
-                    msg += "Plain";
                     break;
                 case ETerrain.RIVER:
                     SetAtk(GetAtk() + 1);
-                    msg += "River";
                     break;
                 case ETerrain.FIELD:
                     SetDef(GetDef() + 1);
-                    msg += "Field";
                     break;
                 case ETerrain.MARSH:
                     SetDef(GetDef() - 1);
-                    msg += "Marsh";
                     break;
                 case ETerrain.FOREST:
                     SetMovePoints(GetMovePoints() + 1);
-                    msg += "Forest";
                     break;
                 case ETerrain.DESERT:
                     SetMovePoints(GetMovePoints() + 2);
-                    msg += "Desert";
                     break;
                 default:
                     break;
             }
-            Console.WriteLine(msg);
         }
 
         public override bool Move(Coord cursor) {
             bool validTarget = false;
-            Dijkstra didi = new Dijkstra(Board, GetPos(), GetMovePoints());
+            Dijkstra didi = new Dijkstra(Boards.GetBoard(), GetPos(), GetMovePoints());
             List<Coord> moveRange = didi.GetValidPaths(Commands.MOVE);
             if (moveRange.Count > 0) {
                 do {
-                    Coord target = RoMBoard.SelectPosition(Terrains, Board, cursor, GetPos(), Commands.MOVE, moveRange);
+                    Coord target = Boards.SelectPosition(cursor, GetPos(), Commands.MOVE, moveRange);
                     validTarget = moveRange.Contains(target);
 
                     if (validTarget) {
-                        Board[GetPos().X, GetPos().Y] = BoardConsts.EMPTY;
-                        Board[target.X, target.Y] = BoardConsts.DALRION_PAWN;
-                        Adapt(Terrains[GetPos().X, GetPos().Y], Terrains[target.X, target.Y]);
+                        Boards.SetCellAt(GetPos(), BoardConsts.EMPTY);
+                        Boards.SetCellAt(target, BoardConsts.RAHKAR_PAWN);
+                        Adapt((ETerrain)Boards.TerrainAt(GetPos()), (ETerrain)Boards.TerrainAt(target));
                         SetPos(target);
                     } else {
                         Console.Write("Invalid target! ");

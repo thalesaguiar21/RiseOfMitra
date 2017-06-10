@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0AC94DF4-D9D1-4F93-A1CC-D55B74BCFDCC}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RiseOfMitra</RootNamespace>
+    <RootNamespace>Game</RootNamespace>
     <AssemblyName>RiseOfMitra</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -49,6 +49,15 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -61,7 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ABuilding.cs" />
-    <Compile Include="RoMBoard.cs" />
+    <Compile Include="Board.cs" />
     <Compile Include="CulturalCenter.cs" />
     <Compile Include="CulturalCenterFactory.cs" />
     <Compile Include="IAdaptable.cs" />
@@ -77,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

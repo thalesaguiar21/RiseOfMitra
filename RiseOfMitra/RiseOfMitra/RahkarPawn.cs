@@ -3,15 +3,14 @@ using Types;
 using Cells;
 using System;
 using ShortestPath;
-using Consts;
 using System.Collections.Generic;
 
-namespace RiseOfMitra
+namespace Game
 {
-    class RahkarPawn : ABasicPawn
+    class RahkarPawn : APawn
     {
         public RahkarPawn() {
-            Board = null;
+            Boards = null;
             BOARD_CHAR = BoardConsts.RAHKAR_PAWN;
             SetCurrLife(0);
             SetTotalLife(0);
@@ -29,13 +28,12 @@ namespace RiseOfMitra
         }
 
         public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
-            string msg = "Adapting for ";
             switch (prevTerrain) {
                 case ETerrain.MOUNTAIN:
                     SetMovePoints(GetMovePoints() + 1);
                     break;
                 case ETerrain.PLAIN:
-                    SetDef(GetDef() + 1);
+                    SetDef(GetDef());
                     break;
                 case ETerrain.RIVER:
                     SetMovePoints(GetMovePoints() + 1);
@@ -47,7 +45,6 @@ namespace RiseOfMitra
                     SetAtk(GetAtk() - 2);
                     break;
                 case ETerrain.FOREST:
-                    SetAtk(GetAtk() - 1);
                     break;
                 case ETerrain.DESERT:
                     SetAtk(GetAtk() + 1);
@@ -59,51 +56,43 @@ namespace RiseOfMitra
             switch (curTerrain) {
                 case ETerrain.MOUNTAIN:
                     SetMovePoints(GetMovePoints() + 1);
-                    msg += "Mountain";
                     break;
                 case ETerrain.PLAIN:
                     SetDef(GetDef() - 1);
-                    msg += "Plain";
                     break;
                 case ETerrain.RIVER:
                     SetMovePoints(GetMovePoints() - 1);
-                    msg += "River";
                     break;
                 case ETerrain.FIELD:
                     SetDef(GetDef() + 1);
-                    msg += "Field";
                     break;
                 case ETerrain.MARSH:
                     SetAtk(GetAtk() + 2);
-                    msg += "Marsh";
                     break;
                 case ETerrain.FOREST:
                     SetAtk(GetAtk() + 1);
-                    msg += "Forest";
                     break;
                 case ETerrain.DESERT:
                     SetAtk(GetAtk() - 1);
-                    msg += "Desert";
                     break;
                 default:
                     break;
             }
-            Console.WriteLine(msg);
         }
 
         public override bool Move(Coord cursor) {
             bool validTarget = false;
-            Dijkstra didi = new Dijkstra(Board, GetPos(), GetMovePoints());
+            Dijkstra didi = new Dijkstra(Boards.GetBoard(), GetPos(), GetMovePoints());
             List<Coord> moveRange = didi.GetValidPaths(Commands.MOVE);
             if(moveRange.Count > 0) {
                 do {
-                    Coord target = RoMBoard.SelectPosition(Terrains, Board, cursor, GetPos(), Commands.MOVE, moveRange);
+                    Coord target = Boards.SelectPosition(cursor, GetPos(), Commands.MOVE, moveRange);
                     validTarget = moveRange.Contains(target);
 
                     if (validTarget) {
-                        Board[GetPos().X, GetPos().Y] = BoardConsts.EMPTY;
-                        Board[target.X, target.Y] = BoardConsts.RAHKAR_PAWN;
-                        Adapt(Terrains[GetPos().X, GetPos().Y], Terrains[target.X, target.Y]);
+                        Boards.SetCellAt(GetPos(), BoardConsts.EMPTY);
+                        Boards.SetCellAt(target, BoardConsts.RAHKAR_PAWN);
+                        Adapt((ETerrain)Boards.TerrainAt(GetPos()), (ETerrain)Boards.TerrainAt(target));
                         SetPos(target);
                     } else {
                         Console.Write("Invalid target! ");

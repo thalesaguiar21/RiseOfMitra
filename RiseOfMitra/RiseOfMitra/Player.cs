@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using Types;
 using Cells;
 
-namespace RiseOfMitra
+namespace Game
 {
     class Player
     {
         private ECultures Culture;
-        private List<ABasicPawn> Pawns;
+        private List<APawn> Pawns;
         private CulturalCenter Center;
         private Coord Cursor;
         private int Turn;
 
         public Player(ECultures native) {
             Culture = native;
-            Pawns = new List<ABasicPawn>();
+            Pawns = new List<APawn>();
             Center = null;
             Cursor = new Coord(1, 1);
         }
 
-        public ABasicPawn GetPawnAt(Coord pos) {
+        public APawn GetPawnAt(Coord pos) {
             for (int i = 0; i < Pawns.Count; i++) {
                 if (Pawns[i].GetPos().Equals(pos))
                     return Pawns[i];
@@ -50,7 +50,7 @@ namespace RiseOfMitra
             return unit;
         }
 
-        public void AddPawn(ABasicPawn pawn) {
+        public void AddPawn(APawn pawn) {
             if (pawn != null && pawn.NativeOf() == Culture) {
                 Pawns.Add(pawn);
             }
@@ -73,9 +73,9 @@ namespace RiseOfMitra
             return found;
         }
 
-        public bool PeformMove(string[,] board) {
-            Coord selPos = RoMBoard.SelectPosition(board, Cursor);
-            ABasicPawn pawn = GetPawnAt(selPos);
+        public bool PeformMove(Board boards) {
+            Coord selPos = boards.SelectPosition(Cursor);
+            APawn pawn = GetPawnAt(selPos);
             bool valid = false;
 
             if (pawn != null) {
@@ -86,9 +86,9 @@ namespace RiseOfMitra
             return valid;
         }
 
-        public Coord PerformAttack(string[,] board, List<Unit> enemies) {
-            Coord selPos = RoMBoard.SelectPosition(board, Cursor);
-            ABasicPawn pawn = GetPawnAt(selPos);
+        public Coord PerformAttack(Board boards, List<Unit> enemies) {
+            Coord selPos = boards.SelectPosition(Cursor);
+            APawn pawn = GetPawnAt(selPos);
             Coord target = null;
 
             if (pawn != null) {
@@ -103,7 +103,7 @@ namespace RiseOfMitra
         public void ExecuteTurnEvents(string[,] board) {
             Center.Regen();
             if (Turn % Center.GetUnitsPerTurn() == 0) {
-                ABasicPawn pawn = Center.GeneratePawn();
+                APawn pawn = Center.GeneratePawn();
                 if(pawn != null) {
                     pawn.Place();
                     AddPawn(pawn);
@@ -115,7 +115,7 @@ namespace RiseOfMitra
         }
 
         public ECultures GetCulture() { return Culture; }
-        public List<ABasicPawn> GetPawns() { return Pawns; }
+        public List<APawn> GetPawns() { return Pawns; }
         public CulturalCenter GetCenter() { return Center; }
         public Coord GetCursor() { return Cursor; }
 
@@ -123,7 +123,7 @@ namespace RiseOfMitra
             Culture = cult;
         }
 
-        public void SetPawns(List<ABasicPawn> pawns) {
+        public void SetPawns(List<APawn> pawns) {
             if (pawns != null)
                 Pawns = pawns;
         }

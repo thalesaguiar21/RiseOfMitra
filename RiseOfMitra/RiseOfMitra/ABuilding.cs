@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace RiseOfMitra
+namespace Game
 {
     class ABuilding : Unit
     {

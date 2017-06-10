@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Types;
 
-namespace RiseOfMitra
+namespace Game
 { 
     class Temple : ABuilding
     {

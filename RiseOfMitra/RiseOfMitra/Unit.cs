@@ -4,12 +4,11 @@ using Types;
 using Consts;
 using System.Text;
 
-namespace RiseOfMitra
+namespace Game
 {
     class Unit
     {
-        protected string[,] Board;
-        protected ETerrain[,] Terrains;
+        protected Board Boards;
         protected string BOARD_CHAR;
         private int CurrLife;
         private int TotalLife;
@@ -44,9 +43,8 @@ namespace RiseOfMitra
         public void Erase() {
             for (int i = 0; i < GetSize(); i++) {
                 for (int k = 0; k < GetSize(); k++) {
-                    int cX = GetPos().X + i;
-                    int cY = GetPos().Y + k;
-                    Board[cX, cY] = BoardConsts.EMPTY;
+                    Coord pos = new Coord(GetPos().X + i, GetPos().Y + k);
+                    Boards.SetCellAt(pos, BoardConsts.EMPTY);
                 }
             }
         }
@@ -54,9 +52,8 @@ namespace RiseOfMitra
         public void Place() {
             for (int i = 0; i < GetSize(); i++) {
                 for (int k = 0; k < GetSize(); k++) {
-                    int cX = GetPos().X + i;
-                    int cY = GetPos().Y + k;
-                    Board[cX, cY] = this.ToString();
+                    Coord pos = new Coord(GetPos().X + i, GetPos().Y + k);
+                    Boards.SetCellAt(pos, this.ToString());
                 }
             }
         }
@@ -71,7 +68,7 @@ namespace RiseOfMitra
         public Coord GetPos() { return Pos; }
         public int GetSize() { return Size; }
         public ECultures NativeOf() { return native; }
-        public string[,] GetBoard() { return Board; }
+        public string[,] GetBoards() { return Boards.GetBoard(); }
 
         public void SetCurrLife(int life) {
             if (life > MAX_LIFE) {
@@ -95,8 +92,8 @@ namespace RiseOfMitra
         }
 
         public void SetPos(Coord pos) {
-            if (pos.X >= BoardConsts.BOARD_LIN || pos.X < 0
-                || pos.Y >= BoardConsts.BOARD_COL || pos.Y < 0)
+            if (pos.X >= BoardConsts.MAX_LIN || pos.X < 0
+                || pos.Y >= BoardConsts.MAX_COL || pos.Y < 0)
                 Console.WriteLine(pos + " isn't a valid position!");
             else {
                 Pos = pos;
@@ -115,16 +112,13 @@ namespace RiseOfMitra
             native = culture;
         }
 
-        public void SetBoard(string[,] board) {
-            if (board != null
-                && board.GetLength(0) == BoardConsts.BOARD_LIN
-                && board.GetLength(1) == BoardConsts.BOARD_COL)
-                Board = board;
-        }
-
-        public void SetTerrain(ETerrain[,] terrains) {
-            if (terrains != null)
-                Terrains = terrains;
+        public void SetBoards(Board boards) {
+            if (boards != null
+                && boards.GetBoard().GetLength(0) == BoardConsts.MAX_LIN
+                && boards.GetBoard().GetLength(1) == BoardConsts.MAX_COL
+                && boards.GetTerrains().GetLength(0) == BoardConsts.MAX_LIN
+                && boards.GetTerrains().GetLength(1) == BoardConsts.MAX_COL)
+                Boards = boards;
         }
     }
 }
