@@ -12,7 +12,6 @@ namespace Game
 {
     abstract class ABasicPawn : APawn
     {
-
         public override bool Move(Coord cursor) {
             bool validTarget = false;
             Dijkstra didi = new Dijkstra(Boards.GetBoard(), GetPos(), GetMovePoints());
