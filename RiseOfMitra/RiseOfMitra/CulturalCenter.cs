@@ -4,7 +4,7 @@ using Consts;
 using Cells;
 using System;
 
-namespace RiseOfMitra
+namespace Game
 {
     class CulturalCenter : ABuilding
     {

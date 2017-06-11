@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ABasicPawn.cs" />
     <Compile Include="ABuilding.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="CulturalCenter.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="RahkarPawn.cs" />
     <Compile Include="Temple.cs" />
     <Compile Include="Unit.cs" />
-    <Compile Include="ABasicPawn.cs" />
+    <Compile Include="APawn.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

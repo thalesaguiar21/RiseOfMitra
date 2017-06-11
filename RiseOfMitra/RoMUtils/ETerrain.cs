@@ -16,19 +16,19 @@
         public static string Convert(this ETerrain terrain) {
             switch (terrain) {
                 case ETerrain.MOUNTAIN:
-                    return "MTN";
+                    return "MOUNTAIN";
                 case ETerrain.PLAIN:
-                    return "PLN";
+                    return "PLAIN";
                 case ETerrain.RIVER:
-                    return "RVR";
+                    return "RIVER";
                 case ETerrain.FIELD:
-                    return "FLD";
+                    return "FIELD";
                 case ETerrain.MARSH:
-                    return "MRS";
+                    return "MARSH";
                 case ETerrain.FOREST:
-                    return "FST";
+                    return "FOREST";
                 case ETerrain.DESERT:
-                    return "DSR";
+                    return "DESERT";
             }
             return "ERROR";
         }

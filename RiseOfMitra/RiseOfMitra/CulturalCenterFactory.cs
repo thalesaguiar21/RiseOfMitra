@@ -3,7 +3,7 @@ using Types;
 using Cells;
 using Consts;
 
-namespace RiseOfMitra
+namespace Game
 {
     class CulturalCenterFactory
     {

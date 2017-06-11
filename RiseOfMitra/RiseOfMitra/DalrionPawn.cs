@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Game
 {
-    class DalrionPawn : APawn
+    class DalrionPawn : ABasicPawn
     {
         public DalrionPawn() {
             Boards = null;
@@ -22,10 +22,6 @@ namespace Game
             SetMovePoints(1);
             SetPos(new Coord(0, 0));
             SetSize(1);
-        }
-
-        public override string ToString() {
-            return BOARD_CHAR;
         }
 
         public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
@@ -59,7 +55,6 @@ namespace Game
                     SetMovePoints(GetMovePoints() - 1);
                     break;
                 case ETerrain.PLAIN:
-                    SetAtk(GetAtk() + 1);
                     break;
                 case ETerrain.RIVER:
                     SetAtk(GetAtk() + 1);
@@ -79,32 +74,6 @@ namespace Game
                 default:
                     break;
             }
-        }
-
-        public override bool Move(Coord cursor) {
-            bool validTarget = false;
-            Dijkstra didi = new Dijkstra(Boards.GetBoard(), GetPos(), GetMovePoints());
-            List<Coord> moveRange = didi.GetValidPaths(Commands.MOVE);
-            if (moveRange.Count > 0) {
-                do {
-                    Coord target = Boards.SelectPosition(cursor, GetPos(), Commands.MOVE, moveRange);
-                    validTarget = moveRange.Contains(target);
-
-                    if (validTarget) {
-                        Boards.SetCellAt(GetPos(), BoardConsts.EMPTY);
-                        Boards.SetCellAt(target, BoardConsts.RAHKAR_PAWN);
-                        Adapt((ETerrain)Boards.TerrainAt(GetPos()), (ETerrain)Boards.TerrainAt(target));
-                        SetPos(target);
-                    } else {
-                        Console.Write("Invalid target! ");
-                        Console.ReadLine();
-                    }
-
-                } while (!validTarget);
-            } else {
-                Console.Write("This pawn can't move! ");
-            }
-            return validTarget;
         }
     }
 }
