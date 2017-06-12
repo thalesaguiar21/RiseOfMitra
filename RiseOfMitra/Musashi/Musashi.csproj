@@ -52,5 +52,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RiseOfMitra\Game.csproj">
+      <Project>{0ac94df4-d9d1-4f93-a1cc-d55b74bcfdcc}</Project>
+      <Name>Game</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

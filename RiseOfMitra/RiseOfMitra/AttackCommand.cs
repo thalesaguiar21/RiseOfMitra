@@ -33,12 +33,12 @@ namespace Game
                 List<Coord> atkRange = didi.GetValidPaths(Consts.Commands.ATTACK);
                 if (PosValidate(atkRange)) {
                     valid = true;
-                    APawn enemyPawn = Oponent.GetPawnAt(EnemyPos);
-                    int damage = allyPawn.GetAtk() - enemyPawn.GetDef();
+                    Unit enemyUnit = Oponent.GetUnitAt(EnemyPos);
+                    int damage = allyPawn.GetAtk() - enemyUnit.GetDef();
                     if(damage > 0) {
                         HitMsg = String.Format("YOU HAVE DEALT {0} DAMAGE!", damage);
-                        enemyPawn.SetCurrLife(enemyPawn.GetCurrLife() - damage);
-                        if(enemyPawn.GetCurrLife() <= 0) {
+                        enemyUnit.SetCurrLife(enemyUnit.GetCurrLife() - damage);
+                        if(enemyUnit.GetCurrLife() <= 0) {
                             Oponent.RemoveUnitAt(EnemyPos);
                             HitMsg += " ENEMY KILLED!!";
                         }
@@ -73,8 +73,9 @@ namespace Game
                 if (allyPawn == null) {
                     ErrorMsg = "CURRENT PLAYER DO NOT HAVE A VALID PAWN AT THE GIVEN POSITION!";
                     valid = false;
-                } else if (Oponent.GetPawnAt(EnemyPos) == null) {
-                    ErrorMsg = "OPONENT DO NOT HAVE A PAWN AT THIS POSITION!";
+                } else if (Oponent.GetUnitAt(EnemyPos) == null) {
+                    ErrorMsg = "OPONENT DO NOT HAVE A UNIT" +
+                        " AT THIS POSITION!";
                     valid = false;
                 }
             }            
