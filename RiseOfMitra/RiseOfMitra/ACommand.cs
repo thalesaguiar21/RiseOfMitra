@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gaia
+namespace Game
 {
-    class Program
+    abstract class ACommand
     {
-        static void Main(string[] args)
-        {
-        }
+        public abstract bool Execute();
+        protected abstract bool Validate();
     }
 }

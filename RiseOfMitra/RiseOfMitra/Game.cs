@@ -4,6 +4,7 @@ using Types;
 using Cells;
 using Consts;
 using System.IO;
+using ShortestPath;
 
 namespace Game
 {
@@ -26,8 +27,8 @@ namespace Game
 
         private void InitPlayers() {
             Players = new Player[2];
-            Players[0] = new Player(ECultures.DALRIONS);
-            Players[1] = new Player(ECultures.RAHKARS);
+            Players[0] = new HumanPlayer(ECultures.DALRIONS);
+            Players[1] = new HumanPlayer(ECultures.RAHKARS);
 
             Players[1].SetCursor(new Coord(BoardConsts.MAX_LIN - 2, BoardConsts.MAX_COL - 2));
             CurPlayer = Players[0];
@@ -44,7 +45,8 @@ namespace Game
         public void Start() {
             do {
                 Boards.PrintBoard();
-                GetUserCmd();
+                ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
+                ValidCmd = cmd.Execute();
                 Console.Write("Press enter to continue...");
                 Console.ReadLine();
                 if (ValidCmd)
@@ -65,53 +67,6 @@ namespace Game
             }
             Console.WriteLine(winner + " ARE THE WINNERs!");
             Console.ReadLine();
-        }
-
-        private void GetUserCmd() {
-            string msg = String.Format("{0} TURN.\nType in a command: ", CurPlayer.GetCulture());
-            Console.Write(msg);
-            string userCmd = Console.ReadLine().Trim().ToUpper();
-            ValidCmd = true;
-
-            switch (userCmd) {
-                case Commands.ATTACK:
-                    Attack();
-                    break;
-                case Commands.MOVE:
-                    Move();
-                    break;
-                case Commands.CONQUER:
-                    Conquer();
-                    break;
-                case Commands.INSPECT:
-                    Inspect();
-                    break;
-                case Commands.EXIT:
-                    Play = false;
-                    break;
-                default:
-                    ValidCmd = false;
-                    Console.WriteLine(userCmd + " isn't a valid command!");
-                    break;
-            }
-        }
-
-        private void Attack() {
-
-            Coord enemyPos = null;
-            enemyPos = CurPlayer.PerformAttack(Boards, GetOponent().GetUnits());
-            if(enemyPos != null) {
-                Unit enemy = GetOponent().GetUnitAt(enemyPos);
-                if (enemy.GetCurrLife() <= 0) {
-                    GetOponent().GetUnitAt(enemyPos).Erase();
-                    GetOponent().RemoveUnitAt(enemyPos);
-                }
-            }
-            ValidCmd = enemyPos != null;
-        }
-
-        private void Move() {
-            ValidCmd = CurPlayer.PeformMove(Boards);
         }
 
         private void Inspect() {

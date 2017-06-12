@@ -12,6 +12,31 @@ namespace Game
 {
     abstract class ABasicPawn : APawn
     {
+        public virtual Coord Attack(Coord cursor, List<Unit> enemies) {
+            bool validTarget = false;
+            Coord target = null;
+            Dijkstra didi = new Dijkstra(Boards.GetBoard(), GetPos(), GetAtkRange());
+            List<Coord> attackRange = didi.GetValidPaths(Commands.ATTACK);
+            List<Coord> enemiesInRange = new List<Coord>();
+
+            foreach (Coord cell in attackRange) {
+                foreach (Unit unit in enemies) {
+                    if (unit.InUnit(cell)) {
+                        enemiesInRange.Add(unit.GetPos());
+                        break;
+                    }
+                }
+            }
+
+            if (enemiesInRange.Count > 0) {
+                target = Boards.SelectPosition(cursor, GetPos(), Commands.ATTACK, attackRange);
+                validTarget = enemiesInRange.Contains(target);
+            } else {
+                Console.Write("No enemies in range! ");
+            }
+            return target;
+        }
+
         public override bool Move(Coord cursor) {
             bool validTarget = false;
             Dijkstra didi = new Dijkstra(Boards.GetBoard(), GetPos(), GetMovePoints());

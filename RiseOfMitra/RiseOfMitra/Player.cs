@@ -5,20 +5,13 @@ using Cells;
 
 namespace Game
 {
-    class Player
+    abstract class Player
     {
-        private ECultures Culture;
-        private List<APawn> Pawns;
-        private CulturalCenter Center;
-        private Coord Cursor;
-        private int Turn;
-
-        public Player(ECultures native) {
-            Culture = native;
-            Pawns = new List<APawn>();
-            Center = null;
-            Cursor = new Coord(1, 1);
-        }
+        protected ECultures Culture;
+        protected List<APawn> Pawns;
+        protected CulturalCenter Center;
+        protected Coord Cursor;
+        protected int Turn;
 
         public APawn GetPawnAt(Coord pos) {
             for (int i = 0; i < Pawns.Count; i++) {
@@ -65,39 +58,13 @@ namespace Game
             } else {
                 for (int i = 0; i < Pawns.Count; i++) {
                     if (Pawns[i].InUnit(pos)) {
+                        Pawns[i].Erase();
                         Pawns.RemoveAt(i);
                         found = true;
                     }
                 }
             }
             return found;
-        }
-
-        public bool PeformMove(Board boards) {
-            Coord selPos = boards.SelectPosition(Cursor);
-            APawn pawn = GetPawnAt(selPos);
-            bool valid = false;
-
-            if (pawn != null) {
-                valid = pawn.Move(Cursor);
-            } else {
-                Console.Write("This position is not a valid unit! ");
-            }
-            return valid;
-        }
-
-        public Coord PerformAttack(Board boards, List<Unit> enemies) {
-            Coord selPos = boards.SelectPosition(Cursor);
-            APawn pawn = GetPawnAt(selPos);
-            Coord target = null;
-
-            if (pawn != null) {
-                target = pawn.Attack(Cursor, enemies);
-            } else {
-                Console.Write("This position is not a valid unit! ");
-            }
-
-            return target;
         }
 
         public void ExecuteTurnEvents(string[,] board) {
@@ -113,6 +80,8 @@ namespace Game
                 }
             }
         }
+
+        public abstract ACommand PrepareAction(Board boards, Player oponent);
 
         public ECultures GetCulture() { return Culture; }
         public List<APawn> GetPawns() { return Pawns; }

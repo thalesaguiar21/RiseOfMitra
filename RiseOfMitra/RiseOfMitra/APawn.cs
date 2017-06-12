@@ -25,47 +25,6 @@ namespace Game
             return msg.ToString();
         }
 
-        public virtual Coord Attack(Coord cursor, List<Unit> enemies) {
-            bool validTarget = false;
-            Coord target = null;
-            Dijkstra didi = new Dijkstra(Boards.GetBoard(), GetPos(), GetAtkRange());
-            List<Coord> attackRange = didi.GetValidPaths(Commands.ATTACK);
-            List<Coord> enemiesInRange = new List<Coord>();
-
-            foreach (Coord cell in attackRange) {
-                foreach (Unit unit in enemies) {
-                    if (unit.InUnit(cell)) {
-                        enemiesInRange.Add(unit.GetPos());
-                        break;
-                    }
-                }
-            }
-
-            if (enemiesInRange.Count > 0) {
-                do {
-                    target = Boards.SelectPosition(cursor, GetPos(), Commands.ATTACK, attackRange);
-
-                    validTarget = enemiesInRange.Contains(target);
-
-                    if (validTarget) {
-                        foreach (Unit unit in enemies) {
-                            if (unit.InUnit(target)) {
-                                int res = GetAtk() - unit.GetDef();
-                                unit.SetCurrLife(unit.GetCurrLife() - res);
-                                break;
-                            }
-                        }
-                    } else {
-                        Console.Write("Invalid target! ");
-                        Console.ReadLine();
-                    }
-                } while (!validTarget);
-            } else {
-                Console.Write("No enemies in range! ");
-            }
-            return target;
-        }
-
         public abstract bool Move(Coord cursor);
 
         public abstract void Adapt(ETerrain prevTerrain, ETerrain curTerrain);

@@ -71,11 +71,15 @@
   <ItemGroup>
     <Compile Include="ABasicPawn.cs" />
     <Compile Include="ABuilding.cs" />
+    <Compile Include="AttackCommand.cs" />
     <Compile Include="Board.cs" />
+    <Compile Include="ACommand.cs" />
     <Compile Include="CulturalCenter.cs" />
     <Compile Include="CulturalCenterFactory.cs" />
+    <Compile Include="HumanPlayer.cs" />
     <Compile Include="IAdaptable.cs" />
     <Compile Include="DalrionPawn.cs" />
+    <Compile Include="MoveCommand.cs" />
     <Compile Include="PawnFactory.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="RahkarPawn.cs" />
