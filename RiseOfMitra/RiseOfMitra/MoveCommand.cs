@@ -3,6 +3,7 @@ using Cells;
 using Consts;
 using ShortestPath;
 using System.Collections.Generic;
+using Types;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,6 +69,19 @@ namespace Game
 
         public override bool IsValid() {
             return Validate();
+        }
+
+        public override string ToString() {
+            string msg = base.ToString();
+            string cult = "";
+            if (CurPlayer.GetCulture() == ECultures.DALRIONS)
+                cult = "D";
+            else
+                cult = "R";
+            msg += String.Format("Culture: {0}\n", cult);
+            msg += String.Format("Ally: {0}\n", AllyPos);
+            msg += "Move: MOV\n";
+            return msg;
         }
 
         private void SetCurPlayer(Player player) {

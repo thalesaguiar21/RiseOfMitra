@@ -53,7 +53,6 @@ namespace Game
 
         public void Start() {
             do {
-                Console.WriteLine("Number of valid moviments: " + GetValidCommands().Count);
                 Boards.PrintBoard();
                 ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
                 ValidCmd = cmd.Execute();
@@ -107,11 +106,11 @@ namespace Game
 
         private List<ACommand> GetValidMoviments() {
             List<ACommand> validMvs = new List<ABasicPawn>().Cast<ACommand>().ToList();
-            MoveCommand mv = new MoveCommand();
             foreach (APawn pawn in CurPlayer.GetPawns()) {
                 Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.GetPos(), pawn.GetMovePoints());
                 List<Coord> moveRange = didi.GetValidPaths(Commands.MOVE);
                 foreach (Coord cell in moveRange) {
+                    MoveCommand mv = new MoveCommand();
                     mv.SetUp(CurPlayer, pawn.GetPos(), cell, Boards);
                     if (mv.IsValid()) validMvs.Add(mv);
                 }
@@ -122,16 +121,25 @@ namespace Game
 
         private List<ACommand> GetValidAttacks() {
             List<ACommand> validAtks = new List<ABasicPawn>().Cast<ACommand>().ToList();
-            AttackCommand atk = new AttackCommand();
 
             foreach(ABasicPawn pawn in CurPlayer.GetPawns()) {
                 foreach (ABasicPawn enemy in GetOponent().GetPawns()) {
+                    AttackCommand atk = new AttackCommand();
                     atk.SetUp(pawn.GetPos(), enemy.GetPos(), CurPlayer, GetOponent(), Boards);
                     if (atk.IsValid()) validAtks.Add(atk);
                 }
             }
 
             return validAtks;
+        }
+
+        private void ShowValidMoves() {
+            List<ACommand> cmds = GetValidCommands();
+
+            foreach (ACommand command in cmds) {
+                Console.Write(command);
+                Console.WriteLine();
+            }
         }
 
         static void Main(string[] args) {

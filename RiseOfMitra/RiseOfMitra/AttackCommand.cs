@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Types;
 
 namespace Game
 {
@@ -75,6 +76,19 @@ namespace Game
                 }
             }            
             return valid;
+        }
+
+        public override string ToString() {
+            string msg = base.ToString();
+            string cult = "";
+            if (CurPlayer.GetCulture() == ECultures.DALRIONS)
+                cult = "D";
+            else
+                cult = "R";
+            msg += String.Format("Culture: {0}\n", cult);
+            msg += String.Format("Ally: {0}\n", AllyPos);
+            msg += "Move: ATK\n";
+            return msg;
         }
 
         public override bool IsValid() {

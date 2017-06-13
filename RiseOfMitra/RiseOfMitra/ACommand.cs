@@ -26,5 +26,9 @@ namespace Game
         public abstract bool Execute();
         public abstract bool IsValid();
         protected abstract bool Validate();
+
+        public override string ToString() {
+            return String.Format("Target: {0}\n", Target);
+        }
     }
 }
