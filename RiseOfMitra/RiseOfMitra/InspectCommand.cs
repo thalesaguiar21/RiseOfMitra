@@ -9,10 +9,7 @@ namespace Game
 {
     class InspectCommand : ACommand
     {
-        string ErrorMsg;
         List<Unit> Units;
-        Coord Target;
-        Board Boards;
 
         public InspectCommand() {
             ErrorMsg = "";

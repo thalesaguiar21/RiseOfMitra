@@ -10,14 +10,13 @@ namespace Game
 {
     class AttackCommand : ACommand
     {
-        string ErrorMsg, HitMsg;
+        string HitMsg;
         Player CurPlayer, Oponent;
-        Coord AllyPos, EnemyPos;
-        Board Boards;
+        Coord AllyPos;
 
         public AttackCommand() {
             AllyPos = null;
-            EnemyPos = null;
+            Target = null;
             CurPlayer = null;
             Oponent = null;
             Boards = null;
@@ -33,13 +32,13 @@ namespace Game
                 List<Coord> atkRange = didi.GetValidPaths(Consts.Commands.ATTACK);
                 if (PosValidate(atkRange)) {
                     valid = true;
-                    Unit enemyUnit = Oponent.GetUnitAt(EnemyPos);
+                    Unit enemyUnit = Oponent.GetUnitAt(Target);
                     int damage = allyPawn.GetAtk() - enemyUnit.GetDef();
                     if(damage > 0) {
                         HitMsg = String.Format("YOU HAVE DEALT {0} DAMAGE!", damage);
                         enemyUnit.SetCurrLife(enemyUnit.GetCurrLife() - damage);
                         if(enemyUnit.GetCurrLife() <= 0) {
-                            Oponent.RemoveUnitAt(EnemyPos);
+                            Oponent.RemoveUnitAt(Target);
                             HitMsg += " ENEMY KILLED!!";
                         }
                     } else {
@@ -53,7 +52,7 @@ namespace Game
 
         protected override bool Validate() {
             bool valid = true;
-            if(!Coord.IsValid(AllyPos) || !Coord.IsValid(EnemyPos)) {
+            if(!Coord.IsValid(AllyPos) || !Coord.IsValid(Target)) {
                 ErrorMsg = INVALID_POS;
                 valid = false;
             }  else if (Oponent == null) {
@@ -70,7 +69,7 @@ namespace Game
                 if (allyPawn == null) {
                     ErrorMsg = NO_PAWN;
                     valid = false;
-                } else if (Oponent.GetUnitAt(EnemyPos) == null) {
+                } else if (Oponent.GetUnitAt(Target) == null) {
                     ErrorMsg = NO_PAWN;
                     valid = false;
                 }
@@ -105,7 +104,7 @@ namespace Game
             if (!enmyInRange) { 
                 ErrorMsg = NO_ENEMIES;
                 return false;
-            } else if (!atkRange.Contains(EnemyPos)) {
+            } else if (!atkRange.Contains(Target)) {
                 ErrorMsg = OUT_OF_RANGE;
                 return false;
             }
@@ -127,7 +126,7 @@ namespace Game
 
         private void SetEnemyPos(Coord enemyPos) {
             if (enemyPos != null)
-                EnemyPos = enemyPos;
+                Target = enemyPos;
         }
 
         private void SetCurPlayer(Player player) {

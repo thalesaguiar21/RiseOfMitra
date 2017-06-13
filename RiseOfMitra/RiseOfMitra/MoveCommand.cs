@@ -12,9 +12,7 @@ namespace Game
     class MoveCommand : ACommand
     {
         private Player CurPlayer;
-        private Board Boards;
-        private Coord AllyPos, Target;
-        private string ErrorMsg;
+        private Coord AllyPos;
 
         public MoveCommand() {
             CurPlayer = null;

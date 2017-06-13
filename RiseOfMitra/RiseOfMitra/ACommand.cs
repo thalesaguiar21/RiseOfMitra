@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cells;
 
 namespace Game
 {
@@ -18,6 +19,9 @@ namespace Game
         protected const string NO_BOARDS = "Current boards can not be null! ";
         protected const string NO_ENEMIES = "This pawn has no enemies in range! ";
 
+        protected Board Boards;
+        protected string ErrorMsg;
+        protected Coord Target;
 
         public abstract bool Execute();
         public abstract bool IsValid();
