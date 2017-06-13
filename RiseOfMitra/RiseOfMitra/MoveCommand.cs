@@ -36,7 +36,7 @@ namespace Game
                     allyPawn.SetPos(Target);
                     allyPawn.Place();
                 } else {
-                    ErrorMsg = "TARGET IS NOT IN RANGE!";
+                    ErrorMsg = OUT_OF_RANGE;
                 }
             }
             if (!ErrorMsg.Equals("")) Console.Write(ErrorMsg);
@@ -45,23 +45,17 @@ namespace Game
 
         protected override bool Validate() {
             bool valid = true;
-            if (AllyPos == null) {
-                ErrorMsg = "INVALID ALLY POSITION!";
-                valid = false;
-            } else if (Target == null) {
-                ErrorMsg = "INVALID TARGET!";
+            if (!Coord.IsValid(AllyPos) || !Coord.IsValid(Target)) {
+                ErrorMsg = INVALID_POS;
                 valid = false;
             } else if (CurPlayer == null) {
-                ErrorMsg = "CURRENT PLAYER IS NOT VALID!";
-                valid = false;
-            } else if (!Coord.IsValid(AllyPos) || !Coord.IsValid(Target)) {
-                ErrorMsg = "ONE OF THE POSITIONS ARE INVALID!";
+                ErrorMsg = PLAYER;
                 valid = false;
             } else if (CurPlayer.GetPawnAt(AllyPos) == null) {
-                ErrorMsg = "THE CURRENT PLAYER HAS NO PAWN AT " + AllyPos + "!";
+                ErrorMsg = NO_PAWN;
                 valid = false;
             } else if (!Boards.CellAt(Target).Equals(BoardConsts.EMPTY)) {
-                ErrorMsg = "THE TARGETED CELL IS NOT EMPTY!";
+                ErrorMsg = OCCUPIED_CELL;
                 valid = false;
             }
             return valid;
@@ -70,29 +64,21 @@ namespace Game
         public void SetCurPlayer(Player player) {
             if (player != null)
                 CurPlayer = player;
-            else
-                Console.Write("CURRENT PLAYER IS INVALID!");
         }
 
         public void SetAllyPos(Coord allypos) {
             if (Coord.IsValid(allypos))
                 AllyPos = allypos;
-            else
-                Console.Write("INVALID ALLY POSITION!");
         }
 
         public void SetTarget(Coord target) {
             if (Coord.IsValid(target))
                 Target = target;
-            else
-                Console.Write("INVALID TARGET POSITION!");
         }
 
         public void SetBoards(Board boards) {
             if (boards != null)
                 Boards = boards;
-            else
-                Console.Write("INVALID BOARDS!");
         }
     }
 }

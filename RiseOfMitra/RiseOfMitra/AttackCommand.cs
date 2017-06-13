@@ -43,7 +43,7 @@ namespace Game
                             HitMsg += " ENEMY KILLED!!";
                         }
                     } else {
-                        HitMsg = "ENEMY HAS BLOCKED THE ATTACK!";
+                        HitMsg = BLOCK;
                     }
                 } 
             }
@@ -53,29 +53,25 @@ namespace Game
 
         protected override bool Validate() {
             bool valid = true;
-            if(AllyPos == null) {
-                ErrorMsg = "INVALID ALLY POSITION!";
+            if(Coord.IsValid(AllyPos) || Coord.IsValid(EnemyPos)) {
+                ErrorMsg = INVALID_POS;
                 valid = false;
-            } else if (EnemyPos == null) {
-                ErrorMsg = "INVALID ENEMY POSITION!";
-                valid = false;
-            } else if (Oponent == null) {
-                ErrorMsg = "INVALID OPONENT!";
+            }  else if (Oponent == null) {
+                ErrorMsg = NO_OPONENT;
                 valid = false;
             } else if (CurPlayer == null) {
-                ErrorMsg = "CURRENT PLAYER IS NOT VALID!";
+                ErrorMsg = PLAYER;
                 valid = false;
             } else if (Boards == null) {
-                ErrorMsg = "INVALID BOARDS!";
+                ErrorMsg = NO_BOARDS;
                 valid = false;
             } else {
                 ABasicPawn allyPawn = CurPlayer.GetPawnAt(AllyPos) as ABasicPawn;
                 if (allyPawn == null) {
-                    ErrorMsg = "CURRENT PLAYER DO NOT HAVE A VALID PAWN AT THE GIVEN POSITION!";
+                    ErrorMsg = NO_PAWN;
                     valid = false;
                 } else if (Oponent.GetUnitAt(EnemyPos) == null) {
-                    ErrorMsg = "OPONENT DO NOT HAVE A UNIT" +
-                        " AT THIS POSITION!";
+                    ErrorMsg = NO_PAWN;
                     valid = false;
                 }
             }            
@@ -83,11 +79,23 @@ namespace Game
         }
 
         private bool PosValidate(List<Coord> atkRange) {
-            if(atkRange.Count == 0) {
-                ErrorMsg = "THIS PAWN CAN NOT ATTACK";
+            bool enmyInRange = false;
+
+            foreach (Unit unit in Oponent.GetUnits()) {
+                foreach (Coord cell in atkRange) {
+                    if (unit.InUnit(cell)) {
+                        enmyInRange = true;
+                        break;
+                    }
+                    if (enmyInRange) break;
+                }
+            }
+
+            if (!enmyInRange) { 
+                ErrorMsg = NO_ENEMIES;
                 return false;
             } else if (!atkRange.Contains(EnemyPos)) {
-                ErrorMsg = "ALLY PAWN CAN NOT REACH SELECTED ENEMY POSITION";
+                ErrorMsg = OUT_OF_RANGE;
                 return false;
             }
             return true;
@@ -96,36 +104,26 @@ namespace Game
         public void SetAllyPos(Coord allyPos) {
             if (allyPos != null)
                 AllyPos = allyPos;
-            else
-                Console.Write("INVALID ALLY POSITION!");
         }
 
         public void SetEnemyPos(Coord enemyPos) {
             if (enemyPos != null)
                 EnemyPos = enemyPos;
-            else
-                Console.Write("INVALID ENEMY POSITION!");
         }
 
         public void SetCurPlayer(Player player) {
             if (player != null)
                 CurPlayer = player;
-            else
-                Console.Write("CURRENT PLAYER IS INVALID!");
         }
 
         public void SetOponent(Player oponent) {
             if (oponent != null)
                 Oponent = oponent;
-            else
-                Console.Write("CURRENT OPONENT IS INVALID!");
         }
 
         public void SetBoards(Board boards) {
             if (boards != null)
                 Boards = boards;
-            else
-                Console.Write("INVALID BOARDS!");
         }
     }
 }
