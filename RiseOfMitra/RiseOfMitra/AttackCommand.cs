@@ -53,7 +53,7 @@ namespace Game
 
         protected override bool Validate() {
             bool valid = true;
-            if(Coord.IsValid(AllyPos) || Coord.IsValid(EnemyPos)) {
+            if(!Coord.IsValid(AllyPos) || !Coord.IsValid(EnemyPos)) {
                 ErrorMsg = INVALID_POS;
                 valid = false;
             }  else if (Oponent == null) {
@@ -100,28 +100,36 @@ namespace Game
             }
             return true;
         }
+
+        public void SetUp(Coord allyPos, Coord enemyPos, Player player, Player oponent, Board boards) {
+            SetAllyPos(allyPos);
+            SetEnemyPos(enemyPos);
+            SetCurPlayer(player);
+            SetOponent(oponent);
+            SetBoards(boards);
+        }
         
-        public void SetAllyPos(Coord allyPos) {
+        private void SetAllyPos(Coord allyPos) {
             if (allyPos != null)
                 AllyPos = allyPos;
         }
 
-        public void SetEnemyPos(Coord enemyPos) {
+        private void SetEnemyPos(Coord enemyPos) {
             if (enemyPos != null)
                 EnemyPos = enemyPos;
         }
 
-        public void SetCurPlayer(Player player) {
+        private void SetCurPlayer(Player player) {
             if (player != null)
                 CurPlayer = player;
         }
 
-        public void SetOponent(Player oponent) {
+        private void SetOponent(Player oponent) {
             if (oponent != null)
                 Oponent = oponent;
         }
 
-        public void SetBoards(Board boards) {
+        private void SetBoards(Board boards) {
             if (boards != null)
                 Boards = boards;
         }

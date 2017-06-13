@@ -54,6 +54,8 @@ namespace Game
                         validCmd = true;
                         break;
                     case Commands.INSPECT:
+                        playerCommand = SetUpInspect(boards, oponent);
+                        validCmd = true;
                         break;
                     case Commands.EXIT:
                         break;
@@ -75,13 +77,9 @@ namespace Game
                 Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.GetAtkRange());
                 List<Coord> atkRange = didi.GetValidPaths(Commands.ATTACK);
                 Coord enemyPos = boards.SelectPosition(Cursor, selPos, Commands.ATTACK, atkRange);
-                    
+
                 // Set up command variables
-                attackCmd.SetAllyPos(selPos);
-                attackCmd.SetCurPlayer(this);
-                attackCmd.SetEnemyPos(enemyPos);
-                attackCmd.SetOponent(oponent);
-                attackCmd.SetBoards(boards);
+                attackCmd.SetUp(selPos, enemyPos, this, oponent, boards);
             }
             return attackCmd;
         }
@@ -96,12 +94,20 @@ namespace Game
                 Coord target = boards.SelectPosition(Cursor, selPos, Commands.MOVE, moveRange);
 
                 // Set up command variables
-                move.SetAllyPos(selPos);
-                move.SetBoards(boards);
-                move.SetCurPlayer(this);
-                move.SetTarget(target);
+                move.SetUp(this, selPos, target, boards);
             }
             return move;
+        }
+
+        private InspectCommand SetUpInspect(Board boards, Player oponent) {
+            InspectCommand inspect = new InspectCommand();
+            Coord selPos = boards.SelectPosition(Cursor);
+            List<Unit> allUnits = new List<Unit>();
+            allUnits.AddRange(GetUnits());
+            allUnits.AddRange(oponent.GetUnits());
+
+            inspect.SetUp(selPos, boards, allUnits);
+            return inspect;
         }
     }
 }

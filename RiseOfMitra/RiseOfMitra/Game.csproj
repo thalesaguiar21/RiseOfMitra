@@ -79,6 +79,7 @@
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="IAdaptable.cs" />
     <Compile Include="DalrionPawn.cs" />
+    <Compile Include="InspectCommand.cs" />
     <Compile Include="MoveCommand.cs" />
     <Compile Include="PawnFactory.cs" />
     <Compile Include="Player.cs" />

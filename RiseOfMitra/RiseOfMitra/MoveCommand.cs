@@ -43,6 +43,13 @@ namespace Game
             return valid;
         }
 
+        public void SetUp(Player curPlayer, Coord allypos, Coord target, Board boards) {
+            SetCurPlayer(curPlayer);
+            SetAllyPos(allypos);
+            SetTarget(target);
+            SetBoards(boards);
+        }
+
         protected override bool Validate() {
             bool valid = true;
             if (!Coord.IsValid(AllyPos) || !Coord.IsValid(Target)) {
@@ -61,22 +68,22 @@ namespace Game
             return valid;
         }
 
-        public void SetCurPlayer(Player player) {
+        private void SetCurPlayer(Player player) {
             if (player != null)
                 CurPlayer = player;
         }
 
-        public void SetAllyPos(Coord allypos) {
+        private void SetAllyPos(Coord allypos) {
             if (Coord.IsValid(allypos))
                 AllyPos = allypos;
         }
 
-        public void SetTarget(Coord target) {
+        private void SetTarget(Coord target) {
             if (Coord.IsValid(target))
                 Target = target;
         }
 
-        public void SetBoards(Board boards) {
+        private void SetBoards(Board boards) {
             if (boards != null)
                 Boards = boards;
         }
