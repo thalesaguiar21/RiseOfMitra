@@ -20,6 +20,7 @@ namespace Game
 
 
         public abstract bool Execute();
+        public abstract bool IsValid();
         protected abstract bool Validate();
     }
 }

@@ -52,7 +52,7 @@ namespace Game
             Dictionary<string, bool> tmpDic = new Dictionary<string, bool>();
             tmpDic.Add(Commands.ATTACK, true);
             tmpDic.Add(Commands.MOVE, true);
-            tmpDic.Add(Commands.CONQUER, false);
+            //tmpDic.Add(Commands.CONQUER, false);
             tmpDic.Add(Commands.INSPECT, true);
             tmpDic.Add(Commands.EXIT, true);
 

@@ -60,6 +60,10 @@ namespace Game
             return valid;
         }
 
+        public override bool IsValid() {
+            return Validate();
+        }
+
         private void SetUnits(List<Unit> units) {
             if (units != null)
                 Units = units;

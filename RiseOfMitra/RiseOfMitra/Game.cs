@@ -4,6 +4,7 @@ using Types;
 using Cells;
 using Consts;
 using System.IO;
+using System.Linq;
 using ShortestPath;
 
 namespace Game
@@ -52,6 +53,7 @@ namespace Game
 
         public void Start() {
             do {
+                Console.WriteLine("Number of valid moviments: " + GetValidCommands().Count);
                 Boards.PrintBoard();
                 ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
                 ValidCmd = cmd.Execute();
@@ -76,42 +78,7 @@ namespace Game
             Console.WriteLine(winner + " ARE THE WINNERs!");
             Console.ReadLine();
         }
-
-        private void Inspect() {
-            Console.Write("Select an unit...");
-            Console.ReadLine();
-            Coord selPos = null;
-            bool isUnit = false;
-            ValidCmd = false;
-            BoardConsts consts = new BoardConsts();
-
-            do {
-                selPos = Boards.SelectPosition(CurPlayer.GetCursor());
-                Unit unit = null;
-
-                foreach (Player it in Players) {
-                    unit = it.GetUnitAt(selPos);
-                    if (unit != null)
-                        break;
-                }
-
-                isUnit = consts.IsValid(Boards.CellAt(selPos)) && unit != null;
-                string msg = "";
-
-                if (isUnit)
-                    msg = unit.GetStatus();
-                else
-                    msg = "Invalid unit!";
-
-                Console.Write(msg);
-                Console.ReadLine();
-            } while (!isUnit);
-        }
-
-        private void Conquer() {
-            Console.WriteLine("PH");
-        }
-
+        
         private void SetNextPlayer() {
             CurPlayer.SetTurn();
             CurPlayer.ExecuteTurnEvents(Boards.GetBoard());
@@ -128,6 +95,43 @@ namespace Game
                 return Players[1];
             else
                 return Players[0];
+        }
+
+        public List<ACommand> GetValidCommands() {
+            List<ACommand> validCmds = new List<ACommand>();
+            validCmds.AddRange(GetValidAttacks());
+            validCmds.AddRange(GetValidMoviments());
+
+            return validCmds;
+        }
+
+        private List<ACommand> GetValidMoviments() {
+            List<ACommand> validMvs = new List<ABasicPawn>().Cast<ACommand>().ToList();
+            MoveCommand mv = new MoveCommand();
+            foreach (APawn pawn in CurPlayer.GetPawns()) {
+                Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.GetPos(), pawn.GetMovePoints());
+                List<Coord> moveRange = didi.GetValidPaths(Commands.MOVE);
+                foreach (Coord cell in moveRange) {
+                    mv.SetUp(CurPlayer, pawn.GetPos(), cell, Boards);
+                    if (mv.IsValid()) validMvs.Add(mv);
+                }
+            }
+
+            return validMvs;
+        }
+
+        private List<ACommand> GetValidAttacks() {
+            List<ACommand> validAtks = new List<ABasicPawn>().Cast<ACommand>().ToList();
+            AttackCommand atk = new AttackCommand();
+
+            foreach(ABasicPawn pawn in CurPlayer.GetPawns()) {
+                foreach (ABasicPawn enemy in GetOponent().GetPawns()) {
+                    atk.SetUp(pawn.GetPos(), enemy.GetPos(), CurPlayer, GetOponent(), Boards);
+                    if (atk.IsValid()) validAtks.Add(atk);
+                }
+            }
+
+            return validAtks;
         }
 
         static void Main(string[] args) {

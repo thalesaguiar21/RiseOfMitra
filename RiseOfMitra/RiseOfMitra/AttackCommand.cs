@@ -78,6 +78,17 @@ namespace Game
             return valid;
         }
 
+        public override bool IsValid() {
+            bool valid = Validate();
+            if (valid) {
+                ABasicPawn allyPawn = (ABasicPawn)CurPlayer.GetPawnAt(AllyPos);
+                Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.GetAtkRange());
+                List<Coord> atkRange = didi.GetValidPaths(Consts.Commands.ATTACK);
+                valid = PosValidate(atkRange);
+            }
+            return valid;
+        }
+
         private bool PosValidate(List<Coord> atkRange) {
             bool enmyInRange = false;
 

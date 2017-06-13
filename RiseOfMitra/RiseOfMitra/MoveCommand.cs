@@ -68,6 +68,10 @@ namespace Game
             return valid;
         }
 
+        public override bool IsValid() {
+            return Validate();
+        }
+
         private void SetCurPlayer(Player player) {
             if (player != null)
                 CurPlayer = player;
