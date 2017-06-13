@@ -82,6 +82,8 @@ namespace Game
         }
 
         public abstract ACommand PrepareAction(Board boards, Player oponent);
+        public abstract Player Copy(Board board);
+
 
         public ECultures GetCulture() { return Culture; }
         public List<APawn> GetPawns() { return Pawns; }

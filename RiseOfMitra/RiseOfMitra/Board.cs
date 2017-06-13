@@ -16,22 +16,51 @@ namespace Game
         private Dictionary<string, bool> Cmds;
         private string[] Legend;
 
+
+        public Board(Board board) {
+
+            for (int i = 0; i < board.GetBoard().GetLongLength(0); i++) {
+                for (int j = 0; j < board.GetBoard().GetLongLength(1); j++) {
+                    MainBoard[i, j] = board.CellAt(i, j);
+                    Terrains[i, j] = (ETerrain)board.TerrainAt(i, j);
+                }
+            }
+
+            CultColors = InitColors();
+            Cmds = InitCommands();
+            Legend = InitLegend();
+        }
+
         public Board(Player[] players) {
             Terrains = ReadTerrainFile();
             MainBoard = ClearBoard();
             CreateUnits(players);
-            CultColors = new Dictionary<ECultures, ConsoleColor>();
-            CultColors.Add(ECultures.DALRIONS, ConsoleColor.Blue);
-            CultColors.Add(ECultures.RAHKARS, ConsoleColor.Yellow);
+            CultColors = InitColors();
+            Cmds = InitCommands();
+            Legend = InitLegend();
+        }
 
-            Cmds = new Dictionary<string, bool>();
-            Cmds.Add(Commands.ATTACK, true);
-            Cmds.Add(Commands.MOVE, true);
-            Cmds.Add(Commands.CONQUER, false);
-            Cmds.Add(Commands.INSPECT, true);
-            Cmds.Add(Commands.EXIT, true);
+        private Dictionary<ECultures, ConsoleColor> InitColors() {
+            Dictionary<ECultures, ConsoleColor> tmpColors = new Dictionary<ECultures, ConsoleColor>();
+            tmpColors.Add(ECultures.DALRIONS, ConsoleColor.Blue);
+            tmpColors.Add(ECultures.RAHKARS, ConsoleColor.Yellow);
 
-            Legend = new string[] {
+            return tmpColors;
+        }
+
+        private Dictionary<string, bool> InitCommands() {
+            Dictionary<string, bool> tmpDic = new Dictionary<string, bool>();
+            tmpDic.Add(Commands.ATTACK, true);
+            tmpDic.Add(Commands.MOVE, true);
+            tmpDic.Add(Commands.CONQUER, false);
+            tmpDic.Add(Commands.INSPECT, true);
+            tmpDic.Add(Commands.EXIT, true);
+
+            return tmpDic;
+        }
+
+        private string[] InitLegend() {
+            string[] tmpLegend = new string[] {
                 "Dalrion pawn: "    + BoardConsts.DALRION_PAWN,
                 "Dalrion center: "  + BoardConsts.DALRION_CENTER,
                 "Rahkar pawn: "     + BoardConsts.RAHKAR_PAWN,
@@ -40,6 +69,7 @@ namespace Game
                 "Cell with fog: "   + BoardConsts.FOG,
                 "Blocked cell: "    + BoardConsts.BLOCKED,
             };
+            return tmpLegend;
         }
 
         private string[,] ClearBoard() {

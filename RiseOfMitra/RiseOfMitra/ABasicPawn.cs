@@ -37,6 +37,22 @@ namespace Game
             return target;
         }
 
+        public override APawn Copy() {
+            DalrionPawn pawn = new DalrionPawn();
+            Boards = new Board(GetBoards());
+            pawn.SetCurrLife(GetCurrLife());
+            pawn.SetTotalLife(GetTotalLife());
+            pawn.SetAtk(GetAtk());
+            pawn.SetAtkRange(GetAtkRange());
+            pawn.SetCulture(NativeOf());
+            pawn.SetDef(GetDef());
+            pawn.SetMovePoints(GetMovePoints());
+            pawn.SetPos(GetPos());
+            pawn.SetSize(GetSize());
+
+            return pawn;
+        }
+
         public override bool Move(Coord cursor) {
             bool validTarget = false;
             Dijkstra didi = new Dijkstra(Boards.GetBoard(), GetPos(), GetMovePoints());

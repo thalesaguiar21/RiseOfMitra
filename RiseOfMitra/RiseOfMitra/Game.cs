@@ -21,8 +21,16 @@ namespace Game
             Play = true;
             ValidCmd = false;
             Boards = new Board(Players);
-            // Adding units
             PlaceUnits();
+        }
+
+        public Game(Game game) {
+            this.Boards = new Board(game.Boards);
+            this.Play = game.Play;
+            this.ValidCmd = game.ValidCmd;
+            this.Players = new Player[2] { game.Players[0].Copy(Boards),
+                                           game.Players[1].Copy(Boards)};
+            this.CurPlayer = game.CurPlayer.Copy(Boards);
         }
 
         private void InitPlayers() {

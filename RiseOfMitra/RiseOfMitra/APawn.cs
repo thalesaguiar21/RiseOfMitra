@@ -26,7 +26,7 @@ namespace Game
         }
 
         public abstract bool Move(Coord cursor);
-
+        public abstract APawn Copy();
         public abstract void Adapt(ETerrain prevTerrain, ETerrain curTerrain);
 
         public int GetMovePoints() { return MovePoints; }

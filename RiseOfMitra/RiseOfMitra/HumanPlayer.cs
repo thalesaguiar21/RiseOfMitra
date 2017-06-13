@@ -24,6 +24,19 @@ namespace Game
             return partialCommand;
         }
 
+        public override Player Copy(Board board) {
+            Player human = new HumanPlayer(GetCulture());
+            Coord tmpCursor = new Coord(GetCursor().X, GetCursor().Y);
+            PawnFactory pFac = new PawnFactory();
+            for (int i = 0; i < GetPawns().Count; i++) {
+                APawn tmpPawn = GetPawns()[i].Copy();
+                human.AddPawn(tmpPawn);
+            }
+            human.SetCulturalCenter(Center.Copy());
+            human.SetCursor(tmpCursor);
+            return human;
+        }
+
         private ACommand GetCmd(Board boards, Player oponent) {
             Console.Write(String.Format("{0} TURN.\nType in a command: ", GetCulture()));
             bool validCmd = false;

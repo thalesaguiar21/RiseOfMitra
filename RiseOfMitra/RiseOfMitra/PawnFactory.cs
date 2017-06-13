@@ -46,7 +46,6 @@ namespace Game
             return pawn;
         }
 
-
         private bool ValidatePawn(APawn pawn) {
             bool isValid = true;
             if (pawn.NativeOf() == ECultures.DALRIONS) {
@@ -58,7 +57,7 @@ namespace Game
                 isValid &= pawn.GetMovePoints() == 20;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
-                isValid &= (pawn.GetBoards() != null);
+                isValid &= (pawn.GetBoard() != null);
             } else if (pawn.NativeOf() == ECultures.RAHKARS) {
                 isValid &= pawn.GetAtk() == 20;
                 isValid &= pawn.GetAtkRange() == 5;
@@ -67,7 +66,7 @@ namespace Game
                 isValid &= pawn.GetMovePoints() == 20;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
-                isValid &= (pawn.GetBoards() != null);
+                isValid &= (pawn.GetBoard() != null);
             }
             return isValid;
         }

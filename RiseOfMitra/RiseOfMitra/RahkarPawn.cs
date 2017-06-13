@@ -22,7 +22,7 @@ namespace Game
             SetPos(new Coord(0, 0));
             SetSize(1);
         }
-
+        
         public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
             switch (prevTerrain) {
                 case ETerrain.MOUNTAIN:

@@ -35,7 +35,7 @@ namespace Game
                     Console.WriteLine("Invalid culture. Can't create cultural center!");
                     break;
             }
-            if (center.GetBoards() == null)
+            if (center.GetBoard() == null)
                 center = null;
             return center;
         }

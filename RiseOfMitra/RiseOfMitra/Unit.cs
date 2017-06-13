@@ -68,7 +68,8 @@ namespace Game
         public Coord GetPos() { return Pos; }
         public int GetSize() { return Size; }
         public ECultures NativeOf() { return native; }
-        public string[,] GetBoards() { return Boards.GetBoard(); }
+        public string[,] GetBoard() { return Boards.GetBoard(); }
+        public Board GetBoards() { return Boards; }
 
         public void SetCurrLife(int life) {
             if (life > MAX_LIFE) {

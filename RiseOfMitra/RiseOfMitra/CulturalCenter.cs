@@ -17,6 +17,7 @@ namespace Game
             else if (native == ECultures.RAHKARS) BOARD_CHAR = BoardConsts.RAHKAR_CENTER;
             SetCulture(native);
             SetCurrLife(0);
+            SetTotalLife(0);
             SetDef(0);
             SetLifePerSec(0);
             SetPos(new Coord(0, 0));
@@ -24,6 +25,21 @@ namespace Game
             UnitPerTurn = 2;
             SpawnPoint = new Coord(0, 0);
             SpawnRange = 4;
+        }
+
+        public new CulturalCenter Copy() {
+            CulturalCenter tmpCenter = new CulturalCenter(NativeOf());
+            tmpCenter.SetCurrLife(GetCurrLife());
+            tmpCenter.SetTotalLife(GetTotalLife());
+            tmpCenter.SetDef(GetDef());
+            tmpCenter.SetLifePerSec(GetLifePerSec());
+            tmpCenter.SetPos(GetPos());
+            tmpCenter.SetSize(GetSize());
+            tmpCenter.SetUnitPerTurn(UnitPerTurn);
+            tmpCenter.SetSpawnPoint(new Coord(SpawnPoint.X, SpawnPoint.Y));
+            tmpCenter.SetSpawnRange(SpawnRange);
+
+            return tmpCenter;
         }
 
         public APawn GeneratePawn() {
@@ -54,8 +70,9 @@ namespace Game
 
         public int GetUnitsPerTurn() { return UnitPerTurn; }
         public Coord GetSpawnPoint() { return SpawnPoint; }
+        public int GetSpawnRange() { return SpawnRange; }
 
-        public void SetunitPerTurn(int value) {
+        public void SetUnitPerTurn(int value) {
             if (value >= 0)
                 UnitPerTurn = value;
         }
@@ -64,6 +81,11 @@ namespace Game
             if(cell != null && Boards.CellAt(cell) == BoardConsts.EMPTY) {
                 SpawnPoint = cell;
             }
+        }
+
+        public void SetSpawnRange(int range) {
+            if (range > 0)
+                SpawnRange = range;
         }
     }
 }
