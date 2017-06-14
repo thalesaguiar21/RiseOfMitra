@@ -54,6 +54,7 @@ namespace Game
         public void Start() {
             do {
                 Boards.PrintBoard();
+                //ShowValidMoves();
                 ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
                 ValidCmd = cmd.Execute();
                 Console.Write("Press enter to continue...");
@@ -135,11 +136,12 @@ namespace Game
 
         private void ShowValidMoves() {
             List<ACommand> cmds = GetValidCommands();
-
+            Console.WriteLine("Valid moves count: " + cmds.Count);
             foreach (ACommand command in cmds) {
                 Console.Write(command);
                 Console.WriteLine();
             }
+
         }
 
         static void Main(string[] args) {

@@ -15,7 +15,8 @@ namespace Game
         }
 
         public void Regen() {
-            SetCurrLife(GetCurrLife() + LifePerSec);
+            if(GetCurrLife() < GetTotalLife())
+                SetCurrLife(GetCurrLife() + LifePerSec);
         }
 
         public int GetLifePerSec() { return LifePerSec; }

@@ -27,7 +27,7 @@ namespace Game
             SpawnRange = 4;
         }
 
-        public new CulturalCenter Copy() {
+        public CulturalCenter Copy() {
             CulturalCenter tmpCenter = new CulturalCenter(NativeOf());
             tmpCenter.SetCurrLife(GetCurrLife());
             tmpCenter.SetTotalLife(GetTotalLife());

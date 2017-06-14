@@ -35,9 +35,28 @@ namespace Game
                     Console.WriteLine("Invalid culture. Can't create cultural center!");
                     break;
             }
-            if (center.GetBoard() == null)
+            if (center.GetBoard() == null || !Validate(center))
                 center = null;
             return center;
+        }
+
+        private bool Validate(CulturalCenter center) {
+            bool valid = true;
+            if(center.NativeOf() == ECultures.DALRIONS) {
+                valid &= center.GetCurrLife() == 30;
+                valid &= center.GetCurrLife() == center.GetTotalLife();
+                valid &= center.GetDef() == 2;
+                valid &= center.GetLifePerSec() == 2;
+                valid &= center.GetBoard() != null;
+
+            } else {
+                valid &= center.GetCurrLife() == 35;
+                valid &= center.GetCurrLife() == center.GetTotalLife();
+                valid &= center.GetDef() == 1;
+                valid &= center.GetLifePerSec() == 1;
+                valid &= center.GetBoard() != null;
+            }
+            return valid;
         }
     }
 }

@@ -5,10 +5,13 @@ using System.Text;
 using System.Collections.Generic;
 using ShortestPath;
 using Consts;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Gaia")]
 
 namespace Game
 {
-    abstract class APawn : Unit, IAdaptable
+    internal abstract class APawn : Unit, IAdaptable
     {
         private int MovePoints;
         private int Atk;

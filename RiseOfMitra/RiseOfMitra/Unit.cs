@@ -3,10 +3,13 @@ using Cells;
 using Types;
 using Consts;
 using System.Text;
+using System.Runtime.CompilerServices;
+
+[assembly : InternalsVisibleTo("Gaia")]
 
 namespace Game
 {
-    class Unit
+    internal class Unit
     {
         protected Board Boards;
         protected string BOARD_CHAR;
