@@ -3,11 +3,11 @@ using Types;
 using Cells;
 using Consts;
 
-namespace Game
+namespace Units
 {
     class CulturalCenterFactory
     {
-        public ABuilding Create(ECultures native, Board boards) {
+        public ABuilding Create(ECultures native, Game.Board boards) {
             CulturalCenter center = null;
             switch (native) {
                 case ECultures.DALRIONS:

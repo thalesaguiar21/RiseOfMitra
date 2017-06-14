@@ -6,6 +6,7 @@ using Consts;
 using System.IO;
 using System.Linq;
 using ShortestPath;
+using Units;
 
 namespace Game
 {
@@ -57,6 +58,7 @@ namespace Game
                 //ShowValidMoves();
                 ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
                 ValidCmd = cmd.Execute();
+
                 Console.Write("Press enter to continue...");
                 Console.ReadLine();
                 if (ValidCmd)

@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Gaia")]
 
-namespace Game
+namespace Units
 {
     internal abstract class APawn : Unit, IAdaptable
     {

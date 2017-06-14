@@ -7,11 +7,11 @@ using System.Runtime.CompilerServices;
 
 [assembly : InternalsVisibleTo("Gaia")]
 
-namespace Game
+namespace Units
 {
     internal class Unit
     {
-        protected Board Boards;
+        protected Game.Board Boards;
         protected string BOARD_CHAR;
         private int CurrLife;
         private int TotalLife;
@@ -72,7 +72,10 @@ namespace Game
         public int GetSize() { return Size; }
         public ECultures NativeOf() { return native; }
         public string[,] GetBoard() { return Boards.GetBoard(); }
-        public Board GetBoards() { return Boards; }
+        public Game.Board GetBoards() { return Boards; }
+        public ETerrain GetTerrain() {
+            return (ETerrain)Boards.TerrainAt(GetPos());
+        }
 
         public void SetCurrLife(int life) {
             if (life > MAX_LIFE) {
@@ -116,7 +119,7 @@ namespace Game
             native = culture;
         }
 
-        public void SetBoards(Board boards) {
+        public void SetBoards(Game.Board boards) {
             if (boards != null
                 && boards.GetBoard().GetLength(0) == BoardConsts.MAX_LIN
                 && boards.GetBoard().GetLength(1) == BoardConsts.MAX_COL

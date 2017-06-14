@@ -6,7 +6,7 @@ using Cells;
 using ShortestPath;
 using System.Collections.Generic;
 
-namespace Game
+namespace Units
 {
     class DalrionPawn : ABasicPawn
     {

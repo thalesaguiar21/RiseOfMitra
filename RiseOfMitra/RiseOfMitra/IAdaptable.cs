@@ -1,6 +1,6 @@
 ﻿using Types;
 
-namespace Game
+namespace Units
 {
     interface IAdaptable
     {

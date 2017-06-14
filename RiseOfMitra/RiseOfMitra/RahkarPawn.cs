@@ -5,7 +5,7 @@ using System;
 using ShortestPath;
 using System.Collections.Generic;
 
-namespace Game
+namespace Units
 {
     class RahkarPawn : ABasicPawn
     {

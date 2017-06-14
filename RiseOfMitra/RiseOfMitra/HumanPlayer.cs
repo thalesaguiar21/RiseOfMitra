@@ -7,6 +7,7 @@ using Types;
 using Cells;
 using Consts;
 using ShortestPath;
+using Units;
 
 namespace Game
 {

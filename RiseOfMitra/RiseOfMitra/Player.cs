@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Types;
 using Cells;
-
+using Units;
 namespace Game
 {
     abstract class Player
@@ -86,7 +86,21 @@ namespace Game
 
 
         public ECultures GetCulture() { return Culture; }
-        public List<APawn> GetPawns() { return Pawns; }
+
+        public List<APawn> GetPawns() {
+            return Pawns;
+        }
+
+        public List<ABasicPawn> GetAttackers() {
+            List<ABasicPawn> attackers = new List<ABasicPawn>();
+
+            foreach (APawn pawn in Pawns) {
+                if (pawn is ABasicPawn)
+                    attackers.Add((ABasicPawn)pawn);
+            }
+            return attackers;
+        }
+
         public CulturalCenter GetCenter() { return Center; }
         public Coord GetCursor() { return Cursor; }
 

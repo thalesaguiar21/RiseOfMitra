@@ -1,6 +1,7 @@
 ﻿using System;
 using Types;
 using Cells;
+using Units;
 
 namespace Game
 {

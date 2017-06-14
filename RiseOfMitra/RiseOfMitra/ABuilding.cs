@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Game
+namespace Units
 {
     abstract class ABuilding : Unit
     {

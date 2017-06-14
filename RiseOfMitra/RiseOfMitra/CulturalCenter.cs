@@ -4,7 +4,7 @@ using Consts;
 using Cells;
 using System;
 
-namespace Game
+namespace Units
 {
     class CulturalCenter : ABuilding
     {
@@ -43,7 +43,7 @@ namespace Game
         }
 
         public APawn GeneratePawn() {
-            PawnFactory factory = new PawnFactory();
+            Game.PawnFactory factory = new Game.PawnFactory();
             APawn pawn = factory.Create(NativeOf(), Boards);
             Coord pos = GetPlacementPosition();
             if (pos == null) {

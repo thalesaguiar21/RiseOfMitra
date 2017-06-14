@@ -8,7 +8,7 @@ using Types;
 using ShortestPath;
 using Consts;
 
-namespace Game
+namespace Units
 {
     abstract class ABasicPawn : APawn
     {
@@ -39,7 +39,7 @@ namespace Game
 
         public override APawn Copy() {
             DalrionPawn pawn = new DalrionPawn();
-            Boards = new Board(GetBoards());
+            Boards = new Game.Board(GetBoards());
             pawn.SetCurrLife(GetCurrLife());
             pawn.SetTotalLife(GetTotalLife());
             pawn.SetAtk(GetAtk());

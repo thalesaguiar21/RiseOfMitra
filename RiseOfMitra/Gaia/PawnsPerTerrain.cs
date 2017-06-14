@@ -20,10 +20,26 @@ namespace Gaia
             }
         }
 
+        public void IncreasePawnsAt(ETerrain terrain) {
+            if (PPTs.ContainsKey(terrain))
+                PPTs[terrain] += 1;
+        }
+
         public void SetNumOfPawnsAt(ETerrain terrain, int numOfPawns) {
             if(numOfPawns > 0) {
-                PPTs.Add(terrain, numOfPawns);
+                if (PPTs.ContainsKey(terrain))
+                    PPTs[terrain] = numOfPawns;
+                else
+                    PPTs.Add(terrain, numOfPawns);
             }
+        }
+
+        public override string ToString() {
+            string msg = String.Format("CULTURE: {0} --> TERRAIN | PAWN : ", Cult);
+            foreach (ETerrain key in PPTs.Keys) {
+                msg += String.Format("{0} | {1}", key, PPTs[key]);
+            }
+            return base.ToString();
         }
     }
 }
