@@ -8,50 +8,48 @@ using Game;
 using Cells;
 using Units;
 
-namespace Gaia
+
+/* 
+ *          PPTs    MeanAllyDistance    MeanEnemyDistance   CultCenterRisk
+ * Dalrion  DPpts       8.4                     3.4                60.3 
+ * Rahkar   RPpts       5.7                     3.4                30.73
+ * 
+ */
+
+namespace Juno
 {
     class Gaia
     {
-        private const double MAX_CENTER_RISK = 100.0;
-        private const int NUM_OF_PARAMETERS = 4;
-        private const int NUM_OF_CULTS = 2;
         private const double CRITICAL_DIST = Math.E * 0.6;
+        private const double MAX_CENTER_RISK = 100.0;
+        private const int NUM_OF_CULTS = 2;
+        private const int ALLY_DIST = 0;
+        private const int ENMY_DIST = 1;
+        private const int CENTER_RISK = 2;
 
         PawnsPerTerrain DalrionPpts, RahkarPpts;
         List<ABasicPawn> NearEnemies;
-        
-        /* 
-         *          PPTs    MeanAllyDistance    MeanEnemyDistance   CultCenterRisk
-         * Dalrion  DPpts       8.4                     3.4                60.3 
-         * Rahkar   RPpts       5.7                     3.4                30.73
-         * 
-         */
-        Object[,] DomainData;
+        List<double> DalrionStatistcs;
+        List<double> RahkarStatistcs;
 
         public Gaia() {
-            DomainData = new Object[NUM_OF_CULTS, NUM_OF_PARAMETERS];
             DalrionPpts = new PawnsPerTerrain(ECultures.DALRIONS);
             RahkarPpts = new PawnsPerTerrain(ECultures.RAHKARS);
             NearEnemies = new List<ABasicPawn>();
-
-            DomainData[0, 0] = DalrionPpts;
-            DomainData[1, 0] = RahkarPpts;
-
-            for (int i = 0; i < NUM_OF_CULTS; i++) {
-                for (int j = 1; j < NUM_OF_PARAMETERS; j++) {
-                    DomainData[i, j] = 0;
-                }
-            }
+            DalrionStatistcs = new List<double>() { 0, 0, 0 };
+            RahkarStatistcs = new List<double>() { 0, 0, 0 };
         }
 
         public void DoGaiaWill(Player playerOne, Player playerTwo) {
             InspectField(playerOne, playerTwo);
 
-            Console.WriteLine(DomainData[0, 0]);
-            Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}", DomainData[0, 1], DomainData[0, 2], DomainData[0, 3]));
+            Console.WriteLine(DalrionPpts);
+            Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}", 
+                DalrionStatistcs[ALLY_DIST], DalrionStatistcs[ENMY_DIST], DalrionStatistcs[CENTER_RISK]));
 
-            Console.WriteLine(DomainData[1, 0]);
-            Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}", DomainData[1, 1], DomainData[1, 2], DomainData[1, 3]));
+            Console.WriteLine(RahkarPpts);
+            Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}",
+                RahkarStatistcs[ALLY_DIST], RahkarStatistcs[ENMY_DIST], RahkarStatistcs[CENTER_RISK]));
         }
 
         private void InspectField(Player playerOne, Player playerTwo) {
@@ -69,7 +67,7 @@ namespace Gaia
 
         private void CalculateMeanAllyDistance(List<Unit> allies) {
             if(allies != null) {
-                int totalDist = 0;
+                double totalDist = 0;
                 if (allies.Count > 2) {
                     for (int i = 0; i < allies.Count; i++) {
                         List<int> distances = new List<int>();
@@ -90,7 +88,7 @@ namespace Gaia
         private void CalculateMeanEnemyDistance(List<Unit> allies, List<Unit> enemies) {
             if(allies != null && enemies != null) {
                 if(allies.Count > 0 && enemies.Count > 0) {
-                    int totalDist = 0;
+                    double totalDist = 0;
                     for (int i = 0; i < allies.Count; i++) {
                         int min = Coord.Distance(allies[i].GetPos(), enemies[0].GetPos());
                         for (int j = 1; j < enemies.Count; j++) {
@@ -120,7 +118,8 @@ namespace Gaia
                     double risk = 0;
                     risk += RiskPerEnemyProximity(enemies, center);
                     risk += RiskPerAllyCloseToEnemy(allies);
-                    if(center.GetCurrLife() > 0) risk += Math.Exp(1 / center.GetCurrLife());
+                    if(center.GetCurrLife() > 0) risk += Math.Exp(1.0 / center.GetCurrLife());
+                    SetCenterRisk(allies[0].NativeOf(), risk);
                 } else if (allies.Count > 0){
                     SetCenterRisk(allies[0].NativeOf(), 0);
                 } else {
@@ -143,16 +142,17 @@ namespace Gaia
                 }
             }
             if (nearAllies > 0)
-                result = Math.Exp(1 / nearAllies);
+                result = Math.Exp(1.0 / nearAllies);
             return result;
         }
 
         private double RiskPerEnemyProximity(List<ABasicPawn> enemies, CulturalCenter center) {
+            NearEnemies.Clear();
             double result = 0;
             if(enemies != null && center != null) {
                 if(enemies.Count > 0) {
                     foreach (ABasicPawn enemy in enemies) {
-                        double dist = Math.Exp(1 / Coord.Distance(enemy.GetPos(), center.GetPos()));
+                        double dist = Math.Exp(1.0 / Coord.Distance(enemy.GetPos(), center.GetPos()));
                         result += dist;
                         if (dist <= CRITICAL_DIST)
                             NearEnemies.Add(enemy);
@@ -168,27 +168,27 @@ namespace Gaia
         private void SetCenterRisk(ECultures cult, double risk) {
             if(risk >= 0) {
                 if (cult == ECultures.DALRIONS)
-                    DomainData[0, 3] = risk;
+                    DalrionStatistcs[CENTER_RISK] = risk;
                 else
-                    DomainData[1, 3] = risk;
+                    RahkarStatistcs[CENTER_RISK] = risk;
             }
         }
 
         private void SetMeanAllyDistance(ECultures cult, double dist) {
             if (dist >= 0) {
                 if (cult == ECultures.DALRIONS)
-                    DomainData[0, 1] = dist;
+                    DalrionStatistcs[ALLY_DIST] = dist;
                 else
-                    DomainData[1, 1] = dist;
+                    RahkarStatistcs[ALLY_DIST] = dist;
             }
         }
 
         private void SetMeanEnemyDist(ECultures cult, double dist) {
             if (dist >= 0) {
                 if (cult == ECultures.DALRIONS)
-                    DomainData[0, 2] = dist;
+                    DalrionStatistcs[ENMY_DIST] = dist;
                 else
-                    DomainData[1, 2] = dist;
+                    RahkarStatistcs[ENMY_DIST] = dist;
             }
         }
     }

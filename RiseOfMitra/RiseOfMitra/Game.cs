@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using ShortestPath;
 using Units;
+using Juno;
 
 namespace Game
 {
@@ -53,7 +54,9 @@ namespace Game
         }
 
         public void Start() {
+            Gaia gaia = new Gaia();
             do {
+                gaia.DoGaiaWill(Players[0], Players[1]);
                 Boards.PrintBoard();
                 //ShowValidMoves();
                 ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());

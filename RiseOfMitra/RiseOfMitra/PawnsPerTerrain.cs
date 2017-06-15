@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Types;
 
-namespace Gaia
+namespace Juno
 {
     public class PawnsPerTerrain {
         public ECultures Cult;
         public Dictionary<ETerrain, int> PPTs { get; }
 
         public PawnsPerTerrain(ECultures cult) {
+            Cult = cult;
             Array terrains = Enum.GetValues(typeof(ETerrain));
             PPTs = new Dictionary<ETerrain, int>();
 
@@ -35,11 +36,11 @@ namespace Gaia
         }
 
         public override string ToString() {
-            string msg = String.Format("CULTURE: {0} --> TERRAIN | PAWN : ", Cult);
+            string msg = String.Format("CULTURE: {0} --> (TERRAIN, PAWN) : ", Cult);
             foreach (ETerrain key in PPTs.Keys) {
-                msg += String.Format("{0} | {1}", key, PPTs[key]);
+                msg += String.Format("({0}, {1}) ;", key, PPTs[key]);
             }
-            return base.ToString();
+            return msg;
         }
     }
 }

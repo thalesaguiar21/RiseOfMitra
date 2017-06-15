@@ -76,12 +76,14 @@
     <Compile Include="ACommand.cs" />
     <Compile Include="CulturalCenter.cs" />
     <Compile Include="CulturalCenterFactory.cs" />
+    <Compile Include="Gaia.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="IAdaptable.cs" />
     <Compile Include="DalrionPawn.cs" />
     <Compile Include="InspectCommand.cs" />
     <Compile Include="MoveCommand.cs" />
     <Compile Include="PawnFactory.cs" />
+    <Compile Include="PawnsPerTerrain.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="RahkarPawn.cs" />
     <Compile Include="Temple.cs" />
