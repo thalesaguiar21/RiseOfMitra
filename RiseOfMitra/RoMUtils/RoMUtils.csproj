@@ -51,7 +51,6 @@
     <Compile Include="ECultures.cs" />
     <Compile Include="ETerrain.cs" />
     <Compile Include="BoardConsts.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
