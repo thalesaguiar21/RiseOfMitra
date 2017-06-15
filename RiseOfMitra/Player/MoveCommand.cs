@@ -8,10 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Units;
+using Players;
+using Boards;
 
-namespace Game
+namespace Commands
 {
-    class MoveCommand : ACommand
+    public class MoveCommand : ACommand
     {
         private Player CurPlayer;
         private Coord AllyPos;
@@ -29,7 +31,7 @@ namespace Game
             if (Validate()) {
                 APawn allyPawn = CurPlayer.GetPawnAt(AllyPos);
                 Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.GetMovePoints());
-                List<Coord> moveRange = didi.GetValidPaths(Commands.MOVE);
+                List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
                 if (moveRange.Contains(Target)) {
                     valid = true;
                     allyPawn.Erase();

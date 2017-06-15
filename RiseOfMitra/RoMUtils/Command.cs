@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Consts
 {
-    public class Commands
+    public class Command
     {
         public const string ATTACK = "ATTACK";
         public const string MOVE = "MOVE";

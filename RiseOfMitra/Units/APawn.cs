@@ -3,15 +3,11 @@ using Types;
 using Cells;
 using System.Text;
 using System.Collections.Generic;
-using ShortestPath;
-using Consts;
 using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("Gaia")]
 
 namespace Units
 {
-    internal abstract class APawn : Unit, IAdaptable
+    public abstract class APawn : Unit, IAdaptable
     {
         private int MovePoints;
         private int Atk;

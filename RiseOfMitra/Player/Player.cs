@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using Types;
 using Cells;
+using Boards;
 using Units;
-namespace Game
+using Commands;
+
+namespace Players
 {
-    abstract class Player
+    public abstract class Player
     {
         protected ECultures Culture;
         protected List<APawn> Pawns;

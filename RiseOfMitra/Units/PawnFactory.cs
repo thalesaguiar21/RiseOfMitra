@@ -2,10 +2,11 @@
 using Types;
 using Cells;
 using Units;
+using Boards;
 
-namespace Game
+namespace Factory
 {
-    class PawnFactory
+    public class PawnFactory
     {
         bool Validate;
         public PawnFactory(bool validate = true) {

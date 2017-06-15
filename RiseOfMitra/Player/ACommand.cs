@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cells;
+using Boards;
 
-namespace Game
+namespace Commands
 {
-    abstract class ACommand
+    public abstract class ACommand
     {
         protected const string INVALID_POS = "The selected position is not valid! ";
         protected const string OCCUPIED_CELL = "The targeted cell is occupied! ";

@@ -5,11 +5,10 @@ using Types;
 using Cells;
 using Consts;
 using System.IO;
-using Units;
 
-namespace Game
+namespace Boards
 {
-    class Board
+    public class Board
     {
         private string[,] MainBoard;
         private ETerrain[,] Terrains;
@@ -32,10 +31,9 @@ namespace Game
             Legend = InitLegend();
         }
 
-        public Board(Player[] players) {
+        public Board() {
             Terrains = ReadTerrainFile();
             MainBoard = ClearBoard();
-            CreateUnits(players);
             CultColors = InitColors();
             Cmds = InitCommands();
             Legend = InitLegend();
@@ -51,11 +49,11 @@ namespace Game
 
         private Dictionary<string, bool> InitCommands() {
             Dictionary<string, bool> tmpDic = new Dictionary<string, bool>();
-            tmpDic.Add(Commands.ATTACK, true);
-            tmpDic.Add(Commands.MOVE, true);
+            tmpDic.Add(Command.ATTACK, true);
+            tmpDic.Add(Command.MOVE, true);
             //tmpDic.Add(Commands.CONQUER, false);
-            tmpDic.Add(Commands.INSPECT, true);
-            tmpDic.Add(Commands.EXIT, true);
+            tmpDic.Add(Command.INSPECT, true);
+            tmpDic.Add(Command.EXIT, true);
 
             return tmpDic;
         }
@@ -81,30 +79,6 @@ namespace Game
                 }
             }
             return auxBoard;
-        }
-
-        private void CreateUnits(Player[] players) {
-            if(players != null && players.Length == 2) {
-                PawnFactory pawnFac = new PawnFactory();
-                for (int i = 0; i < BoardConsts.INITIAL_PAWNS; i++) {
-                    APawn dPawn = pawnFac.Create(ECultures.DALRIONS, this);
-                    dPawn.SetPos(new Coord(1 + i, 7));
-                    players[0].AddPawn(dPawn);
-
-                    APawn rPawn = pawnFac.Create(ECultures.RAHKARS, this);
-                    rPawn.SetPos(new Coord(BoardConsts.MAX_LIN - 2 - i, BoardConsts.MAX_COL - 8));
-                    players[1].AddPawn(rPawn);
-                }
-
-                CulturalCenterFactory centFac = new CulturalCenterFactory();
-                ABuilding dCenter = centFac.Create(ECultures.DALRIONS, this);
-                ABuilding rCenter = centFac.Create(ECultures.RAHKARS, this);
-
-                players[0].SetCulturalCenter((CulturalCenter)dCenter);
-                players[1].SetCulturalCenter((CulturalCenter)rCenter);
-            } else {
-                throw new ArgumentException("Invalid player array!");
-            }
         }
 
         private ETerrain[,] ReadTerrainFile() {
@@ -179,7 +153,7 @@ namespace Game
             do {
                 Console.Clear();
                 PrintBoard(cmd, cursor, prevSelec, avaiableCells);
-                if (cmd == Commands.MOVE)
+                if (cmd == Command.MOVE)
                     Console.Write("TERRAIN IS " + Terrains[cursor.X, cursor.Y].Convert());
                 var move = Console.ReadKey(false).Key;
                 switch (move) {
@@ -220,9 +194,9 @@ namespace Game
             for (int i = 0; i < BoardConsts.MAX_LIN; i++) {
                 for (int j = 0; j < BoardConsts.MAX_COL; j++) {
                     if (selection != null && avaiableCells.Contains(new Coord(i, j))) {
-                        if (Commands.MOVE == cmd)
+                        if (Command.MOVE == cmd)
                             Console.BackgroundColor = ConsoleColor.DarkGreen;
-                        else if (Commands.ATTACK == cmd)
+                        else if (Command.ATTACK == cmd)
                             Console.BackgroundColor = ConsoleColor.DarkRed;
                     }
                     if (cursor != null && cursor.Equals(new Coord(i, j))) {

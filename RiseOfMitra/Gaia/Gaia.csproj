@@ -42,19 +42,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gaia.cs" />
+    <Compile Include="PawnsPerTerrain.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RiseOfMitra\Game.csproj">
-      <Project>{0ac94df4-d9d1-4f93-a1cc-d55b74bcfdcc}</Project>
-      <Name>Game</Name>
+    <ProjectReference Include="..\Player\Player.csproj">
+      <Project>{34c18b25-a1f8-44e6-81a9-24e58c74e157}</Project>
+      <Name>Player</Name>
     </ProjectReference>
     <ProjectReference Include="..\RoMUtils\RoMUtils.csproj">
       <Project>{0a198aea-b29c-44a5-ac8d-f31ecb91f83f}</Project>
       <Name>RoMUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Units\Units.csproj">
+      <Project>{529df13f-c636-4632-bde6-ff271726ba80}</Project>
+      <Name>Units</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

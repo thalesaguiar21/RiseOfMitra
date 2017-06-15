@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{39E8AE0B-64BB-484A-8EAB-DF38FCDB6B44}</ProjectGuid>
+    <ProjectGuid>{34C18B25-A1F8-44E6-81A9-24E58C74E157}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Musashi</RootNamespace>
-    <AssemblyName>Musashi</AssemblyName>
+    <RootNamespace>Player</RootNamespace>
+    <AssemblyName>Player</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -45,21 +45,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MonteCarloTreeSearch.cs" />
-    <Compile Include="OMCSelection.cs" />
+    <Compile Include="ACommand.cs" />
+    <Compile Include="AttackCommand.cs" />
+    <Compile Include="HumanPlayer.cs" />
+    <Compile Include="InspectCommand.cs" />
+    <Compile Include="MoveCommand.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelectionStrategy.cs" />
-    <Compile Include="SimulationStrategy.cs" />
-    <Compile Include="UCTSelection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RiseOfMitra\Game.csproj">
-      <Project>{0ac94df4-d9d1-4f93-a1cc-d55b74bcfdcc}</Project>
-      <Name>Game</Name>
+    <ProjectReference Include="..\Boards\Boards.csproj">
+      <Project>{3e692cc5-ee81-48e3-8a97-dd47d4e35883}</Project>
+      <Name>Boards</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dijkstra\Dijkstra.csproj">
+      <Project>{2e2f913d-1d71-417b-a3c8-9ca7b4436142}</Project>
+      <Name>Dijkstra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RoMUtils\RoMUtils.csproj">
+      <Project>{0a198aea-b29c-44a5-ac8d-f31ecb91f83f}</Project>
+      <Name>RoMUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Units\Units.csproj">
+      <Project>{529df13f-c636-4632-bde6-ff271726ba80}</Project>
+      <Name>Units</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

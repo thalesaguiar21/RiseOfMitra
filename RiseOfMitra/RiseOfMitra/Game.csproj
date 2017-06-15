@@ -47,7 +47,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>Game.Game</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -69,26 +69,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ABasicPawn.cs" />
-    <Compile Include="ABuilding.cs" />
-    <Compile Include="AttackCommand.cs" />
-    <Compile Include="Board.cs" />
-    <Compile Include="ACommand.cs" />
-    <Compile Include="CulturalCenter.cs" />
-    <Compile Include="CulturalCenterFactory.cs" />
-    <Compile Include="Gaia.cs" />
-    <Compile Include="HumanPlayer.cs" />
-    <Compile Include="IAdaptable.cs" />
-    <Compile Include="DalrionPawn.cs" />
-    <Compile Include="InspectCommand.cs" />
-    <Compile Include="MoveCommand.cs" />
-    <Compile Include="PawnFactory.cs" />
-    <Compile Include="PawnsPerTerrain.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="RahkarPawn.cs" />
-    <Compile Include="Temple.cs" />
-    <Compile Include="Unit.cs" />
-    <Compile Include="APawn.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -109,13 +89,29 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Boards\Boards.csproj">
+      <Project>{3e692cc5-ee81-48e3-8a97-dd47d4e35883}</Project>
+      <Name>Boards</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dijkstra\Dijkstra.csproj">
       <Project>{2e2f913d-1d71-417b-a3c8-9ca7b4436142}</Project>
       <Name>Dijkstra</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Gaia\Gaia.csproj">
+      <Project>{14702a80-ea46-4b92-a17d-e220427b8b32}</Project>
+      <Name>Gaia</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Player\Player.csproj">
+      <Project>{34c18b25-a1f8-44e6-81a9-24e58c74e157}</Project>
+      <Name>Player</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RoMUtils\RoMUtils.csproj">
       <Project>{0a198aea-b29c-44a5-ac8d-f31ecb91f83f}</Project>
       <Name>RoMUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Units\Units.csproj">
+      <Project>{529df13f-c636-4632-bde6-ff271726ba80}</Project>
+      <Name>Units</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

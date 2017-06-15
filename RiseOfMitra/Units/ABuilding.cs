@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Units
 {
-    abstract class ABuilding : Unit
+    public abstract class ABuilding : Unit
     {
         private int LifePerSec;
         private const int MAX_LIFEPERSEC = 3;

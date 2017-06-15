@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Types;
 using Game;
 using Cells;
+using Players;
 using Units;
 
 
@@ -18,7 +19,7 @@ using Units;
 
 namespace Juno
 {
-    class Gaia
+    public class Gaia
     {
         private const double CRITICAL_DIST = Math.E * 0.6;
         private const double MAX_CENTER_RISK = 100.0;

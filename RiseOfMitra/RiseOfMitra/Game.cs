@@ -6,24 +6,29 @@ using Consts;
 using System.IO;
 using System.Linq;
 using ShortestPath;
-using Units;
 using Juno;
+using Boards;
+using Players;
+using Commands;
+using Units;
+using Factory;
 
 namespace Game
 {
     class Game
     {
-        private Player[] Players;
+        private Player[] Gamers;
         private Player CurPlayer;
         private bool Play;
         private bool ValidCmd;
         private Board Boards;
 
         public Game() {
-            InitPlayers();
             Play = true;
             ValidCmd = false;
-            Boards = new Board(Players);
+            InitPlayers();
+            Boards = new Board();
+            CreateUnits();
             PlaceUnits();
         }
 
@@ -31,22 +36,46 @@ namespace Game
             this.Boards = new Board(game.Boards);
             this.Play = game.Play;
             this.ValidCmd = game.ValidCmd;
-            this.Players = new Player[2] { game.Players[0].Copy(Boards),
-                                           game.Players[1].Copy(Boards)};
-            this.CurPlayer = game.CurPlayer.Copy(Boards);
+            this.Gamers = new Player[2] { Gamers[0].Copy(Boards),
+                                           Gamers[1].Copy(Boards)};
+            this.CurPlayer = CurPlayer.Copy(Boards);
+        }
+
+        private void CreateUnits() {
+            if (Gamers != null && Gamers.Length == 2) {
+                PawnFactory pawnFac = new PawnFactory();
+                for (int i = 0; i < BoardConsts.INITIAL_PAWNS; i++) {
+                    APawn dPawn = pawnFac.Create(ECultures.DALRIONS, Boards);
+                    dPawn.SetPos(new Coord(1 + i, 7));
+                    Gamers[0].AddPawn(dPawn);
+
+                    APawn rPawn = pawnFac.Create(ECultures.RAHKARS, Boards);
+                    rPawn.SetPos(new Coord(BoardConsts.MAX_LIN - 2 - i, BoardConsts.MAX_COL - 8));
+                    Gamers[1].AddPawn(rPawn);
+                }
+
+                CulturalCenterFactory centFac = new CulturalCenterFactory();
+                ABuilding dCenter = centFac.Create(ECultures.DALRIONS, Boards);
+                ABuilding rCenter = centFac.Create(ECultures.RAHKARS, Boards);
+
+                Gamers[0].SetCulturalCenter((CulturalCenter)dCenter);
+                Gamers[1].SetCulturalCenter((CulturalCenter)rCenter);
+            } else {
+                throw new ArgumentException("Invalid player array!");
+            }
         }
 
         private void InitPlayers() {
-            Players = new Player[2];
-            Players[0] = new HumanPlayer(ECultures.DALRIONS);
-            Players[1] = new HumanPlayer(ECultures.RAHKARS);
+            Gamers = new Player[2];
+            Gamers[0] = new HumanPlayer(ECultures.DALRIONS);
+            Gamers[1] = new HumanPlayer(ECultures.RAHKARS);
 
-            Players[1].SetCursor(new Coord(BoardConsts.MAX_LIN - 2, BoardConsts.MAX_COL - 2));
-            CurPlayer = Players[0];
+            Gamers[1].SetCursor(new Coord(BoardConsts.MAX_LIN - 2, BoardConsts.MAX_COL - 2));
+            CurPlayer = Gamers[0];
         }
 
         private void PlaceUnits() {
-            foreach (Player it in Players) {
+            foreach (Player it in Gamers) {
                 foreach (Unit unit in it.GetUnits()) {
                     unit.Place();
                 }
@@ -56,7 +85,7 @@ namespace Game
         public void Start() {
             Gaia gaia = new Gaia();
             do {
-                gaia.DoGaiaWill(Players[0], Players[1]);
+                gaia.DoGaiaWill(Gamers[0], Gamers[1]);
                 Boards.PrintBoard();
                 //ShowValidMoves();
                 ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
@@ -67,7 +96,7 @@ namespace Game
                 if (ValidCmd)
                     SetNextPlayer();
 
-                foreach (Player player in Players) {
+                foreach (Player player in Gamers) {
                     if (player.GetCenter() == null || player.GetCenter().GetCurrLife() <= 0)
                         Play = false;
                 }
@@ -88,18 +117,18 @@ namespace Game
             CurPlayer.SetTurn();
             CurPlayer.ExecuteTurnEvents(Boards.GetBoard());
 
-            if (CurPlayer == Players[0]) {
-                CurPlayer = Players[1];
+            if (CurPlayer == Gamers[0]) {
+                CurPlayer = Gamers[1];
             } else {
-                CurPlayer = Players[0];   
+                CurPlayer = Gamers[0];   
             }
         }
 
         private Player GetOponent() {
-            if (CurPlayer == Players[0])
-                return Players[1];
+            if (CurPlayer == Gamers[0])
+                return Gamers[1];
             else
-                return Players[0];
+                return Gamers[0];
         }
 
         public List<ACommand> GetValidCommands() {
@@ -114,7 +143,7 @@ namespace Game
             List<ACommand> validMvs = new List<ABasicPawn>().Cast<ACommand>().ToList();
             foreach (APawn pawn in CurPlayer.GetPawns()) {
                 Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.GetPos(), pawn.GetMovePoints());
-                List<Coord> moveRange = didi.GetValidPaths(Commands.MOVE);
+                List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
                 foreach (Coord cell in moveRange) {
                     MoveCommand mv = new MoveCommand();
                     mv.SetUp(CurPlayer, pawn.GetPos(), cell, Boards);
@@ -149,7 +178,7 @@ namespace Game
 
         }
 
-        static void Main(string[] args) {
+        public static void Main(string[] args) {
 
             try {
                 Game rom = new Game();

@@ -2,12 +2,14 @@
 using Types;
 using Cells;
 using Consts;
+using Boards;
+using Units;
 
-namespace Units
+namespace Factory
 {
-    class CulturalCenterFactory
+    public class CulturalCenterFactory
     {
-        public ABuilding Create(ECultures native, Game.Board boards) {
+        public ABuilding Create(ECultures native, Board boards) {
             CulturalCenter center = null;
             switch (native) {
                 case ECultures.DALRIONS:

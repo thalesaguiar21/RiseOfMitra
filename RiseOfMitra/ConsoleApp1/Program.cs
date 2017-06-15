@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoMUtils
+namespace ConsoleApp1
 {
     class Program
     {
-        static void Main() {
-
+        static void Main(string[] args) {
         }
     }
 }

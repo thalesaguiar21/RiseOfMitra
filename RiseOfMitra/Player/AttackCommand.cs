@@ -7,10 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Types;
 using Units;
+using Players;
+using Boards;
 
-namespace Game
+namespace Commands
 {
-    class AttackCommand : ACommand
+    public class AttackCommand : ACommand
     {
         string HitMsg;
         Player CurPlayer, Oponent;
@@ -31,7 +33,7 @@ namespace Game
             if (Validate()) {
                 ABasicPawn allyPawn = (ABasicPawn) CurPlayer.GetPawnAt(AllyPos);
                 Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.GetAtkRange());
-                List<Coord> atkRange = didi.GetValidPaths(Consts.Commands.ATTACK);
+                List<Coord> atkRange = didi.GetValidPaths(Consts.Command.ATTACK);
                 if (PosValidate(atkRange)) {
                     valid = true;
                     Unit enemyUnit = Oponent.GetUnitAt(Target);
@@ -97,7 +99,7 @@ namespace Game
             if (valid) {
                 ABasicPawn allyPawn = (ABasicPawn)CurPlayer.GetPawnAt(AllyPos);
                 Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.GetAtkRange());
-                List<Coord> atkRange = didi.GetValidPaths(Consts.Commands.ATTACK);
+                List<Coord> atkRange = didi.GetValidPaths(Consts.Command.ATTACK);
                 valid = PosValidate(atkRange);
             }
             return valid;

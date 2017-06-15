@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Cells;
 using Units;
 
-namespace Game
+namespace Command
 {
     class InspectCommand : ACommand
     {

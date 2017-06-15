@@ -5,13 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Types;
 using Cells;
-using Consts;
 using ShortestPath;
+using Commands;
+using Consts;
+using Boards;
 using Units;
+using Factory;
 
-namespace Game
+namespace Players
 {
-    class HumanPlayer : Player
+    public class HumanPlayer : Player
     {
         public HumanPlayer(ECultures native) {
             Culture = native;
@@ -46,19 +49,19 @@ namespace Game
             while (!validCmd) {
                 string userCmd = Console.ReadLine().Trim().ToUpper();
                 switch (userCmd) {
-                    case Commands.ATTACK:
+                    case Command.ATTACK:
                         playerCommand = SetUpAttack(boards, oponent);
                         validCmd = true;
                         break;
-                    case Commands.MOVE:
+                    case Command.MOVE:
                         playerCommand = SetUpMove(boards);
                         validCmd = true;
                         break;
-                    case Commands.INSPECT:
+                    case Command.INSPECT:
                         playerCommand = SetUpInspect(boards, oponent);
                         validCmd = true;
                         break;
-                    case Commands.EXIT:
+                    case Command.EXIT:
                         break;
                     default:
                         Console.Write(userCmd + " IS NOT A VALID COMMAND! Please, try again...");
@@ -76,8 +79,8 @@ namespace Game
             ABasicPawn ally = GetPawnAt(selPos) as ABasicPawn;
             if(ally != null) {
                 Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.GetAtkRange());
-                List<Coord> atkRange = didi.GetValidPaths(Commands.ATTACK);
-                Coord enemyPos = boards.SelectPosition(Cursor, selPos, Commands.ATTACK, atkRange);
+                List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
+                Coord enemyPos = boards.SelectPosition(Cursor, selPos, Command.ATTACK, atkRange);
 
                 // Set up command variables
                 attackCmd.SetUp(selPos, enemyPos, this, oponent, boards);
@@ -91,8 +94,8 @@ namespace Game
             APawn ally = GetPawnAt(selPos);
             if(ally != null) {
                 Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.GetMovePoints());
-                List<Coord> moveRange = didi.GetValidPaths(Commands.MOVE);
-                Coord target = boards.SelectPosition(Cursor, selPos, Commands.MOVE, moveRange);
+                List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
+                Coord target = boards.SelectPosition(Cursor, selPos, Command.MOVE, moveRange);
 
                 // Set up command variables
                 move.SetUp(this, selPos, target, boards);

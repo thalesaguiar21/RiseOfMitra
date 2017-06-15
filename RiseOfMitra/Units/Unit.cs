@@ -4,14 +4,13 @@ using Types;
 using Consts;
 using System.Text;
 using System.Runtime.CompilerServices;
-
-[assembly : InternalsVisibleTo("Gaia")]
+using Boards;
 
 namespace Units
 {
-    internal class Unit
+    public class Unit
     {
-        protected Game.Board Boards;
+        protected Board Boards;
         protected string BOARD_CHAR;
         private int CurrLife;
         private int TotalLife;
@@ -72,7 +71,7 @@ namespace Units
         public int GetSize() { return Size; }
         public ECultures NativeOf() { return native; }
         public string[,] GetBoard() { return Boards.GetBoard(); }
-        public Game.Board GetBoards() { return Boards; }
+        public Board GetBoards() { return Boards; }
         public ETerrain GetTerrain() {
             return (ETerrain)Boards.TerrainAt(GetPos());
         }
@@ -119,7 +118,7 @@ namespace Units
             native = culture;
         }
 
-        public void SetBoards(Game.Board boards) {
+        public void SetBoards(Board boards) {
             if (boards != null
                 && boards.GetBoard().GetLength(0) == BoardConsts.MAX_LIN
                 && boards.GetBoard().GetLength(1) == BoardConsts.MAX_COL

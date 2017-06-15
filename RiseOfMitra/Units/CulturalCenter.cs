@@ -3,10 +3,11 @@ using Types;
 using Consts;
 using Cells;
 using System;
+using Factory;
 
 namespace Units
 {
-    class CulturalCenter : ABuilding
+    public class CulturalCenter : ABuilding
     {
         private int UnitPerTurn;
         private Coord SpawnPoint;
@@ -43,7 +44,7 @@ namespace Units
         }
 
         public APawn GeneratePawn() {
-            Game.PawnFactory factory = new Game.PawnFactory();
+            PawnFactory factory = new PawnFactory();
             APawn pawn = factory.Create(NativeOf(), Boards);
             Coord pos = GetPlacementPosition();
             if (pos == null) {

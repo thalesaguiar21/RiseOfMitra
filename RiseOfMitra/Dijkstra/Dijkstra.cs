@@ -28,7 +28,7 @@ namespace ShortestPath
                 isValid = false;
             else if (validCells.Contains(np))
                 isValid = false;
-            else if (cmd == Commands.MOVE && Board[np.X, np.Y] != BoardConsts.EMPTY)
+            else if (cmd == Command.MOVE && Board[np.X, np.Y] != BoardConsts.EMPTY)
                 isValid = false;
             else if (acumDist[origin] + 1 > MaxDist)
                 isValid = false;
