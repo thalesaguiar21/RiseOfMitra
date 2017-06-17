@@ -105,11 +105,18 @@ namespace Juno
         }
 
         private void SetPawnsPerTerrain(List<APawn> pawns) {
-            foreach (APawn pawn in pawns) {
-                if (pawn.NativeOf() == ECultures.DALRIONS)
-                    DalrionPpts.IncreasePawnsAt(pawn.GetTerrain());
+            if(pawns != null && pawns.Count > 0) {
+                if (pawns[0].NativeOf() == ECultures.DALRIONS)
+                    DalrionPpts.ResetNumbers();
                 else
-                    RahkarPpts.IncreasePawnsAt(pawn.GetTerrain());
+                    RahkarPpts.ResetNumbers();
+
+                foreach (APawn pawn in pawns) {
+                    if (pawn.NativeOf() == ECultures.DALRIONS)
+                        DalrionPpts.IncreasePawnsAt(pawn.GetTerrain());
+                    else
+                        RahkarPpts.IncreasePawnsAt(pawn.GetTerrain());
+                }
             }
         }
 

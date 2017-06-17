@@ -26,6 +26,12 @@ namespace Juno
                 PPTs[terrain] += 1;
         }
 
+        public void ResetNumbers() {
+            foreach (ETerrain key in PPTs.Keys.ToList()) {
+                PPTs[key] = 0;
+            }
+        }
+
         public void SetNumOfPawnsAt(ETerrain terrain, int numOfPawns) {
             if(numOfPawns > 0) {
                 if (PPTs.ContainsKey(terrain))
