@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F1B5C982-9E63-4AFE-B8DB-779FF5A7488E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>RiseOfMitra</RootNamespace>
+    <AssemblyName>RiseOfMitra</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>RiseOfMitra.Game</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Units\Pawns\ABasicPawn.cs" />
+    <Compile Include="Units\ABuilding.cs" />
+    <Compile Include="Players\Commands\ACommand.cs" />
+    <Compile Include="Units\Pawns\APawn.cs" />
+    <Compile Include="Players\Commands\AttackCommand.cs" />
+    <Compile Include="Board.cs" />
+    <Compile Include="Utils\Space\BoardConsts.cs" />
+    <Compile Include="Utils\Types\Command.cs" />
+    <Compile Include="Utils\Space\Coord.cs" />
+    <Compile Include="Units\Centers\CulturalCenter.cs" />
+    <Compile Include="Units\Centers\CulturalCenterFactory.cs" />
+    <Compile Include="Units\Pawns\DalrionPawn.cs" />
+    <Compile Include="Utils\Space\Dijkstra.cs" />
+    <Compile Include="Utils\Types\ECultures.cs" />
+    <Compile Include="Utils\Types\ETerrain.cs" />
+    <Compile Include="Juno\Gaia.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="Players\HumanPlayer.cs" />
+    <Compile Include="Units\IAdaptable.cs" />
+    <Compile Include="Players\Commands\InspectCommand.cs" />
+    <Compile Include="MonteCarlo\MonteCarloTreeSearch.cs" />
+    <Compile Include="Players\Commands\MoveCommand.cs" />
+    <Compile Include="MonteCarlo\OMCSelection.cs" />
+    <Compile Include="Units\Pawns\PawnFactory.cs" />
+    <Compile Include="Juno\PawnsPerTerrain.cs" />
+    <Compile Include="Players\Player.cs" />
+    <Compile Include="Players\PlayerFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Units\Pawns\RahkarPawn.cs" />
+    <Compile Include="MonteCarlo\SelectionStrategy.cs" />
+    <Compile Include="MonteCarlo\SimulationStrategy.cs" />
+    <Compile Include="Units\Temples\Temple.cs" />
+    <Compile Include="MonteCarlo\UCTSelection.cs" />
+    <Compile Include="Units\Unit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
