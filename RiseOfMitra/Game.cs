@@ -85,10 +85,11 @@ namespace RiseOfMitra
 
         public void Start() {
             Gaia gaia = new Gaia();
-            do {
+            do {                
                 gaia.DoGaiaWill(Gamers[0], Gamers[1]);
                 Boards.PrintBoard();
                 //ShowValidMoves();
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                 ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
                 ValidCmd = ChangeState(cmd);
 
