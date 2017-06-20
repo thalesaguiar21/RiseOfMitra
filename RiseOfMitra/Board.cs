@@ -35,7 +35,7 @@ namespace Boards
 
         public Board() {
             Terrains = ReadTerrainFile();
-            MainBoard = ClearBoard();
+            MainBoard = ReadMainBoard();
             CultColors = InitColors();
             Cmds = InitCommands();
             Legend = InitLegend();
@@ -85,7 +85,7 @@ namespace Boards
         }
 
         private ETerrain[,] ReadTerrainFile() {
-            string TerrainFilePath = @"C:\Users\thalesaguiar\Documents\Dev\C#\RiseOfMitra\terrains.txt";
+            string TerrainFilePath = @"C:\Users\thalesaguiar\Documents\Dev\C#\ROM\terrains.txt";
             ETerrain[,] auxTerrains = new ETerrain[BoardConsts.MAX_LIN, BoardConsts.MAX_COL];
             int lin = 0;
             int col = 0;
@@ -107,6 +107,29 @@ namespace Boards
             }
             file.Close();
             return auxTerrains;
+        }
+
+        private string[,] ReadMainBoard() {
+            string TerrainFilePath = @"C:\Users\thalesaguiar\Documents\Dev\C#\ROM\board.txt";
+            string[,] auxBoard = new string[BoardConsts.MAX_LIN, BoardConsts.MAX_COL];
+            int lin = 0;
+            int col = 0;
+            string line;
+            FileStream fStream = new FileStream(TerrainFilePath, FileMode.Open, FileAccess.Read);
+            StreamReader file = new StreamReader(fStream);
+
+            while ((line = file.ReadLine()) != null) {
+                string[] cells = line.Split(' ');
+                foreach (string cell in cells) {
+                    cell.Trim();
+                    auxBoard[lin, col] = cell;
+                    col++;
+                }
+                lin++;
+                col = 0;
+            }
+            file.Close();
+            return auxBoard;
         }
 
         public Coord SelectPosition(Coord cursor) {
