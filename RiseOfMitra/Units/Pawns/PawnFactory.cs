@@ -20,14 +20,14 @@ namespace Units.Pawns
                 case ECultures.DALRIONS:
                     pawn = new DalrionPawn();
                     if (Validate)
-                        values = new Object[] { 10, 10, 4, 2, 2, 5 };
+                        values = new Object[] { 10, 10, 5, 2, 1, 5 };
                     pawn.SetCulture(ECultures.DALRIONS);
                     break;
 
                 case ECultures.RAHKARS:
                     pawn = new RahkarPawn();
                     if (Validate)
-                        values = new Object[] { 15, 15, 2, 2, 3, 3 };
+                        values = new Object[] { 15, 15, 3, 2, 3, 3 };
                     pawn.SetCulture(ECultures.RAHKARS);
                     break;
                 default:
@@ -55,9 +55,9 @@ namespace Units.Pawns
 
                 isValid &= pawn.GetCurrLife() == 10;
                 isValid &= pawn.GetTotalLife() == 10;
-                isValid &= pawn.GetAtk() == 4;
+                isValid &= pawn.GetAtk() == 5;
                 isValid &= pawn.GetAtkRange() == 2;
-                isValid &= pawn.GetDef() == 2;
+                isValid &= pawn.GetDef() == 1;
                 isValid &= pawn.GetMovePoints() == 5;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
@@ -66,7 +66,7 @@ namespace Units.Pawns
 
                 isValid &= pawn.GetCurrLife() == 15;
                 isValid &= pawn.GetTotalLife() == 15;
-                isValid &= pawn.GetAtk() == 2;
+                isValid &= pawn.GetAtk() == 3;
                 isValid &= pawn.GetAtkRange() == 2;
                 isValid &= pawn.GetDef() == 3;
                 isValid &= pawn.GetMovePoints() == 3;
