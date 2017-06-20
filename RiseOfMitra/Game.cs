@@ -11,7 +11,7 @@ using Players.Commands;
 using Units;
 using Units.Pawns;
 using Units.Centers;
-using MonteCarlo;
+using RiseOfMitra.MonteCarlo;
 
 namespace RiseOfMitra
 {
@@ -115,7 +115,7 @@ namespace RiseOfMitra
             Console.ReadLine();
         }
 
-        private bool ChangeState(ACommand command) {
+        public bool ChangeState(ACommand command) {
             if (command != null) {
                 command.SetUp(Boards, CurPlayer, GetOponent());
                 return command.Execute();                
@@ -139,6 +139,18 @@ namespace RiseOfMitra
                 return Gamers[1];
             else
                 return Gamers[0];
+        }
+
+        public Board GetState() {
+            return Boards;
+        }
+
+        public bool GameOver() {
+            return !Play;
+        }
+
+        public Player GetCurPlayer() {
+            return CurPlayer;
         }
 
         public List<ACommand> GetValidCommands() {
