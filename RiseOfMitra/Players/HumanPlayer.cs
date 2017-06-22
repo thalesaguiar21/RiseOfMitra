@@ -19,6 +19,7 @@ namespace Players
             Pawns = new List<APawn>();
             Center = null;
             Cursor = new Coord(1, 1);
+            num = 1;
         }
 
         public override ACommand PrepareAction(Board boards, Player oponent) {

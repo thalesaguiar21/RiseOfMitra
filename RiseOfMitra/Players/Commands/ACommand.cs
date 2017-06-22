@@ -40,9 +40,11 @@ namespace Players.Commands
             }
         }
 
+        public abstract double Value();
         public abstract bool Execute();
         public abstract bool IsValid();
         protected abstract bool Validate();
+        public abstract string GetShort();
 
         public override string ToString() {
             return String.Format("Target: {0}\n", Target);

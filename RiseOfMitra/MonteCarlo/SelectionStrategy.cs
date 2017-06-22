@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Players.Commands;
 
 namespace RiseOfMitra.MonteCarlo
 {
-    interface SelectionStrategy
+    interface ISelectionStrategy
     {
-        double execute();
+        ACommand Execute();
     }
 }

@@ -17,6 +17,7 @@ namespace Players
         protected CulturalCenter Center;
         protected Coord Cursor;
         protected int Turn;
+        public int num;
 
         public APawn GetPawnAt(Coord pos) {
             for (int i = 0; i < Pawns.Count; i++) {

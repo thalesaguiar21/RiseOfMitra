@@ -45,7 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MonteCarlo\DefaultSelection.cs" />
+    <Compile Include="MonteCarlo\ExpansionStrategy.cs" />
     <Compile Include="MonteCarlo\Node.cs" />
+    <Compile Include="MonteCarlo\UCBSelection.cs" />
     <Compile Include="Units\Pawns\ABasicPawn.cs" />
     <Compile Include="Units\ABuilding.cs" />
     <Compile Include="Players\Commands\ACommand.cs" />

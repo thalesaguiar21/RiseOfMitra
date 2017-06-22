@@ -9,6 +9,7 @@ namespace Units.Pawns
     class DalrionPawn : ABasicPawn
     {
         public DalrionPawn() {
+            PositiveTerrains = new ETerrain[] { ETerrain.MOUNTAIN, ETerrain.MARSH, ETerrain.DESERT };
             Boards = null;
             BOARD_CHAR = BoardConsts.DALRION_PAWN;
             SetCurrLife(0);
@@ -42,7 +43,7 @@ namespace Units.Pawns
                     SetMovePoints(GetMovePoints() - 1);
                     break;
                 case ETerrain.DESERT:
-                    SetMovePoints(GetMovePoints() - 2);
+                    SetMovePoints(GetMovePoints() + 2);
                     break;
                 default:
                     break;

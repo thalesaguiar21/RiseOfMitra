@@ -38,6 +38,31 @@ namespace Players.Commands
             return valid;
         }
 
+        public override double Value() {
+            double total = 0;
+
+            total += 3.0 / Coord.Distance(Target, Oponent.GetCenter().GetPos());
+            ETerrain terrainAtTarget = (ETerrain)Boards.TerrainAt(Target);
+            foreach (ETerrain terrain in CurPlayer.GetPawnAt(AllyPos).GetPositiveTerrains()) {
+                if(terrainAtTarget == terrain) {
+                    total += 1;
+                    break;
+                }
+            }
+            foreach (ABasicPawn pawn in Oponent.GetAttackers()) {
+                if(Coord.Distance(pawn.GetPos(), CurPlayer.GetCenter().GetPos()) < 10
+                    && Coord.Distance(pawn.GetPos(), AllyPos) < 10) {
+                    total += 3.0 / Coord.Distance(Target, pawn.GetPos());
+                }
+            }
+
+            return total;
+        }
+
+        public override string GetShort() {
+            return "MOV";
+        }
+
         public void SetUp(Player curPlayer, Coord allypos, Coord target, Board boards) {
             SetCurPlayer(curPlayer);
             SetAllyPos(allypos);

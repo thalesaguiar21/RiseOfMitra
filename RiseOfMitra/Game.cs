@@ -88,15 +88,12 @@ namespace RiseOfMitra
             do {                
                 gaia.DoGaiaWill(Gamers[0], Gamers[1]);
                 Boards.PrintBoard();
-                //ShowValidMoves();
                 Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                 ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
-                ValidCmd = ChangeState(cmd);
+                ChangeState(cmd);
 
                 Console.Write("Press enter to continue...");
                 Console.ReadLine();
-                if (ValidCmd)
-                    SetNextPlayer();
 
                 foreach (Player player in Gamers) {
                     if (player.GetCenter() == null || player.GetCenter().GetCurrLife() <= 0)
@@ -115,12 +112,13 @@ namespace RiseOfMitra
             Console.ReadLine();
         }
 
-        public bool ChangeState(ACommand command) {
+        public void ChangeState(ACommand command) {
             if (command != null) {
                 command.SetUp(Boards, CurPlayer, GetOponent());
-                return command.Execute();                
-            } else
-                return false;
+                bool validCmd = command.Execute();
+                if (validCmd)
+                    SetNextPlayer();
+            }
         }
         
         private void SetNextPlayer() {
@@ -168,6 +166,7 @@ namespace RiseOfMitra
                 List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
                 foreach (Coord cell in moveRange) {
                     MoveCommand mv = new MoveCommand();
+                    mv.SetUp(Boards, CurPlayer, GetOponent());
                     mv.SetUp(CurPlayer, pawn.GetPos(), cell, Boards);
                     if (mv.IsValid()) validMvs.Add(mv);
                 }
@@ -182,6 +181,7 @@ namespace RiseOfMitra
             foreach(ABasicPawn pawn in CurPlayer.GetPawns()) {
                 foreach (ABasicPawn enemy in GetOponent().GetPawns()) {
                     AttackCommand atk = new AttackCommand();
+                    atk.SetUp(Boards, CurPlayer, GetOponent());
                     atk.SetUp(pawn.GetPos(), enemy.GetPos(), CurPlayer, GetOponent(), Boards);
                     if (atk.IsValid()) validAtks.Add(atk);
                 }

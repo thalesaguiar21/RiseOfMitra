@@ -6,6 +6,7 @@ namespace Units.Pawns
     class RahkarPawn : ABasicPawn
     {
         public RahkarPawn() {
+            PositiveTerrains = new ETerrain[] { ETerrain.MOUNTAIN, ETerrain.RIVER, ETerrain.MARSH };
             Boards = null;
             BOARD_CHAR = BoardConsts.RAHKAR_PAWN;
             SetCurrLife(0);
@@ -25,7 +26,7 @@ namespace Units.Pawns
                     SetMovePoints(GetMovePoints() + 1);
                     break;
                 case ETerrain.PLAIN:
-                    SetDef(GetDef());
+                    SetDef(GetDef() - 1);
                     break;
                 case ETerrain.RIVER:
                     SetMovePoints(GetMovePoints() + 1);
@@ -34,12 +35,12 @@ namespace Units.Pawns
                     SetDef(GetDef() - 1);
                     break;
                 case ETerrain.MARSH:
-                    SetAtk(GetAtk() - 2);
+                    SetAtk(GetAtk() + 2);
                     break;
                 case ETerrain.FOREST:
                     break;
                 case ETerrain.DESERT:
-                    SetAtk(GetAtk() + 1);
+                    SetAtk(GetAtk() - 1);
                     break;
                 default:
                     break;

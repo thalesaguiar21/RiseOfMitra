@@ -34,6 +34,14 @@ namespace Players.Commands
             return false;
         }
 
+        public override double Value() {
+            return 0;
+        }
+
+        public override string GetShort() {
+            return "INSP";
+        }
+
         public void SetUp(Coord target, Board boards, List<Unit> units) {
             SetTarget(target);
             SetBoards(boards);

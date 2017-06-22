@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Players.Commands;
 
 namespace RiseOfMitra.MonteCarlo
 {
-    class UCTSelection : SelectionStrategy
+    class UCTSelection : ISelectionStrategy
     {
-        public double execute() {
+        public ACommand Execute() {
             throw new NotImplementedException();
         }
     }

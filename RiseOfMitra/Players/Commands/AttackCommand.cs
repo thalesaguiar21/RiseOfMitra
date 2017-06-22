@@ -6,6 +6,7 @@ using Boards;
 using Utils.Space;
 using Utils.Types;
 using Units.Pawns;
+using Units.Centers;
 
 
 namespace Players.Commands
@@ -22,6 +23,18 @@ namespace Players.Commands
             Boards = null;
             ErrorMsg = "";
             HitMsg = "";
+        }
+
+        public override double Value() {
+            double total = 3;
+            if(Oponent.GetUnitAt(Target) is CulturalCenter) {
+                total += 5.0;
+            }
+            double remainingHealth = Oponent.GetUnitAt(Target).GetCurrLife() / Oponent.GetUnitAt(Target).GetTotalLife();
+            if (remainingHealth < 0.5)
+                total += 3.0;
+            total += 2.0 / Coord.Distance(Oponent.GetCenter().GetPos(), AllyPos);
+            return total;
         }
 
         public override bool Execute() {
@@ -88,6 +101,10 @@ namespace Players.Commands
             msg += String.Format("Ally: {0}\n", AllyPos);
             msg += "Move: ATK\n";
             return msg;
+        }
+
+        public override string GetShort() {
+            return "ATK";
         }
 
         public override bool IsValid() {

@@ -14,23 +14,26 @@ namespace RiseOfMitra.MonteCarlo
     public class MonteCarloTreeSearch : Player
     {
         List<Node> GameTree;
-        List<ACommand> ExpandedCommands;
+        Dictionary<ACommand, Node> SimulationResult;
+        ISelectionStrategy Selection;
         Game curGame;
         Game MCTSGame;
         private const int MAX_SIMULATION_TIME = 3; // Define um tempo máximo de execução de simulações
         private const int MAX_SIMULATION_MOVE = 10; // Define o quão profundo será a simulação
 
         public MonteCarloTreeSearch(ECultures cult, Game game) {
+            num = 2;
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
             Center = null;
             curGame = game;
             GameTree = new List<Node>();
-            ExpandedCommands = new List<ACommand>();
+            SimulationResult = new Dictionary<ACommand, Node>();
         }
 
         private MonteCarloTreeSearch(ECultures cult) {
+            num = 2;
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
@@ -53,7 +56,7 @@ namespace RiseOfMitra.MonteCarlo
         public override ACommand PrepareAction(Board boards, Player oponent) {
             // No início dessa função, significa que o jogador humano já executou alguma ação
             // Dessa forma, deve-se adicionar um novo nó à Game Tree
-            GameTree.Add(new Node(0, 0, new Board(curGame.GetState()), oponent));
+
             // Cria um novo comando que será realizado pela Inteligência artificial
             ACommand rndCmd = null;
             // Identifica e seleciona todos os comandos válidos
@@ -63,17 +66,18 @@ namespace RiseOfMitra.MonteCarlo
             cron.Start();
             Console.Write("Musashi is thinking...");
             while (cron.Elapsed < TimeSpan.FromSeconds(MAX_SIMULATION_TIME)) {
-                // Executa simulações até que um tempo especificado seja esgotado
                 RunSimulation(cmds);
             }
+
             // Após as simulações, alguns comandos aleatórios foram selecionados.
             // Dentre eles, usa-se alguma métrica de seleção
-            Random rnd = new Random();
-            int move = rnd.Next(ExpandedCommands.Count);
+            Selection = new DefaultSelection(SimulationResult.Keys.ToList());
+            // Selection = new UCBSelection(SimulationResult, MAX_SIMULATION_MOVE);
+            rndCmd = Selection.Execute();
+            SimulationResult.Clear();
 
-            rndCmd = ExpandedCommands[move];
-            
-            ExpandedCommands.Clear();
+            Console.Write("Finished!");
+            Console.ReadLine();
 
             boards.SetStatus(("Musashi will do:\n" + rndCmd.ToString()).Split('\n'));
             Console.Clear();
@@ -82,38 +86,43 @@ namespace RiseOfMitra.MonteCarlo
         }
 
         private void RunSimulation(List<ACommand> validMoves) {
-            bool Expand = true;
             // Cria uma cópia do jogo atual para evitar que as simulações interfiram no jogo real
             MCTSGame = new Game(curGame);
             // Seleciona um comando válido aleatoriamente
             ACommand rndCmd = null;
             Random rnd = new Random();
             if (validMoves != null) {
+                // Seleciona um comando aleatório
                 int move = rnd.Next(validMoves.Count);
                 rndCmd = validMoves[move];
-            }
-            // Adiciona um possível comando para a Game Tree a partir do estado
-            if (Expand && !ExpandedCommands.Contains(rndCmd))
-                ExpandedCommands.Add(rndCmd);
-            // Cria uma cópia dos estados alcançados até agora pela Game Tree
-            List<Node> gameTreeCp = new List<Node>(GameTree);
-            // Inicializa as simulações
-            int counter = 0;
-            while(counter < MAX_SIMULATION_MOVE) {
-                // Identifica e cria todos os comandos possíveis a partir do estado atual
-                List<ACommand> validCmds = MCTSGame.GetValidCommands();
-                // Seleciona um comando válido aleatoriamente
-                ACommand posRndCmd = null;
-                if (validCmds != null) {
-                    int move = rnd.Next(validCmds.Count);
-                    posRndCmd = validCmds[move];
+                // Adiciona um possível comando para a Game Tree a partir do estado
+                // expandido
+                if (SimulationResult.ContainsKey(rndCmd)) {
+                    SimulationResult[rndCmd].visitCount++;
+                } else {
+                    SimulationResult.Add(rndCmd, new Node(1, 0, rndCmd.Value()));
                 }
-                // Executa o comando na cópia do jogo
-                MCTSGame.ChangeState(posRndCmd);
-                // Verifica se o novo estado é um estado final
-                if (MCTSGame.GameOver())
-                    break;
-                counter++;
+                // Inicializa as simulações
+                int counter = 0;
+                while (counter < MAX_SIMULATION_MOVE) {
+                    // Identifica e cria todos os comandos possíveis a partir do estado atual
+                    List<ACommand> validCmds = MCTSGame.GetValidCommands();
+                    // Seleciona um comando válido aleatoriamente
+                    ACommand posRndCmd = null;
+                    if (validCmds != null && MCTSGame.GetCurPlayer().num == 2) {
+                        int posMove = rnd.Next(validCmds.Count);
+                        posRndCmd = validCmds[posMove];
+                        SimulationResult[rndCmd].value += posRndCmd.Value();
+                    }
+                    // Executa o comando na cópia do jogo
+                    MCTSGame.ChangeState(posRndCmd);
+                    // Verifica se o novo estado é um estado final
+                    if (MCTSGame.GameOver()) {
+                        SimulationResult[rndCmd].winCount++;
+                        break;
+                    }
+                    counter++;
+                }
             }
         }
 

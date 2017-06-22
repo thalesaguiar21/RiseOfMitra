@@ -13,6 +13,7 @@ namespace Units.Pawns
         private int MovePoints;
         private int Atk;
         private int AtkRange;
+        protected ETerrain[] PositiveTerrains;
         private const int MAX_MOVE = 25;
         private const int MAX_RANGE = 5;
         private const int MAX_ATK = 25;
@@ -32,6 +33,7 @@ namespace Units.Pawns
         public int GetMovePoints() { return MovePoints; }
         public int GetAtk() { return Atk; }
         public int GetAtkRange() { return AtkRange; }
+        public ETerrain[] GetPositiveTerrains() { return PositiveTerrains; }
 
         public void SetAtkRange(int atkRange) {
             if (atkRange > 0 && atkRange <= MAX_RANGE)

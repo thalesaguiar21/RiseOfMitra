@@ -8,9 +8,11 @@ namespace Units.Pawns
     public class PawnFactory
     {
         bool Validate;
+
         public PawnFactory(bool validate = true) {
             Validate = validate;
         }
+
         public APawn Create(ECultures nature, Board boards) {
             // CurrLife, TotalLife, Atk, AtkRange, Def, MovePoints
             Object[] values = new Object[] { 1, 10, 20, 5, 3, 20};
