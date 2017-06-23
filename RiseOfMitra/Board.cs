@@ -356,5 +356,20 @@ namespace Boards
         public void SetStatus(string[] status) {
             Status = status;
         }
+
+        public bool Equals(Board otherOboard) {
+            if(otherOboard.MainBoard.GetLength(0) != BoardConsts.MAX_LIN
+                || otherOboard.MainBoard.GetLength(1) != BoardConsts.MAX_COL) {
+                return false;
+            } else {
+                for (int i = 0; i < BoardConsts.MAX_LIN; i++) {
+                    for (int j = 0; j < BoardConsts.MAX_COL; j++) {
+                        if (MainBoard[i, j] != otherOboard.MainBoard[i, j])
+                            return false;
+                    }
+                }
+                return true;
+            }
+        }
     }
 }

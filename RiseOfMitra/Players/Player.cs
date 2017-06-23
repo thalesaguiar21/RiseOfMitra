@@ -17,7 +17,6 @@ namespace Players
         protected CulturalCenter Center;
         protected Coord Cursor;
         protected int Turn;
-        public int num;
 
         public APawn GetPawnAt(Coord pos) {
             for (int i = 0; i < Pawns.Count; i++) {
@@ -54,7 +53,7 @@ namespace Players
             }
         }
 
-        public bool RemoveUnitAt(Coord pos) {
+        public bool RemoveUnitAt(Coord pos, Board boards) {
             bool found = false;
 
             if (Center.InUnit(pos)) {
@@ -63,7 +62,7 @@ namespace Players
             } else {
                 for (int i = 0; i < Pawns.Count; i++) {
                     if (Pawns[i].InUnit(pos)) {
-                        Pawns[i].Erase();
+                        Pawns[i].Erase(boards);
                         Pawns.RemoveAt(i);
                         found = true;
                     }
@@ -72,12 +71,12 @@ namespace Players
             return found;
         }
 
-        public void ExecuteTurnEvents(string[,] board) {
+        public void ExecuteTurnEvents(Board boards) {
             Center.Regen();
             if (Turn % Center.GetUnitsPerTurn() == 0) {
-                APawn pawn = Center.GeneratePawn();
+                APawn pawn = Center.GeneratePawn(boards);
                 if(pawn != null) {
-                    pawn.Place();
+                    pawn.Place(boards);
                     AddPawn(pawn);
                 } else {
                     Console.Write("Can not create more pawns!");

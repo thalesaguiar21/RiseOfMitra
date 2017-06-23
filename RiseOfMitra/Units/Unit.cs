@@ -9,7 +9,6 @@ namespace Units
 {
     public class Unit
     {
-        protected Board Boards;
         protected string BOARD_CHAR;
         private int CurrLife;
         private int TotalLife;
@@ -41,20 +40,20 @@ namespace Units
             return false;
         }
 
-        public void Erase() {
+        public void Erase(Board boards) {
             for (int i = 0; i < GetSize(); i++) {
                 for (int k = 0; k < GetSize(); k++) {
                     Coord pos = new Coord(GetPos().X + i, GetPos().Y + k);
-                    Boards.SetCellAt(pos, BoardConsts.EMPTY);
+                    boards.SetCellAt(pos, BoardConsts.EMPTY);
                 }
             }
         }
 
-        public void Place() {
+        public void Place(Board boards) {
             for (int i = 0; i < GetSize(); i++) {
                 for (int k = 0; k < GetSize(); k++) {
                     Coord pos = new Coord(GetPos().X + i, GetPos().Y + k);
-                    Boards.SetCellAt(pos, ToString());
+                    boards.SetCellAt(pos, ToString());
                 }
             }
         }
@@ -69,11 +68,6 @@ namespace Units
         public Coord GetPos() { return Pos; }
         public int GetSize() { return Size; }
         public ECultures NativeOf() { return native; }
-        public string[,] GetBoard() { return Boards.GetBoard(); }
-        public Board GetBoards() { return Boards; }
-        public ETerrain GetTerrain() {
-            return (ETerrain)Boards.TerrainAt(GetPos());
-        }
 
         public void SetCurrLife(int life) {
             if (life > MAX_LIFE) {
@@ -115,15 +109,6 @@ namespace Units
 
         public void SetCulture(ECultures culture) {
             native = culture;
-        }
-
-        public void SetBoards(Board boards) {
-            if (boards != null
-                && boards.GetBoard().GetLength(0) == BoardConsts.MAX_LIN
-                && boards.GetBoard().GetLength(1) == BoardConsts.MAX_COL
-                && boards.GetTerrains().GetLength(0) == BoardConsts.MAX_LIN
-                && boards.GetTerrains().GetLength(1) == BoardConsts.MAX_COL)
-                Boards = boards;
         }
     }
 }

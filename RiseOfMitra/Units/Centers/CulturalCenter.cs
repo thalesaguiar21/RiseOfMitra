@@ -30,7 +30,6 @@ namespace Units.Centers
 
         public CulturalCenter Copy(Board board) {
             CulturalCenter tmpCenter = new CulturalCenter(NativeOf());
-            tmpCenter.SetBoards(board);
             tmpCenter.SetCurrLife(GetCurrLife());
             tmpCenter.SetTotalLife(GetTotalLife());
             tmpCenter.SetDef(GetDef());
@@ -38,16 +37,16 @@ namespace Units.Centers
             tmpCenter.SetPos(GetPos());
             tmpCenter.SetSize(GetSize());
             tmpCenter.SetUnitPerTurn(UnitPerTurn);
-            tmpCenter.SetSpawnPoint(new Coord(SpawnPoint.X, SpawnPoint.Y));
+            tmpCenter.SetSpawnPoint(board, new Coord(SpawnPoint.X, SpawnPoint.Y));
             tmpCenter.SetSpawnRange(SpawnRange);
 
             return tmpCenter;
         }
 
-        public APawn GeneratePawn() {
+        public APawn GeneratePawn(Board boards) {
             PawnFactory factory = new PawnFactory();
-            APawn pawn = factory.Create(NativeOf(), Boards);
-            Coord pos = GetPlacementPosition();
+            APawn pawn = factory.Create(NativeOf());
+            Coord pos = PlacementPosition(boards);
             if (pos == null) {
                 Console.Write("Can not generate more pawns!");
                 return null;
@@ -58,11 +57,11 @@ namespace Units.Centers
             
         }
 
-        private Coord GetPlacementPosition() {
+        private Coord PlacementPosition(Board boards) {
             Coord spawnPoint = null;
             for(int i = 0; i < BoardConsts.MAX_LIN; i++) {
                 for(int j=0; j < BoardConsts.MAX_COL; j++) {
-                    if (Boards.GetBoard()[i, j] == BoardConsts.EMPTY && Coord.Distance(SpawnPoint, new Coord(i, j)) <= SpawnRange) {
+                    if (boards.CellAt(i, j) == BoardConsts.EMPTY && Coord.Distance(SpawnPoint, new Coord(i, j)) <= SpawnRange) {
                         spawnPoint = new Coord(i, j);
                     }
                 }
@@ -79,8 +78,8 @@ namespace Units.Centers
                 UnitPerTurn = value;
         }
 
-        public void SetSpawnPoint(Coord cell) {
-            if(cell != null && Boards.CellAt(cell) == BoardConsts.EMPTY) {
+        public void SetSpawnPoint(Board boards, Coord cell) {
+            if(cell != null && boards.CellAt(cell) == BoardConsts.EMPTY) {
                 SpawnPoint = cell;
             }
         }

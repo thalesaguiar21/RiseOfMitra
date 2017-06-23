@@ -9,6 +9,7 @@ using Units.Centers;
 using Units.Pawns;
 using Utils.Types;
 using Utils.Space;
+using Boards;
 
 
 
@@ -43,8 +44,8 @@ namespace Juno
             RahkarStatistcs = new List<double>() { 0, 0, 0 };
         }
 
-        public void DoGaiaWill(Player playerOne, Player playerTwo) {
-            InspectField(playerOne, playerTwo);
+        public void DoGaiaWill(Player playerOne, Player playerTwo, Board boards) {
+            InspectField(playerOne, playerTwo, boards);
 
             /*Console.WriteLine(DalrionPpts);
             Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}", 
@@ -55,14 +56,14 @@ namespace Juno
                 RahkarStatistcs[ALLY_DIST], RahkarStatistcs[ENMY_DIST], RahkarStatistcs[CENTER_RISK]));*/
         }
 
-        private void InspectField(Player playerOne, Player playerTwo) {
+        private void InspectField(Player playerOne, Player playerTwo, Board boards) {
             // Calculating player two statistics 
-            SetPawnsPerTerrain(playerOne.GetPawns());
+            SetPawnsPerTerrain(playerOne.GetPawns(), boards);
             CalculateMeanAllyDistance(playerOne.GetUnits());
             CalculateMeanEnemyDistance(playerOne.GetUnits(), playerTwo.GetUnits());
             CalculateCulturalCenterRisk(playerOne.GetAttackers(), playerTwo.GetAttackers(), playerOne.GetCenter());
             // Calculating player two statistics 
-            SetPawnsPerTerrain(playerTwo.GetPawns());
+            SetPawnsPerTerrain(playerTwo.GetPawns(), boards);
             CalculateMeanAllyDistance(playerTwo.GetUnits());
             CalculateMeanEnemyDistance(playerTwo.GetUnits(), playerOne.GetUnits());
             CalculateCulturalCenterRisk(playerTwo.GetAttackers(), playerOne.GetAttackers(), playerTwo.GetCenter());
@@ -106,7 +107,7 @@ namespace Juno
             }
         }
 
-        private void SetPawnsPerTerrain(List<APawn> pawns) {
+        private void SetPawnsPerTerrain(List<APawn> pawns, Board boards) {
             if(pawns != null && pawns.Count > 0) {
                 if (pawns[0].NativeOf() == ECultures.DALRIONS)
                     DalrionPpts.ResetNumbers();
@@ -115,9 +116,9 @@ namespace Juno
 
                 foreach (APawn pawn in pawns) {
                     if (pawn.NativeOf() == ECultures.DALRIONS)
-                        DalrionPpts.IncreasePawnsAt(pawn.GetTerrain());
+                        DalrionPpts.IncreasePawnsAt((ETerrain)boards.TerrainAt(pawn.GetPos()));
                     else
-                        RahkarPpts.IncreasePawnsAt(pawn.GetTerrain());
+                        RahkarPpts.IncreasePawnsAt((ETerrain)boards.TerrainAt(pawn.GetPos()));
                 }
             }
         }

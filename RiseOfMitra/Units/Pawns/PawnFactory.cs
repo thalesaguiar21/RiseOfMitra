@@ -13,7 +13,7 @@ namespace Units.Pawns
             Validate = validate;
         }
 
-        public APawn Create(ECultures nature, Board boards) {
+        public APawn Create(ECultures nature) {
             // CurrLife, TotalLife, Atk, AtkRange, Def, MovePoints
             Object[] values = new Object[] { 1, 10, 20, 5, 3, 20};
             APawn pawn = null;
@@ -37,7 +37,6 @@ namespace Units.Pawns
                     Console.WriteLine(nature + " isn't a valid culture!");
                     break;
             }
-            pawn.SetBoards(boards);
             pawn.SetPos(new Coord(0, 0));
             pawn.SetCurrLife((int)values[0]);
             pawn.SetTotalLife((int)values[1]);
@@ -63,7 +62,6 @@ namespace Units.Pawns
                 isValid &= pawn.GetMovePoints() == 5;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
-                isValid &= (pawn.GetBoard() != null);
             } else if (pawn.NativeOf() == ECultures.RAHKARS) {
 
                 isValid &= pawn.GetCurrLife() == 15;
@@ -74,7 +72,6 @@ namespace Units.Pawns
                 isValid &= pawn.GetMovePoints() == 3;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
-                isValid &= (pawn.GetBoard() != null);
             }
             return isValid;
         }

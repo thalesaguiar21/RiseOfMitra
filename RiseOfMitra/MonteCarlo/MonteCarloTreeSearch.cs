@@ -22,7 +22,6 @@ namespace RiseOfMitra.MonteCarlo
         private const int MAX_SIMULATION_MOVE = 10; // Define o quão profundo será a simulação
 
         public MonteCarloTreeSearch(ECultures cult, Game game) {
-            num = 2;
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
@@ -33,7 +32,6 @@ namespace RiseOfMitra.MonteCarlo
         }
 
         private MonteCarloTreeSearch(ECultures cult) {
-            num = 2;
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
@@ -56,7 +54,7 @@ namespace RiseOfMitra.MonteCarlo
         public override ACommand PrepareAction(Board boards, Player oponent) {
             // No início dessa função, significa que o jogador humano já executou alguma ação
             // Dessa forma, deve-se adicionar um novo nó à Game Tree
-
+            
             // Cria um novo comando que será realizado pela Inteligência artificial
             ACommand rndCmd = null;
             // Identifica e seleciona todos os comandos válidos
@@ -71,7 +69,7 @@ namespace RiseOfMitra.MonteCarlo
 
             // Após as simulações, alguns comandos aleatórios foram selecionados.
             // Dentre eles, usa-se alguma métrica de seleção
-            Selection = new DefaultSelection(SimulationResult.Keys.ToList());
+            Selection = new UCBSelection(SimulationResult, MAX_SIMULATION_MOVE);
             // Selection = new UCBSelection(SimulationResult, MAX_SIMULATION_MOVE);
             rndCmd = Selection.Execute();
             SimulationResult.Clear();
@@ -109,18 +107,13 @@ namespace RiseOfMitra.MonteCarlo
                     List<ACommand> validCmds = MCTSGame.GetValidCommands();
                     // Seleciona um comando válido aleatoriamente
                     ACommand posRndCmd = null;
-                    if (validCmds != null && MCTSGame.GetCurPlayer().num == 2) {
+                    if (validCmds != null && MCTSGame.GetCurPlayer() is MonteCarloTreeSearch) {
                         int posMove = rnd.Next(validCmds.Count);
                         posRndCmd = validCmds[posMove];
                         SimulationResult[rndCmd].value += posRndCmd.Value();
                     }
                     // Executa o comando na cópia do jogo
                     MCTSGame.ChangeState(posRndCmd);
-                    // Verifica se o novo estado é um estado final
-                    if (MCTSGame.GameOver()) {
-                        SimulationResult[rndCmd].winCount++;
-                        break;
-                    }
                     counter++;
                 }
             }

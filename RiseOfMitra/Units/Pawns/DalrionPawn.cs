@@ -10,7 +10,6 @@ namespace Units.Pawns
     {
         public DalrionPawn() {
             PositiveTerrains = new ETerrain[] { ETerrain.MOUNTAIN, ETerrain.MARSH, ETerrain.DESERT };
-            Boards = null;
             BOARD_CHAR = BoardConsts.DALRION_PAWN;
             SetCurrLife(0);
             SetTotalLife(0);
