@@ -7,6 +7,7 @@ using Utils.Types;
 using Utils.Space;
 using Units.Centers;
 using Units;
+using RiseOfMitra.MonteCarlo;
 
 namespace Players
 {
@@ -85,7 +86,7 @@ namespace Players
             }
         }
 
-        public abstract ACommand PrepareAction(Board boards, Player oponent);
+        public abstract Node PrepareAction(Board boards, Player oponent);
         public abstract Player Copy(Board board);
 
 

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="MonteCarlo\DefaultSelection.cs" />
     <Compile Include="MonteCarlo\ExpansionStrategy.cs" />
+    <Compile Include="MonteCarlo\GameTree.cs" />
     <Compile Include="MonteCarlo\Node.cs" />
     <Compile Include="MonteCarlo\UCBSelection.cs" />
     <Compile Include="Units\Pawns\ABasicPawn.cs" />

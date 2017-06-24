@@ -9,6 +9,7 @@ using Players.Commands;
 using Utils.Types;
 using Utils.Space;
 using Units.Pawns;
+using RiseOfMitra.MonteCarlo;
 
 namespace Players
 {
@@ -21,9 +22,10 @@ namespace Players
             Cursor = new Coord(1, 1);
         }
 
-        public override ACommand PrepareAction(Board boards, Player oponent) {
+        public override Node PrepareAction(Board boards, Player oponent) {
             ACommand partialCommand = GetCmd(boards, oponent);
-            return partialCommand;
+            Node state = new Node(0, boards, partialCommand);
+            return state;
         }
 
         public override Player Copy(Board board) {

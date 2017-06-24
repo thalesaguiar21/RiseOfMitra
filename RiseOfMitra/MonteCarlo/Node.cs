@@ -9,12 +9,17 @@ using Players.Commands;
 
 namespace RiseOfMitra.MonteCarlo
 {
-    class Node
+    /// <summary>
+    /// This class represents a Game Tree node, which is reachable by Given a a State(Board) applying
+    /// the given Command.
+    /// </summary>
+    public class Node
     {
         public int visitCount;
         public double value;
         public Board boards;
         public ACommand cmd;
+        List<Node> Childs;
 
 
         public Node(double value, Board boards, ACommand cmd) {
@@ -24,7 +29,7 @@ namespace RiseOfMitra.MonteCarlo
             this.value = value;
         }
 
-        private static bool ValidateNode(Node node) {
+        public static bool ValidateNode(Node node) {
             bool valid = true;
             if (node == null) {
                 valid = false;

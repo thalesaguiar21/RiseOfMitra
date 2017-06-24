@@ -89,8 +89,8 @@ namespace RiseOfMitra
                 gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards);
                 Boards.PrintBoard();
                 Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-                ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
-                ChangeState(cmd);
+                Node state = CurPlayer.PrepareAction(Boards, GetOponent());
+                ChangeState(state);
 
                 Console.Write("Press enter to continue...");
                 Console.ReadLine();
@@ -110,6 +110,17 @@ namespace RiseOfMitra
             }
             Console.WriteLine(winner + " ARE THE WINNERs!");
             Console.ReadLine();
+        }
+
+        public void ChangeState(Node state) {
+            if(state != null && Node.ValidateNode(state)) {
+                state.cmd.SetUp(Boards, CurPlayer, GetOponent());
+                if (state.value == 0)
+                    state.value = state.cmd.Value();
+                bool validCmd = state.cmd.Execute();
+                if (validCmd)
+                    SetNextPlayer();
+            }
         }
 
         public void ChangeState(ACommand command) {
