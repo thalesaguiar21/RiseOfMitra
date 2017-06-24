@@ -45,11 +45,11 @@ namespace RiseOfMitra
             if (Gamers != null && Gamers.Length == 2) {
                 PawnFactory pawnFac = new PawnFactory();
                 for (int i = 0; i < BoardConsts.INITIAL_PAWNS; i++) {
-                    APawn dPawn = pawnFac.Create(ECultures.DALRIONS, Boards);
+                    APawn dPawn = pawnFac.Create(ECultures.DALRIONS);
                     dPawn.SetPos(new Coord(1 + i, 7));
                     Gamers[0].AddPawn(dPawn);
 
-                    APawn rPawn = pawnFac.Create(ECultures.RAHKARS, Boards);
+                    APawn rPawn = pawnFac.Create(ECultures.RAHKARS);
                     rPawn.SetPos(new Coord(BoardConsts.MAX_LIN - 2 - i, BoardConsts.MAX_COL - 8));
                     Gamers[1].AddPawn(rPawn);
                 }
@@ -78,7 +78,7 @@ namespace RiseOfMitra
         private void PlaceUnits() {
             foreach (Player it in Gamers) {
                 foreach (Unit unit in it.GetUnits()) {
-                    unit.Place();
+                    unit.Place(Boards);
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace RiseOfMitra
         public void Start() {
             Gaia gaia = new Gaia();
             do {                
-                gaia.DoGaiaWill(Gamers[0], Gamers[1]);
+                gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards);
                 Boards.PrintBoard();
                 Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                 ACommand cmd = CurPlayer.PrepareAction(Boards, GetOponent());
@@ -123,7 +123,7 @@ namespace RiseOfMitra
         
         private void SetNextPlayer() {
             CurPlayer.SetTurn();
-            CurPlayer.ExecuteTurnEvents(Boards.GetBoard());
+            CurPlayer.ExecuteTurnEvents(Boards);
 
             if (CurPlayer == Gamers[0]) {
                 CurPlayer = Gamers[1];

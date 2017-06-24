@@ -25,8 +25,7 @@ namespace Units.Pawns
                 pawn = new DalrionPawn();
             else
                 pawn = new RahkarPawn();
-
-            Boards = boards;
+            
             pawn.SetCurrLife(GetCurrLife());
             pawn.SetTotalLife(GetTotalLife());
             pawn.SetAtk(GetAtk());

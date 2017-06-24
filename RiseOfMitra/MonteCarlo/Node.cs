@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Boards;
 using Players;
+using Players.Commands;
 
 namespace RiseOfMitra.MonteCarlo
 {
@@ -12,24 +13,37 @@ namespace RiseOfMitra.MonteCarlo
     {
         public int visitCount;
         public double value;
-        public int winCount;
+        public Board boards;
+        public ACommand cmd;
 
 
-        public Node(int visitCount, int winCount, double value) {
-            this.visitCount = visitCount;
-            this.winCount = winCount;
+        public Node(double value, Board boards, ACommand cmd) {
+            visitCount = 0;
+            this.boards = boards;
+            this.cmd = cmd;
             this.value = value;
         }
 
         private static bool ValidateNode(Node node) {
             bool valid = true;
-            if (node == null)
+            if (node == null) {
                 valid = false;
-            else if (node.visitCount < 0)
+            } else if (node.visitCount < 0) {
                 valid = false;
-            else if (node.winCount < 0)
+            } else if (node.boards == null) {
                 valid = false;
+            } else if (node.cmd == null) {
+                valid = false;
+            }
             return valid;
+        }
+
+        public bool Equals(Node otherNode) {
+            if(otherNode is Node) {
+                return boards.Equals(otherNode.boards) && cmd.Equals(otherNode.cmd);
+            } else {
+                return false;
+            }
         }
     }
 }

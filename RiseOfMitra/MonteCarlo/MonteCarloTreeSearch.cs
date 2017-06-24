@@ -98,7 +98,7 @@ namespace RiseOfMitra.MonteCarlo
                 if (SimulationResult.ContainsKey(rndCmd)) {
                     SimulationResult[rndCmd].visitCount++;
                 } else {
-                    SimulationResult.Add(rndCmd, new Node(1, 0, rndCmd.Value()));
+                    SimulationResult.Add(rndCmd, new Node(rndCmd.Value(), MCTSGame.GetState(), rndCmd));
                 }
                 // Inicializa as simulações
                 int counter = 0;

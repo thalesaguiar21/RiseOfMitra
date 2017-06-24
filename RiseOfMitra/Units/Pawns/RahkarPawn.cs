@@ -7,7 +7,6 @@ namespace Units.Pawns
     {
         public RahkarPawn() {
             PositiveTerrains = new ETerrain[] { ETerrain.MOUNTAIN, ETerrain.RIVER, ETerrain.MARSH };
-            Boards = null;
             BOARD_CHAR = BoardConsts.RAHKAR_PAWN;
             SetCurrLife(0);
             SetTotalLife(0);

@@ -32,12 +32,6 @@ namespace Players.Commands
             SetBoards(boards);
             SetCurPlayer(curPlayer);
             SetOponent(oponent);
-            foreach(Unit unit in CurPlayer.GetUnits()) {
-                unit.SetBoards(boards);
-            }
-            foreach (Unit unit in Oponent.GetUnits()) {
-                unit.SetBoards(boards);
-            }
         }
 
         public abstract double Value();
@@ -45,15 +39,16 @@ namespace Players.Commands
         public abstract bool IsValid();
         protected abstract bool Validate();
         public abstract string GetShort();
+        public abstract bool Equals(ACommand otherCmd);
 
         public override string ToString() {
             return String.Format("Target: {0}\n", Target);
         }
-
+        
         protected void SetBoards(Board boards) {
             if (boards != null)
                 Boards = boards;
-;        }
+        }
 
         protected void SetCurPlayer(Player player) {
             if (player != null)

@@ -31,7 +31,6 @@ namespace Players
             Coord tmpCursor = new Coord(GetCursor().X, GetCursor().Y);
             for (int i = 0; i < GetPawns().Count; i++) {
                 APawn tmpPawn = GetPawns()[i].Copy(board);
-                tmpPawn.SetBoards(board);
                 human.AddPawn(tmpPawn);
             }
             human.SetCulturalCenter(Center.Copy(board));
@@ -74,8 +73,7 @@ namespace Players
         private AttackCommand SetUpAttack(Board boards, Player oponent) {
             AttackCommand attackCmd = new AttackCommand();
             Coord selPos = boards.SelectPosition(Cursor);
-            ABasicPawn ally = GetPawnAt(selPos) as ABasicPawn;
-            if(ally != null) {
+            if (GetPawnAt(selPos) is ABasicPawn ally) {
                 Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.GetAtkRange());
                 List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
                 Coord enemyPos = boards.SelectPosition(Cursor, selPos, Command.ATTACK, atkRange);

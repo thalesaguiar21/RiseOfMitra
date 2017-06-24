@@ -70,6 +70,10 @@ namespace Players.Commands
             return Validate();
         }
 
+        public override bool Equals(ACommand otherCmd) {
+            return otherCmd is InspectCommand;
+        }
+
         private void SetUnits(List<Unit> units) {
             if (units != null)
                 Units = units;

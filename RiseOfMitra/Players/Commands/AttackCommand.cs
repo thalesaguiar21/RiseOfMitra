@@ -51,7 +51,7 @@ namespace Players.Commands
                         HitMsg = String.Format("YOU HAVE DEALT {0} DAMAGE!", damage);
                         enemyUnit.SetCurrLife(enemyUnit.GetCurrLife() - damage);
                         if(enemyUnit.GetCurrLife() <= 0) {
-                            Oponent.RemoveUnitAt(Target);
+                            Oponent.RemoveUnitAt(Target, Boards);
                             HitMsg += " ENEMY KILLED!!";
                         }
                     } else {
@@ -116,6 +116,15 @@ namespace Players.Commands
                 valid = PosValidate(atkRange);
             }
             return valid;
+        }
+
+        public override bool Equals(ACommand otherCmd) {
+            if(otherCmd is AttackCommand) {
+                AttackCommand other = (AttackCommand)otherCmd;
+                return (AllyPos.Equals(other.AllyPos)) && (Target.Equals(other.Target));
+            } else {
+                return false;
+            }
         }
 
         private bool PosValidate(List<Coord> atkRange) {

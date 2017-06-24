@@ -27,9 +27,9 @@ namespace Players.Commands
                 List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
                 if (moveRange.Contains(Target)) {
                     valid = true;
-                    allyPawn.Erase();
+                    allyPawn.Erase(Boards);
                     allyPawn.SetPos(Target);
-                    allyPawn.Place();
+                    allyPawn.Place(Boards);
                 } else {
                     ErrorMsg = OUT_OF_RANGE;
                 }
@@ -103,6 +103,15 @@ namespace Players.Commands
             msg += String.Format("Ally: {0}\n", AllyPos);
             msg += "Move: MOV\n";
             return msg;
+        }
+
+        public override bool Equals(ACommand otherCmd) {
+            if(otherCmd is MoveCommand) {
+                MoveCommand other = (MoveCommand)otherCmd;
+                return (AllyPos.Equals(other.AllyPos)) && (Target.Equals(other.Target));
+            } else {
+                return false;
+            }
         }
 
         private void SetAllyPos(Coord allypos) {
