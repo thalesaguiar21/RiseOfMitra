@@ -114,19 +114,10 @@ namespace RiseOfMitra
 
         public void ChangeState(Node state) {
             if(state != null && Node.ValidateNode(state)) {
-                state.cmd.SetUp(Boards, CurPlayer, GetOponent());
-                if (state.value == 0)
-                    state.value = state.cmd.Value();
-                bool validCmd = state.cmd.Execute();
-                if (validCmd)
-                    SetNextPlayer();
-            }
-        }
-
-        public void ChangeState(ACommand command) {
-            if (command != null) {
-                command.SetUp(Boards, CurPlayer, GetOponent());
-                bool validCmd = command.Execute();
+                state.Cmd.SetUp(Boards, CurPlayer, GetOponent());
+                if (state.Value == 0)
+                    state.Value = state.Cmd.Value();
+                bool validCmd = state.Cmd.Execute();
                 if (validCmd)
                     SetNextPlayer();
             }

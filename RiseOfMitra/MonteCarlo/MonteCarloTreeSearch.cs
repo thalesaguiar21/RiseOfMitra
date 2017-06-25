@@ -19,13 +19,14 @@ namespace RiseOfMitra.MonteCarlo
         Game CurGame;
         Game MCTSGame;
         private const int MAX_SIMULATION_TIME = 3; // Define um tempo máximo de execução de simulações
-        private const int MAX_SIMULATION_MOVE = 10; // Define o quão profundo será a simulação
+        private const int MAX_DEPTH = 3; // Define o quão profundo será a simulação
 
         public MonteCarloTreeSearch(ECultures cult, Game game) {
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
             Center = null;
+            GameTree = new Node(0, game.GetState(), null);
             CurGame = game;
             SimulationResult = new Dictionary<ACommand, Node>();
         }
@@ -51,74 +52,78 @@ namespace RiseOfMitra.MonteCarlo
 
         // The AI Algorithm
         public override Node PrepareAction(Board boards, Player oponent) {
-            // No início dessa função, significa que o jogador humano já executou alguma ação
-            // Dessa forma, deve-se adicionar um novo nó à Game Tree
-            
-            // Cria um novo comando que será realizado pela Inteligência artificial
-            ACommand rndCmd = null;
-            // Identifica e seleciona todos os comandos válidos
-            List<ACommand> cmds = CurGame.GetValidCommands();
-            // Cria um cronômetro para especificar o tempo limite para as simulações
+            Random rnd = new Random();
+
+
+            if(GameTree.Childs != null && GameTree.Childs.Count > 0) {
+                Console.Write("Musashi is thinking...");
+                int t = rnd.Next(GameTree.Childs.Count);
+                Console.WriteLine("Finisehd");
+                GameTree = GameTree.Childs[t];
+                return GameTree;
+            } else {
+                Stopwatch cron = new Stopwatch();
+                cron.Start();
+                Console.Write("Musashi is thinking...");
+                GameTree.Childs = RunSimulation();
+                //Run selection
+                Console.WriteLine("Finisehd");
+                Console.ReadLine();
+                int t = rnd.Next(GameTree.Childs.Count);
+                GameTree = GameTree.Childs[t];
+                return GameTree;
+            }
+        }
+
+        private List<Node> RunSimulation() {
+            // Childs of the current game state
+            List<Node> nextMoves = new List<Node>();
+
             Stopwatch cron = new Stopwatch();
             cron.Start();
-            Console.Write("Musashi is thinking...");
-            while (cron.Elapsed < TimeSpan.FromSeconds(MAX_SIMULATION_TIME)) {
-                RunSimulation(cmds);
-            }
+            while(cron.Elapsed < TimeSpan.FromSeconds(MAX_SIMULATION_TIME)) {
+                MCTSGame = new Game(CurGame);
+                Node GameTreeCp = new Node(GameTree.Value, GameTree.Boards, GameTree.Cmd);
+                Node curr = GameTreeCp;
 
-            // Após as simulações, alguns comandos aleatórios foram selecionados.
-            // Dentre eles, usa-se alguma métrica de seleção
-            Selection = new UCBSelection(SimulationResult, MAX_SIMULATION_MOVE);
-            // Selection = new UCBSelection(SimulationResult, MAX_SIMULATION_MOVE);
-            rndCmd = Selection.Execute();
-            SimulationResult.Clear();
+                Random rand = new Random();
+                int depth = 0;
+                while (depth < MAX_DEPTH) {
+                    List<ACommand> mctsCmds = MCTSGame.GetValidCommands();
+                    int cmd = rand.Next(mctsCmds.Count);
+                    Node nextState = new Node(mctsCmds[cmd].Value(), 
+                                              new Board(MCTSGame.GetState()), 
+                                              mctsCmds[cmd]);
+                    nextState.VisitCount++;
 
-            Console.Write("Finished!");
-            Console.ReadLine();
-
-            boards.SetStatus(("Musashi will do:\n" + rndCmd.ToString()).Split('\n'));
-            Console.Clear();
-            boards.PrintBoard();
-            return new Node(rndCmd.Value(), boards, rndCmd);
-        }
-
-        private void RunSimulation(List<ACommand> validMoves) {
-            // Cria uma cópia do jogo atual para evitar que as simulações interfiram no jogo real
-            MCTSGame = new Game(CurGame);
-            // Seleciona um comando válido aleatoriamente
-            ACommand rndCmd = null;
-            Random rnd = new Random();
-            if (validMoves != null) {
-                // Seleciona um comando aleatório
-                int move = rnd.Next(validMoves.Count);
-                rndCmd = validMoves[move];
-                // Adiciona um possível comando para a Game Tree a partir do estado
-                // expandido
-                if (SimulationResult.ContainsKey(rndCmd)) {
-                    SimulationResult[rndCmd].visitCount++;
-                } else {
-                    SimulationResult.Add(rndCmd, new Node(rndCmd.Value(), MCTSGame.GetState(), rndCmd));
-                }
-                // Inicializa as simulações
-                int counter = 0;
-                while (counter < MAX_SIMULATION_MOVE) {
-                    // Identifica e cria todos os comandos possíveis a partir do estado atual
-                    List<ACommand> validCmds = MCTSGame.GetValidCommands();
-                    // Seleciona um comando válido aleatoriamente
-                    ACommand posRndCmd = null;
-                    if (validCmds != null && MCTSGame.GetCurPlayer() is MonteCarloTreeSearch) {
-                        int posMove = rnd.Next(validCmds.Count);
-                        posRndCmd = validCmds[posMove];
-                        SimulationResult[rndCmd].value += posRndCmd.Value();
+                    if(depth == 0) {
+                        bool visited = false;
+                        foreach (Node node in nextMoves) {
+                            if (node.Equals(nextState)) {
+                                visited = true;
+                                break;
+                            }
+                        }
+                        if(!visited)
+                            nextMoves.Add(nextState);
                     }
-                    // Executa o comando na cópia do jogo
-                    MCTSGame.ChangeState(posRndCmd);
-                    counter++;
+
+                    if (!curr.Childs.Contains(nextState)) {
+                        curr.Childs.Add(nextState);
+                    } else {
+                        int visited = curr.Childs.IndexOf(nextState);
+                        curr.Childs.ElementAt(visited).VisitCount++;
+                    }
+
+                    MCTSGame.ChangeState(nextState);
+                    curr = nextState;
+                    depth++;
                 }
             }
+            return nextMoves;
         }
 
-        private void Expand() {
+        private void Expand(Node state) {
 
         }
 

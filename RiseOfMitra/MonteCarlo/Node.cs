@@ -15,29 +15,30 @@ namespace RiseOfMitra.MonteCarlo
     /// </summary>
     public class Node
     {
-        public int visitCount;
-        public double value;
-        public Board boards;
-        public ACommand cmd;
-        List<Node> Childs;
+        public int VisitCount;
+        public double Value;
+        public Board Boards;
+        public ACommand Cmd;
+        public List<Node> Childs;
 
 
         public Node(double value, Board boards, ACommand cmd) {
-            visitCount = 0;
-            this.boards = boards;
-            this.cmd = cmd;
-            this.value = value;
+            VisitCount = 0;
+            Boards = boards;
+            Cmd = cmd;
+            Value = value;
+            Childs = new List<Node>();
         }
 
         public static bool ValidateNode(Node node) {
             bool valid = true;
             if (node == null) {
                 valid = false;
-            } else if (node.visitCount < 0) {
+            } else if (node.VisitCount < 0) {
                 valid = false;
-            } else if (node.boards == null) {
+            } else if (node.Boards == null) {
                 valid = false;
-            } else if (node.cmd == null) {
+            } else if (node.Cmd == null) {
                 valid = false;
             }
             return valid;
@@ -45,7 +46,7 @@ namespace RiseOfMitra.MonteCarlo
 
         public bool Equals(Node otherNode) {
             if(otherNode is Node) {
-                return boards.Equals(otherNode.boards) && cmd.Equals(otherNode.cmd);
+                return Boards.Equals(otherNode.Boards) && Cmd.Equals(otherNode.Cmd);
             } else {
                 return false;
             }

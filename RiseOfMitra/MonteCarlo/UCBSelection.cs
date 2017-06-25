@@ -22,9 +22,9 @@ namespace RiseOfMitra.MonteCarlo
             if (validMoves.Count > 0) {
                 double maxValue = 0;
                 foreach (ACommand tmpCmd in validMoves.Keys.ToList()) {
-                    double meanPayout = validMoves[tmpCmd].value / validMoves[tmpCmd].visitCount;
+                    double meanPayout = validMoves[tmpCmd].Value / validMoves[tmpCmd].VisitCount;
                     double curValue = meanPayout +
-                        Math.Sqrt((2 * Math.Log(validMoves[tmpCmd].visitCount)) / maxPlayouts);
+                        Math.Sqrt((2 * Math.Log(validMoves[tmpCmd].VisitCount)) / maxPlayouts);
                     if (curValue >= maxValue) {
                         cmd = tmpCmd;
                         maxValue = curValue;
