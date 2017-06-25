@@ -5,8 +5,8 @@ namespace Utils.Space
     public class BoardConsts
     {
         // Limits
-        public const int MAX_LIN = 35;
-        public const int MAX_COL = 45;
+        public const int MAX_LIN = 25;
+        public const int MAX_COL = 35;
         public const int INITIAL_PAWNS = 6;
 
         // Strings
