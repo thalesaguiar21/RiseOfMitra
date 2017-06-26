@@ -88,6 +88,8 @@ namespace RiseOfMitra.MonteCarlo
                                               new Board(MCTSGame.GetState()), 
                                               mctsCmds[cmd]);
 
+                    // If the node is a directly descendent, it checks if its already added 
+                    // to the next moves.
                     if(depth == 0) {
                         bool visited = false;
                         foreach (Node node in nextMoves) {
@@ -100,6 +102,8 @@ namespace RiseOfMitra.MonteCarlo
                             nextMoves.Add(nextState);
                     }
 
+                    // Checks if the state is in the game tree, if not then
+                    // expands the game tree by adding the new state
                     bool expanded = false;
                     for (int i = 0; i < curr.Childs.Count; i++) {
                         if (curr.Childs[i].Equals(nextState)) {
@@ -111,6 +115,8 @@ namespace RiseOfMitra.MonteCarlo
                         curr.Childs.Add(nextState);
                     }
 
+                    // Increments the node visit count, create a copy of the current player
+                    // and executes the new state in the game copy
                     nextState.VisitCount++;
                     Player playerCp = MCTSGame.GetCurPlayer().Copy(MCTSGame.GetState());
                     MCTSGame.ChangeState(nextState);
