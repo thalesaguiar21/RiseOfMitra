@@ -60,7 +60,6 @@ namespace RiseOfMitra.MonteCarlo
             }
             Console.WriteLine("Finisehd");
 
-            Console.ReadLine();
             Selection = new DefaultSelection(GameTree.Childs, 0.05);
             GameTree = Selection.Execute();
             return GameTree;

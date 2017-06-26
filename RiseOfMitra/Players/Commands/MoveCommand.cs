@@ -41,7 +41,8 @@ namespace Players.Commands
         public override double Value() {
             double total = 0;
 
-            total += 3.0 / Coord.Distance(Target, Oponent.GetCenter().GetPos());
+            total += 10.0 / Coord.Distance(Target, Oponent.GetCenter().GetPos());
+
             ETerrain terrainAtTarget = (ETerrain)Boards.TerrainAt(Target);
             foreach (ETerrain terrain in CurPlayer.GetPawnAt(AllyPos).GetPositiveTerrains()) {
                 if(terrainAtTarget == terrain) {
@@ -49,6 +50,7 @@ namespace Players.Commands
                     break;
                 }
             }
+
             foreach (ABasicPawn pawn in Oponent.GetAttackers()) {
                 if(Coord.Distance(pawn.GetPos(), CurPlayer.GetCenter().GetPos()) < 10
                     && Coord.Distance(pawn.GetPos(), AllyPos) < 10) {

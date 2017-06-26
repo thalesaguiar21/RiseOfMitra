@@ -8,6 +8,6 @@ namespace RiseOfMitra.MonteCarlo
 {
     interface ISimulationStrategy
     {
-        Node Execute();
+        List<Node> Execute();
     }
 }

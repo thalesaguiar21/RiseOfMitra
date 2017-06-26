@@ -28,12 +28,14 @@ namespace Players.Commands
         public override double Value() {
             double total = 3;
             if(Oponent.GetUnitAt(Target) is CulturalCenter) {
-                total += 5.0;
+                total += 10.0;
             }
             double remainingHealth = Oponent.GetUnitAt(Target).GetCurrLife() / Oponent.GetUnitAt(Target).GetTotalLife();
             if (remainingHealth < 0.5)
                 total += 3.0;
-            total += 2.0 / Coord.Distance(Oponent.GetCenter().GetPos(), AllyPos);
+            if(Coord.Distance(Target, CurPlayer.GetCenter().GetPos()) < 10) {
+                total += 15;
+            }
             return total;
         }
 
