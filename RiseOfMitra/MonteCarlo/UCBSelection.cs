@@ -9,29 +9,29 @@ namespace RiseOfMitra.MonteCarlo
 {
     class UCBSelection : ISelectionStrategy
     {
-        private Dictionary<ACommand, Node> validMoves;
+        private List<Node> validMoves;
         private int maxPlayouts;
 
-        public UCBSelection(Dictionary<ACommand, Node> validMoves, int maxPlayouts) {
+        public UCBSelection(List<Node> validMoves, int maxPlayouts) {
             this.validMoves = validMoves;
             this.maxPlayouts = maxPlayouts;
         }
 
-        public ACommand Execute() {
-            ACommand cmd = null;
+        public Node Execute() {
+            Node chosen = null;
             if (validMoves.Count > 0) {
                 double maxValue = 0;
-                foreach (ACommand tmpCmd in validMoves.Keys.ToList()) {
-                    double meanPayout = validMoves[tmpCmd].Value / validMoves[tmpCmd].VisitCount;
+                foreach (Node tmpNode in validMoves) {
+                    double meanPayout = tmpNode.Cmd.Value() / tmpNode.VisitCount;
                     double curValue = meanPayout +
-                        Math.Sqrt((2 * Math.Log(validMoves[tmpCmd].VisitCount)) / maxPlayouts);
+                        Math.Sqrt((2 * Math.Log(tmpNode.VisitCount)) / maxPlayouts);
                     if (curValue >= maxValue) {
-                        cmd = tmpCmd;
+                        chosen = tmpNode;
                         maxValue = curValue;
                     }
                 }
             }
-            return cmd;
+            return chosen;
         }
     }
 }

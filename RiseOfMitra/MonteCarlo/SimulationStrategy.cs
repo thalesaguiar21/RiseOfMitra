@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace RiseOfMitra.MonteCarlo
 {
-    interface SimulationStrategy
+    interface ISimulationStrategy
     {
-        int execute();
+        int Execute();
     }
 }

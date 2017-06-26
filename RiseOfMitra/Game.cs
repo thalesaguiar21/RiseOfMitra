@@ -130,7 +130,6 @@ namespace RiseOfMitra
                     }
                     if (!expanded) {
                         op.GameTree = state;
-                        state.VisitCount++;
                     }
 
                 }
@@ -217,7 +216,11 @@ namespace RiseOfMitra
             }
 
         }
-    
+
+        public void SetCurPlayer(Player player) {
+            CurPlayer = player;
+        }
+
         public static void Main() {
             try {
                 Game rom = new Game();

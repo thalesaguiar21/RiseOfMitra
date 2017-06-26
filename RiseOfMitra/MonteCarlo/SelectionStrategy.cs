@@ -9,6 +9,6 @@ namespace RiseOfMitra.MonteCarlo
 {
     interface ISelectionStrategy
     {
-        ACommand Execute();
+        Node Execute();
     }
 }

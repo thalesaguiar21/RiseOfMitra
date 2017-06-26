@@ -50,7 +50,7 @@ namespace Players.Commands
                 Boards = boards;
         }
 
-        protected void SetCurPlayer(Player player) {
+        public void SetCurPlayer(Player player) {
             if (player != null)
                 CurPlayer = player;
         }

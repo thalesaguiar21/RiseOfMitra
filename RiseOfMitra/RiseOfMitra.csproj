@@ -72,7 +72,6 @@
     <Compile Include="Players\Commands\InspectCommand.cs" />
     <Compile Include="MonteCarlo\MonteCarloTreeSearch.cs" />
     <Compile Include="Players\Commands\MoveCommand.cs" />
-    <Compile Include="MonteCarlo\OMCSelection.cs" />
     <Compile Include="Units\Pawns\PawnFactory.cs" />
     <Compile Include="Juno\PawnsPerTerrain.cs" />
     <Compile Include="Players\Player.cs" />
@@ -82,7 +81,6 @@
     <Compile Include="MonteCarlo\SelectionStrategy.cs" />
     <Compile Include="MonteCarlo\SimulationStrategy.cs" />
     <Compile Include="Units\Temples\Temple.cs" />
-    <Compile Include="MonteCarlo\UCTSelection.cs" />
     <Compile Include="Units\Unit.cs" />
   </ItemGroup>
   <ItemGroup>
