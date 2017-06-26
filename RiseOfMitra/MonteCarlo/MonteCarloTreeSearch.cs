@@ -13,25 +13,24 @@ namespace RiseOfMitra.MonteCarlo
 {
     public class MonteCarloTreeSearch : Player
     {
-        Node GameTree;
-        Dictionary<ACommand, Node> SimulationResult;
+        public Node GameTree;
+        private Game CurGame;
+        private Game MCTSGame;
         ISelectionStrategy Selection;
-        Game CurGame;
-        Game MCTSGame;
         private const int MAX_SIMULATION_TIME = 3; // Define um tempo máximo de execução de simulações
         private const int MAX_DEPTH = 3; // Define o quão profundo será a simulação
 
         public MonteCarloTreeSearch(ECultures cult, Game game) {
+            GameTree = new Node(0, game.GetState(), null);
+            CurGame = game;
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
             Center = null;
-            GameTree = new Node(0, game.GetState(), null);
-            CurGame = game;
-            SimulationResult = new Dictionary<ACommand, Node>();
         }
 
         private MonteCarloTreeSearch(ECultures cult) {
+            GameTree = new Node(0, null, null);
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
@@ -81,7 +80,8 @@ namespace RiseOfMitra.MonteCarlo
 
             Stopwatch cron = new Stopwatch();
             cron.Start();
-            while(cron.Elapsed < TimeSpan.FromSeconds(MAX_SIMULATION_TIME)) {
+            int playouts = 0;
+            while(playouts < 200) {
                 MCTSGame = new Game(CurGame);
                 Node GameTreeCp = new Node(GameTree.Value, GameTree.Boards, GameTree.Cmd);
                 Node curr = GameTreeCp;
@@ -101,6 +101,7 @@ namespace RiseOfMitra.MonteCarlo
                         foreach (Node node in nextMoves) {
                             if (node.Equals(nextState)) {
                                 visited = true;
+                                node.VisitCount++;
                                 break;
                             }
                         }
@@ -119,6 +120,7 @@ namespace RiseOfMitra.MonteCarlo
                     curr = nextState;
                     depth++;
                 }
+                playouts++;
             }
             return nextMoves;
         }

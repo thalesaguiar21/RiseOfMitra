@@ -118,6 +118,22 @@ namespace RiseOfMitra
                 if (state.Value == 0)
                     state.Value = state.Cmd.Value();
                 bool validCmd = state.Cmd.Execute();
+                if(CurPlayer is HumanPlayer) {
+                    MonteCarloTreeSearch op = (MonteCarloTreeSearch)GetOponent();
+                    bool expanded = false;
+                    for (int i = 0; i < op.GameTree.Childs.Count; i++) {
+                        if (op.GameTree.Childs[i].Equals(state)) {
+                            expanded = true;
+                            op.GameTree = op.GameTree.Childs[i];
+                            break;
+                        }
+                    }
+                    if (!expanded) {
+                        op.GameTree = state;
+                        state.VisitCount++;
+                    }
+
+                }
                 if (validCmd)
                     SetNextPlayer();
             }
