@@ -35,6 +35,9 @@
     <StartupObject>RiseOfMitra.Game</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Meta.Numerics">
+      <HintPath>..\external_dlls\Meta.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,10 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MonteCarlo\BestOfAllSimulation.cs" />
     <Compile Include="MonteCarlo\DefaultSelection.cs" />
     <Compile Include="MonteCarlo\ExpansionStrategy.cs" />
     <Compile Include="MonteCarlo\GameTree.cs" />
     <Compile Include="MonteCarlo\Node.cs" />
+    <Compile Include="MonteCarlo\OMCSelection.cs" />
     <Compile Include="MonteCarlo\UCBSelection.cs" />
     <Compile Include="Units\Pawns\ABasicPawn.cs" />
     <Compile Include="Units\ABuilding.cs" />

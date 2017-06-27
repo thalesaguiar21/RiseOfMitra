@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Players.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace RiseOfMitra.MonteCarlo
 {
     interface ISimulationStrategy
     {
-        List<Node> Execute();
+        List<ACommand> Execute();
     }
 }

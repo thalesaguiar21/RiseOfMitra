@@ -112,12 +112,12 @@ namespace RiseOfMitra
             Console.ReadLine();
         }
 
-        public void ChangeState(Node state) {
+        public void ChangeState(Node state, bool isSimulation = false) {
             if(state != null && Node.ValidateNode(state)) {
                 state.Cmd.SetUp(Boards, CurPlayer, GetOponent());
                 if (state.Value == 0)
                     state.Value = state.Cmd.Value();
-                bool validCmd = state.Cmd.Execute();
+                bool validCmd = state.Cmd.Execute(isSimulation);
                 if(CurPlayer is HumanPlayer) {
                     MonteCarloTreeSearch op = (MonteCarloTreeSearch)GetOponent();
                     bool expanded = false;

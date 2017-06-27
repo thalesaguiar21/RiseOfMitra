@@ -19,7 +19,7 @@ namespace Players.Commands
             ErrorMsg = "";
         }
 
-        public override bool Execute() {
+        public override bool Execute(bool isSimualtion = false) {
             bool valid = false;
             if (Validate()) {
                 APawn allyPawn = CurPlayer.GetPawnAt(AllyPos);
@@ -34,14 +34,17 @@ namespace Players.Commands
                     ErrorMsg = OUT_OF_RANGE;
                 }
             }
-            if (!ErrorMsg.Equals("")) Console.Write(ErrorMsg);
+            if (!ErrorMsg.Equals("") && !isSimualtion) Console.Write(ErrorMsg);
             return valid;
         }
 
         public override double Value() {
-            double total = 0;
-
-            total += 10.0 / Coord.Distance(Target, Oponent.GetCenter().GetPos());
+            double total = 1;
+            
+            if(Coord.Distance(Target, Oponent.GetCenter().GetPos()) < 
+                Coord.Distance(AllyPos, Oponent.GetCenter().GetPos())) {
+                total += 2 * Coord.Distance(AllyPos, Target);
+            }
 
             ETerrain terrainAtTarget = (ETerrain)Boards.TerrainAt(Target);
             foreach (ETerrain terrain in CurPlayer.GetPawnAt(AllyPos).GetPositiveTerrains()) {

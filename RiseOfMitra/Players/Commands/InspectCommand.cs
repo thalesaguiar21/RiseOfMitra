@@ -17,7 +17,7 @@ namespace Players.Commands
             Boards = null;
         }
 
-        public override bool Execute() {
+        public override bool Execute(bool isSimulation = false) {
             bool valid = Validate();
             if (valid) {
                 foreach (Unit unit in Units) {

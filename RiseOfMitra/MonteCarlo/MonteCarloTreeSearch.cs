@@ -17,6 +17,7 @@ namespace RiseOfMitra.MonteCarlo
         private Game CurGame;
         private Game MCTSGame;
         private ISelectionStrategy Selection;
+        private ISimulationStrategy SimulationStrat;
         private const int MAX_PLAYOUTS = 500;
         private const int MAX_SIMULATION_TIME = 3; // Define um tempo máximo de execução de simulações
         private const int MAX_DEPTH = 4; // Define o quão profundo será a simulação
@@ -60,7 +61,7 @@ namespace RiseOfMitra.MonteCarlo
             }
             Console.WriteLine("Finisehd");
 
-            Selection = new DefaultSelection(GameTree.Childs, 0.05);
+            Selection = new OMCSelection(GameTree.Childs);
             GameTree = Selection.Execute();
             return GameTree;
         }
@@ -82,10 +83,13 @@ namespace RiseOfMitra.MonteCarlo
                 int depth = 0;
                 while (depth < MAX_DEPTH) {
                     List<ACommand> mctsCmds = MCTSGame.GetValidCommands();
-                    int cmd = rand.Next(mctsCmds.Count);
-                    Node nextState = new Node(mctsCmds[cmd].Value(), 
-                                              new Board(MCTSGame.GetState()), 
-                                              mctsCmds[cmd]);
+                    SimulationStrat = new BestOfAllSimulation(mctsCmds);
+
+                    List<ACommand> bestCmds = SimulationStrat.Execute();
+                    int chosen = rand.Next(bestCmds.Count);
+                    Node nextState = new Node(bestCmds[chosen].Value(), 
+                                              new Board(MCTSGame.GetState()),
+                                              bestCmds[chosen]);
 
                     // If the node is a directly descendent, it checks if its already added 
                     // to the next moves.
@@ -108,6 +112,7 @@ namespace RiseOfMitra.MonteCarlo
                         if (curr.Childs[i].Equals(nextState)) {
                             expanded = true;
                             nextState = curr.Childs[i];
+                            break;
                         }
                     }
                     if (!expanded) {
@@ -118,7 +123,7 @@ namespace RiseOfMitra.MonteCarlo
                     // and executes the new state in the game copy
                     nextState.VisitCount++;
                     Player playerCp = MCTSGame.GetCurPlayer().Copy(MCTSGame.GetState());
-                    MCTSGame.ChangeState(nextState);
+                    MCTSGame.ChangeState(nextState, true);
 
                     nextState.Cmd.SetCurPlayer(playerCp);
                     curr = nextState;
@@ -127,10 +132,6 @@ namespace RiseOfMitra.MonteCarlo
                 playouts++;
             }
             return nextMoves;
-        }
-
-        private void Expand(Node state) {
-
         }
 
         public void SetGame(Game game) {

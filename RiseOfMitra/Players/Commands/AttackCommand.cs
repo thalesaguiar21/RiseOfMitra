@@ -26,7 +26,7 @@ namespace Players.Commands
         }
 
         public override double Value() {
-            double total = 3;
+            double total = 6;
             if(Oponent.GetUnitAt(Target) is CulturalCenter) {
                 total += 10.0;
             }
@@ -34,12 +34,12 @@ namespace Players.Commands
             if (remainingHealth < 0.5)
                 total += 3.0;
             if(Coord.Distance(Target, CurPlayer.GetCenter().GetPos()) < 10) {
-                total += 15;
+                total += 1.0;
             }
             return total;
         }
 
-        public override bool Execute() {
+        public override bool Execute(bool isSimulation = false) {
             bool valid = false;
             if (Validate()) {
                 ABasicPawn allyPawn = (ABasicPawn) CurPlayer.GetPawnAt(AllyPos);
@@ -61,7 +61,7 @@ namespace Players.Commands
                     }
                 } 
             }
-            Console.Write((valid) ? (HitMsg) : (ErrorMsg));
+            Console.Write((valid && !isSimulation) ? (HitMsg) : (ErrorMsg));
             return valid;
         }
 
