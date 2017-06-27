@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Boards;
-using Players;
-using Players.Commands;
+using RiseOfMitra.Players.Commands;
 
 namespace RiseOfMitra.MonteCarlo
 {

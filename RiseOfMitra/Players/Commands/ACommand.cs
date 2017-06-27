@@ -7,7 +7,7 @@ using Boards;
 using Units;
 using Utils.Space;
 
-namespace Players.Commands
+namespace RiseOfMitra.Players.Commands
 {
     public abstract class ACommand
     {

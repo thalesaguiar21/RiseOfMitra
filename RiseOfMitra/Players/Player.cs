@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using Boards;
 using Units.Pawns;
-using Players.Commands;
+using RiseOfMitra.Players.Commands;
 using Utils.Types;
 using Utils.Space;
 using Units.Centers;
 using Units;
 using RiseOfMitra.MonteCarlo;
 
-namespace Players
+namespace RiseOfMitra.Players
 {
     public abstract class Player
     {

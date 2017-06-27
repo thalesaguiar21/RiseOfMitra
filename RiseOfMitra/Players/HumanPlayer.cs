@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Boards;
 using Units;
-using Players.Commands;
 using Utils.Types;
 using Utils.Space;
 using Units.Pawns;
 using RiseOfMitra.MonteCarlo;
+using RiseOfMitra.Players.Commands;
 
-namespace Players
+namespace RiseOfMitra.Players
 {
     public class HumanPlayer : Player
     {

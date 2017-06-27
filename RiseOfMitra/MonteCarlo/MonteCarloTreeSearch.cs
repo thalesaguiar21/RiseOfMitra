@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Players;
+using RiseOfMitra.Players;
 using Utils.Types;
 using Utils.Space;
-using Players.Commands;
+using RiseOfMitra.Players.Commands;
 using Boards;
 using Units.Pawns;
 using System.Diagnostics;
@@ -63,6 +63,7 @@ namespace RiseOfMitra.MonteCarlo
 
             Selection = new OMCSelection(GameTree.Childs);
             GameTree = Selection.Execute();
+            Console.WriteLine(GameTree.Cmd.ToString());
             return GameTree;
         }
 

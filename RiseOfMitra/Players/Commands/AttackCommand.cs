@@ -9,7 +9,7 @@ using Units.Pawns;
 using Units.Centers;
 
 
-namespace Players.Commands
+namespace RiseOfMitra.Players.Commands
 {
     public class AttackCommand : ACommand
     {

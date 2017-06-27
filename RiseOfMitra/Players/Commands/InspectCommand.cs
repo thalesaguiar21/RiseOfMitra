@@ -4,7 +4,7 @@ using Units;
 using Boards;
 using Utils.Space;
 
-namespace Players.Commands
+namespace RiseOfMitra.Players.Commands
 {
     public class InspectCommand : ACommand
     {

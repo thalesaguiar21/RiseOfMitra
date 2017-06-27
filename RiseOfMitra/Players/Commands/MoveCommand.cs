@@ -5,7 +5,7 @@ using Utils.Space;
 using Utils.Types;
 using Units.Pawns;
 
-namespace Players.Commands
+namespace RiseOfMitra.Players.Commands
 {
     public class MoveCommand : ACommand
     {
