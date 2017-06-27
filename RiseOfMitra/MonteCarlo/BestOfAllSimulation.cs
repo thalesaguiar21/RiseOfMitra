@@ -46,9 +46,15 @@ namespace RiseOfMitra.MonteCarlo
             List<ACommand> bestOfAll = new List<ACommand>();
             double mean = Mean(ValidCmds);
             double stDev = StandartDeviation(ValidCmds, mean);
+            double max = 0;
+
+            for (int i = 0; i < ValidCmds.Count; i++) {
+                if (ValidCmds[i].Value() > max)
+                    max = ValidCmds[i].Value();
+            }
 
             foreach (ACommand cmd in ValidCmds) {
-                if(cmd.Value() >= mean - stDev && cmd.Value() <= mean + stDev) {
+                if(cmd.Value() >= max - stDev) {
                     bestOfAll.Add(cmd);
                 }
             }
