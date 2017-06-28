@@ -54,10 +54,10 @@ namespace RiseOfMitra.Players.Commands
                 }
             }
 
-            foreach (ABasicPawn pawn in Oponent.GetAttackers()) {
-                if(Coord.Distance(pawn.GetPos(), CurPlayer.GetCenter().GetPos()) < 10
-                    && Coord.Distance(pawn.GetPos(), AllyPos) < 10) {
-                    total += 3.0 / Coord.Distance(Target, pawn.GetPos());
+            foreach (ABasicPawn enemy in Oponent.GetAttackers()) {
+                if(Coord.Distance(enemy.GetPos(), CurPlayer.GetCenter().GetPos()) < 10
+                    && Coord.Distance(enemy.GetPos(), AllyPos) < 10) {
+                    total += 3.0;
                 }
             }
 
@@ -111,8 +111,7 @@ namespace RiseOfMitra.Players.Commands
         }
 
         public override bool Equals(ACommand otherCmd) {
-            if(otherCmd is MoveCommand) {
-                MoveCommand other = (MoveCommand)otherCmd;
+            if (otherCmd is MoveCommand other) {
                 return (AllyPos.Equals(other.AllyPos)) && (Target.Equals(other.Target));
             } else {
                 return false;

@@ -9,10 +9,12 @@ namespace RiseOfMitra.MonteCarlo
     class OMCSelection : ISelectionStrategy
     {
         private List<Node> ValidStates;
+        private double NumOfPlayouts;
 
-        public OMCSelection(List<Node> validStates) {
-            if(validStates != null) {
+        public OMCSelection(List<Node> validStates, double numOfPlayouts) {
+            if(validStates != null && numOfPlayouts > 0) {
                 ValidStates = validStates;
+                NumOfPlayouts = numOfPlayouts;
             }
         }
 
@@ -21,14 +23,17 @@ namespace RiseOfMitra.MonteCarlo
             double bestValue = 0.0;
             double mean = 0;
             foreach (Node state in states) {
-                mean += state.Value; 
-                if (bestValue < state.Value)
+                mean += state.Value;
+                if (state.Value > bestValue)
                     bestValue = state.Value;
             }
+            mean /= states.Count;
 
             foreach (Node state in states) {
                 double iVariation = Math.Pow(state.Value - mean, 2.0) / states.Count;
-                double value = (bestValue - iVariation) / (Math.Sqrt(2)*Math.Sqrt(iVariation));
+                double value = 0.0;
+                if (iVariation > 0.0)
+                    value = (bestValue - state.Value) / (Math.Sqrt(2) * Math.Sqrt(iVariation));
                 Meta.Numerics.Complex erfc = 1.0 - Meta.Numerics.Functions.AdvancedComplexMath.Erf(value);
                 stateUrgency.Add(erfc);
             }
@@ -36,13 +41,14 @@ namespace RiseOfMitra.MonteCarlo
         }
 
         private List<Meta.Numerics.Complex> Fairness(List<Meta.Numerics.Complex> urgency, List<Node> states) {
-            Meta.Numerics.Complex siblingsMean = 0;
+            Meta.Numerics.Complex siblingsSum = 0;
             for (int i = 0; i < urgency.Count; i++) {
-                siblingsMean += states[i].VisitCount * urgency[i];
+                siblingsSum += states[i].VisitCount * urgency[i];
             }
+
             List<Meta.Numerics.Complex> fairnessValues = new List<Meta.Numerics.Complex>();
             for (int i = 0; i < urgency.Count; i++) {
-                fairnessValues.Add(states[i].VisitCount * urgency[i] / siblingsMean);
+                fairnessValues.Add(states[i].VisitCount * urgency[i] / siblingsSum);
             }
             return fairnessValues;
         }

@@ -26,15 +26,15 @@ namespace RiseOfMitra.Players.Commands
         }
 
         public override double Value() {
-            double total = 6;
+            double total = 10;
             if(Oponent.GetUnitAt(Target) is CulturalCenter) {
-                total += 10.0;
+                total += 1.0;
             }
             double remainingHealth = Oponent.GetUnitAt(Target).GetCurrLife() / Oponent.GetUnitAt(Target).GetTotalLife();
             if (remainingHealth < 0.5)
                 total += 3.0;
             if(Coord.Distance(Target, CurPlayer.GetCenter().GetPos()) < 10) {
-                total += 1.0;
+                total += 2.0;
             }
             return total;
         }
@@ -120,9 +120,16 @@ namespace RiseOfMitra.Players.Commands
             return valid;
         }
 
+        public bool IsValid(List<Coord> atkRange) {
+            bool valid = Validate();
+            if (valid) {
+                valid = PosValidate(atkRange);
+            }
+            return valid;
+        }
+
         public override bool Equals(ACommand otherCmd) {
-            if(otherCmd is AttackCommand) {
-                AttackCommand other = (AttackCommand)otherCmd;
+            if (otherCmd is AttackCommand other) {
                 return (AllyPos.Equals(other.AllyPos)) && (Target.Equals(other.Target));
             } else {
                 return false;
@@ -132,13 +139,12 @@ namespace RiseOfMitra.Players.Commands
         private bool PosValidate(List<Coord> atkRange) {
             bool enmyInRange = false;
 
-            foreach (Unit unit in Oponent.GetUnits()) {
-                foreach (Coord cell in atkRange) {
-                    if (unit.InUnit(cell)) {
-                        enmyInRange = true;
-                        break;
-                    }
-                    if (enmyInRange) break;
+            Unit unit = Oponent.GetUnitAt(Target);
+
+            foreach (Coord cell in atkRange) {
+                if (unit.InUnit(cell)) {
+                    enmyInRange = true;
+                    break;
                 }
             }
 

@@ -23,7 +23,7 @@ namespace Units.Centers
             SetLifePerSec(0);
             SetPos(new Coord(0, 0));
             SetSize(5);
-            UnitPerTurn = 5;
+            UnitPerTurn = 10;
             SpawnPoint = new Coord(0, 0);
             SpawnRange = 4;
         }

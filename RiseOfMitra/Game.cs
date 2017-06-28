@@ -22,6 +22,7 @@ namespace RiseOfMitra
         private bool Play;
         private bool ValidCmd;
         private Board Boards;
+        private static int win = 0;
 
         public Game() {
             Play = true;
@@ -68,7 +69,7 @@ namespace RiseOfMitra
         private void InitPlayers() {
             Gamers = new Player[2];
 
-            Gamers[0] = new HumanPlayer(ECultures.DALRIONS);
+            Gamers[0] = new RandomPlayer(ECultures.DALRIONS, this);
             CurPlayer = Gamers[0];
 
             Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, this);
@@ -85,31 +86,27 @@ namespace RiseOfMitra
 
         public void Start() {
             Gaia gaia = new Gaia();
-            do {                
-                gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards);
+            int turn = 0;
+            do {
+                //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards);
                 Boards.PrintBoard();
-                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                //Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                 Node state = CurPlayer.PrepareAction(Boards, GetOponent());
-                ChangeState(state);
+                ChangeState(state, true);
 
-                Console.Write("Press enter to continue...");
-                Console.ReadLine();
-
-                foreach (Player player in Gamers) {
-                    if (player.GetCenter() == null || player.GetCenter().GetCurrLife() <= 0)
-                        Play = false;
-                }
+                //Console.Write("Press enter to continue...");
+                //Console.ReadLine();
+                turn++;
+                //Console.WriteLine("Turno: " + turn);
                 Console.Clear();
             } while (Play);
-            string winner = "";
             if (CurPlayer.GetCenter() == null || CurPlayer.GetCenter().GetCurrLife() <= 0) {
-                if (CurPlayer.GetCulture() == ECultures.DALRIONS)
-                    winner = "RAHKARS";
-                else
-                    winner = "DALRIONS";
+                if (CurPlayer.GetCulture() == ECultures.DALRIONS) {
+                    win++;
+                }
+                Console.WriteLine("Finished in {0} turns.", turn);
+                Console.ReadLine();
             }
-            Console.WriteLine(winner + " ARE THE WINNERs!");
-            Console.ReadLine();
         }
 
         public void ChangeState(Node state, bool isSimulation = false) {
@@ -119,7 +116,7 @@ namespace RiseOfMitra
                 if (validCmd) {
                     if (state.Value == 0)
                         state.Value = state.Cmd.Value();
-                    if (CurPlayer is HumanPlayer) {
+                    if (!(CurPlayer is MonteCarloTreeSearch)) {
                         MonteCarloTreeSearch op = (MonteCarloTreeSearch)GetOponent();
                         bool expanded = false;
                         for (int i = 0; i < op.GameTree.Childs.Count; i++) {
@@ -136,7 +133,16 @@ namespace RiseOfMitra
                     }
                     state.Cmd.Execute(isSimulation);
                     SetNextPlayer();
+                    
+                    foreach (Player player in Gamers) {
+                        if (player.GetCenter() == null || player.GetCenter().GetCurrLife() <= 0)
+                            Play = false;
+                    }
+                } else {
+                    Console.WriteLine("INVALID CMD!");
                 }
+            } else {
+                Console.WriteLine("INVALID CMD!");
             }
         }
         
@@ -196,13 +202,14 @@ namespace RiseOfMitra
 
         private List<ACommand> GetValidAttacks() {
             List<ACommand> validAtks = new List<ABasicPawn>().Cast<ACommand>().ToList();
-
             foreach(ABasicPawn pawn in CurPlayer.GetPawns()) {
-                foreach (ABasicPawn enemy in GetOponent().GetPawns()) {
+                Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.GetPos(), pawn.GetAtkRange());
+                List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
+                foreach (Coord pos in atkRange) {
                     AttackCommand atk = new AttackCommand();
                     atk.SetUp(Boards, CurPlayer, GetOponent());
-                    atk.SetUp(pawn.GetPos(), enemy.GetPos(), CurPlayer, GetOponent(), Boards);
-                    if (atk.IsValid()) validAtks.Add(atk);
+                    atk.SetUp(pawn.GetPos(), pos, CurPlayer, GetOponent(), Boards);
+                    if (atk.IsValid(atkRange)) validAtks.Add(atk);
                 }
             }
 
@@ -225,8 +232,13 @@ namespace RiseOfMitra
 
         public static void Main() {
             try {
-                Game rom = new Game();
-                rom.Start();
+                int i = 0;
+                while (i < 10) {
+                    Game rom = new Game();
+                    rom.Start();
+                    i++;
+                }
+                Console.WriteLine("Winrate: {0}/{1}", Game.win, 10);
             } catch (FormatException) {
                 Console.WriteLine("Invalid Terrain file format!");
             } catch (IOException) {

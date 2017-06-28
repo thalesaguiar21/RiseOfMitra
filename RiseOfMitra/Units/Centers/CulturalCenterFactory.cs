@@ -14,7 +14,7 @@ namespace Units.Centers
                     center = new CulturalCenter(ECultures.DALRIONS);
                     center.SetCurrLife(30);
                     center.SetTotalLife(30);
-                    center.SetDef(2);
+                    center.SetDef(0);
                     center.SetLifePerSec(2);
                     center.SetPos(new Coord(1, 1));
                     center.SetSpawnPoint(boards, new Coord(center.GetPos().X, center.GetPos().Y + center.GetSize()));
@@ -23,7 +23,7 @@ namespace Units.Centers
                     center = new CulturalCenter(ECultures.RAHKARS);
                     center.SetCurrLife(35);
                     center.SetTotalLife(35);
-                    center.SetDef(1);
+                    center.SetDef(0);
                     center.SetLifePerSec(1);
                     int buildSize = center.GetSize() + 1;
                     center.SetPos(new Coord(BoardConsts.MAX_LIN - buildSize, BoardConsts.MAX_COL - buildSize));
@@ -43,13 +43,13 @@ namespace Units.Centers
             if(center.NativeOf() == ECultures.DALRIONS) {
                 valid &= center.GetCurrLife() == 30;
                 valid &= center.GetCurrLife() == center.GetTotalLife();
-                valid &= center.GetDef() == 2;
+                valid &= center.GetDef() == 0;
                 valid &= center.GetLifePerSec() == 2;
 
             } else {
                 valid &= center.GetCurrLife() == 35;
                 valid &= center.GetCurrLife() == center.GetTotalLife();
-                valid &= center.GetDef() == 1;
+                valid &= center.GetDef() == 0;
                 valid &= center.GetLifePerSec() == 1;
             }
             return valid;

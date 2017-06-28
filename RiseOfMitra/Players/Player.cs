@@ -74,14 +74,14 @@ namespace RiseOfMitra.Players
 
         public void ExecuteTurnEvents(Board boards) {
             Center.Regen();
-            if (Turn % Center.GetUnitsPerTurn() == 0) {
+            if (Turn % Center.GetUnitsPerTurn() == 0 && Pawns.Count < 6) {
                 APawn pawn = Center.GeneratePawn(boards);
                 if(pawn != null) {
                     pawn.Place(boards);
                     AddPawn(pawn);
                 } else {
-                    Console.Write("Can not create more pawns!");
-                    Console.ReadLine();
+                    //Console.Write("Can not create more pawns!");
+                    //Console.ReadLine();
                 }
             }
         }
