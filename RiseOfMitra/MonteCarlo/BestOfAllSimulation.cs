@@ -54,11 +54,13 @@ namespace RiseOfMitra.MonteCarlo
             }
 
             foreach (ACommand cmd in ValidCmds) {
-                if(cmd.Value() >= max - stDev) {
+                double cValue = cmd.Value();
+                if(cValue >= max - stDev) {
                     bestOfAll.Add(cmd);
                 }
             }
-            if(bestOfAll.Count <= 0) {
+
+            if(bestOfAll == null || bestOfAll.Count == 0) {
                 Console.ReadLine();
             }
 

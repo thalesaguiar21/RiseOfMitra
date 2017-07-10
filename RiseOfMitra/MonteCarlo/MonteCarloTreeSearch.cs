@@ -16,13 +16,14 @@ namespace RiseOfMitra.MonteCarlo
         public Node GameTree;
         private Game CurGame;
         private Game MCTSGame;
+        private int strat;
         private ISelectionStrategy Selection;
         private ISimulationStrategy SimulationStrat;
-        private const int MAX_PLAYOUTS = 200;
+        private const int MAX_PLAYOUTS = 50;
         private const int MAX_SIMULATION_TIME = 4; // Define um tempo máximo de execução de simulações
         private const int MAX_DEPTH = 4; // Define o quão profundo será a simulação
 
-        public MonteCarloTreeSearch(ECultures cult, Game game) {
+        public MonteCarloTreeSearch(ECultures cult, Game game, int strat = 1) {
             GameTree = new Node(0, game.GetState(), null);
             CurGame = game;
             Selection = null;
@@ -30,6 +31,7 @@ namespace RiseOfMitra.MonteCarlo
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
             Center = null;
+            this.strat = strat;
         }
 
         private MonteCarloTreeSearch(ECultures cult) {
@@ -60,7 +62,6 @@ namespace RiseOfMitra.MonteCarlo
                 GameTree.Childs = RunSimulation();
             }
             //Console.WriteLine("Finisehd");
-
             Selection = new OMCSelection(GameTree.Childs, MAX_PLAYOUTS);
             GameTree = Selection.Execute();
             //Console.WriteLine(GameTree.Cmd.ToString());
@@ -76,9 +77,10 @@ namespace RiseOfMitra.MonteCarlo
             cron.Start();
 
             int playouts = 0;
-            while(cron.Elapsed < TimeSpan.FromSeconds(MAX_SIMULATION_TIME)) {
+            while(playouts < MAX_PLAYOUTS) {
                 MCTSGame = new Game(CurGame);
                 Node curr = GameTreeCp;
+                List<Node> path = new List<Node>();
 
                 Random rand = new Random();
                 int depth = 0;
@@ -87,6 +89,10 @@ namespace RiseOfMitra.MonteCarlo
                         break;
                     }
                     List<ACommand> mctsCmds = MCTSGame.GetValidCommands();
+                    if(mctsCmds == null || mctsCmds.Count == 0) {
+                        MCTSGame.SetNextPlayer();
+                        mctsCmds = MCTSGame.GetValidCommands();
+                    }
                     SimulationStrat = new BestOfAllSimulation(mctsCmds);
 
                     List<ACommand> bestCmds = SimulationStrat.Execute();
@@ -95,6 +101,8 @@ namespace RiseOfMitra.MonteCarlo
                     Node nextState = new Node(bestCmds[chosen].Value(), 
                                               new Board(MCTSGame.GetState()),
                                               bestCmds[chosen]);
+                    // Saves the current path taken
+                    path.Add(nextState);
 
                     // If the node is a directly descendent, it checks if its already added 
                     // to the next moves.
@@ -135,6 +143,9 @@ namespace RiseOfMitra.MonteCarlo
                     depth++;
                 }
                 playouts++;
+                for (int i = path.Count - 1; i > 0; i--) {
+                    path[i - 1].Value += path[i].Value;
+                }
             }
             if (nextMoves == null) {
                 Console.WriteLine("no moves!");

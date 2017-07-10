@@ -43,7 +43,7 @@ namespace RiseOfMitra.Players.Commands
             
             if(Coord.Distance(Target, Oponent.GetCenter().GetPos()) < 
                 Coord.Distance(AllyPos, Oponent.GetCenter().GetPos())) {
-                total += 2 * Coord.Distance(AllyPos, Target);
+                total += 2 * (1 + 1.0 / Coord.Distance(AllyPos, Oponent.GetCenter().GetPos()));
             }
 
             ETerrain terrainAtTarget = (ETerrain)Boards.TerrainAt(Target);
@@ -55,9 +55,9 @@ namespace RiseOfMitra.Players.Commands
             }
 
             foreach (ABasicPawn enemy in Oponent.GetAttackers()) {
-                if(Coord.Distance(enemy.GetPos(), CurPlayer.GetCenter().GetPos()) < 10
-                    && Coord.Distance(enemy.GetPos(), AllyPos) < 10) {
-                    total += 3.0;
+                if(Coord.Distance(enemy.GetPos(), CurPlayer.GetCenter().GetPos()) < BoardConsts.MAX_COL / 2
+                    && Coord.Distance(Target, enemy.GetPos()) < Coord.Distance(AllyPos, enemy.GetPos())) {
+                    total += 3.0 * (1 + 1.0 / Coord.Distance(AllyPos, enemy.GetPos()));
                 }
             }
 

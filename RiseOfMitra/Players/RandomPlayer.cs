@@ -42,8 +42,20 @@ namespace RiseOfMitra.Players
             List<ACommand> validCmds = CurGame.GetValidCommands();
 
             if(validCmds != null && validCmds.Count > 0) {
-                int selected = rand.Next(validCmds.Count);
-                return new Node(0.0, boards, validCmds[selected]);
+                double highest = 0;
+                foreach (ACommand cmd in validCmds) {
+                    if (cmd.Value() > highest)
+                        highest = cmd.Value();
+                }
+
+                List<ACommand> someCmds = new List<ACommand>();
+                for (int i = 0; i < validCmds.Count; i++) {
+                    if (validCmds[i].Value() >= 0.7 * highest)
+                        someCmds.Add(validCmds[i]);
+                }
+
+                int selected = rand.Next(someCmds.Count);
+                return new Node(0.0, boards, someCmds[selected]);
             } else {
                 return null;
             }

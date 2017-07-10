@@ -44,8 +44,93 @@ namespace Juno
             RahkarStatistcs = new List<double>() { 0, 0, 0 };
         }
 
-        public void DoGaiaWill(Player playerOne, Player playerTwo, Board boards) {
-            InspectField(playerOne, playerTwo, boards);
+        public void DoGaiaWill(Player playerOne, Player playerTwo, Board boards, int turn) {
+            Random rnd = new Random();
+            int actionTurn = 10 + rnd.Next(6);
+            if (turn % actionTurn == 0) {
+                InspectField(playerOne, playerTwo, boards);
+                Array terrains = Enum.GetValues(typeof(ETerrain));
+                int terrain = rnd.Next(terrains.Length);
+                int cultToCheck = rnd.Next(2);
+                Player other = null;
+                Player currPlayer = null;
+                PawnsPerTerrain currPpt = null;
+                List<double> currStatistics = null;
+
+                if (cultToCheck == 0) {
+                    if (playerOne.GetCulture() == ECultures.DALRIONS) {
+                        currPlayer = playerOne;
+                        other = playerTwo;
+                        currPpt = DalrionPpts;
+                        currStatistics = DalrionStatistcs;
+                    } else {
+                        currPlayer = playerTwo;
+                        other = playerOne;
+                        currPpt = RahkarPpts;
+                        currStatistics = RahkarStatistcs;
+                    }
+                } else {
+                    if (playerOne.GetCulture() == ECultures.RAHKARS) {
+                        currPlayer = playerOne;
+                        other = playerTwo;
+                        currPpt = RahkarPpts;
+                        currStatistics = RahkarStatistcs;
+                    } else {
+                        currPlayer = playerTwo;
+                        other = playerOne;
+                        currPpt = DalrionPpts;
+                        currStatistics = DalrionStatistcs;
+                    }
+                }
+                List<APawn> playerPawns = currPlayer.GetPawns();
+                string msg = "Gaia will now ";
+                if (currPpt.PPTs[(ETerrain)terrains.GetValue(terrain)] < 2) {
+                    if (currStatistics[ENMY_DIST] < 1) {
+                        if(currPpt.OccupiedTerrains() > 3) {
+                            msg += "increase the atk of pawns at " + (ETerrain)terrains.GetValue(terrain);
+                            foreach (APawn pawn in playerPawns) {
+                                if((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain))
+                                    pawn.SetDef(pawn.GetDef() + pawn.GetAtk());
+                            }
+                        } else {
+                            msg += "set the atk of pawns at " + (ETerrain)terrains.GetValue(terrain) + " to 1!";
+                            foreach (APawn pawn in playerPawns) {
+                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain))
+                                    pawn.SetAtk(1);
+                            }
+                        }
+                    } else if (currStatistics[ENMY_DIST] >= 1 && currStatistics[ENMY_DIST] < 3) {
+                        msg += "increase the move range of pawns at " + (ETerrain)terrains.GetValue(terrain);
+                        foreach (APawn pawn in playerPawns) {
+                            if ((ETerrain)boards.TerrainAt(pawn.GetPos()) != (ETerrain)terrains.GetValue(terrain))
+                                pawn.SetMovePoints(pawn.GetMovePoints() + 2);
+                        }
+                    } else {
+                        if(currStatistics[ALLY_DIST] < 3) {
+                            msg += "set the move range of pawns at " + (ETerrain)terrains.GetValue(terrain) + " to 1!";
+                            foreach (APawn pawn in playerPawns) {
+                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain))
+                                    pawn.SetMovePoints(1);
+                            }
+                        } else if (currStatistics[ALLY_DIST] >= 3  && currStatistics[ALLY_DIST] < 7) {
+                            msg += "increase the atk range of pawns at " + (ETerrain)terrains.GetValue(terrain);
+                            foreach (APawn pawn in playerPawns) {
+                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain))
+                                    pawn.SetAtkRange(pawn.GetAtkRange() + 2);
+                            }
+                        } else {
+                            msg += "set the def of pawns at " + (ETerrain)terrains.GetValue(terrain) + " to 1!";
+                            foreach (APawn pawn in playerPawns) {
+                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) != (ETerrain)terrains.GetValue(terrain))
+                                    pawn.SetDef(1);
+                            }
+                        }
+                    }
+                }
+
+                //Console.WriteLine(msg + " For " + currPlayer.GetCulture());
+                //Console.ReadLine();
+            }
 
             /*Console.WriteLine(DalrionPpts);
             Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}", 

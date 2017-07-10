@@ -24,7 +24,7 @@ namespace RiseOfMitra.MonteCarlo
             Node chosen = null;
             List<Node> bestNodes = new List<Node>();
             if (ValidStates.Count > 0) {
-                double highestValue = ValidStates[0].Cmd.Value();
+                double highestValue = ValidStates[0].Value;
                 for (int i = 1; i < ValidStates.Count; i++) {
                     double currValue = ValidStates[i].Cmd.Value();
                     if (currValue > highestValue) {

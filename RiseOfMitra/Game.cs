@@ -12,6 +12,7 @@ using Units;
 using Units.Pawns;
 using Units.Centers;
 using RiseOfMitra.MonteCarlo;
+using System.Diagnostics;
 
 namespace RiseOfMitra
 {
@@ -87,8 +88,9 @@ namespace RiseOfMitra
         public void Start() {
             Gaia gaia = new Gaia();
             int turn = 0;
+            Stopwatch cron = new Stopwatch();
+            cron.Start();
             do {
-                //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards);
                 Boards.PrintBoard();
                 //Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                 Node state = CurPlayer.PrepareAction(Boards, GetOponent());
@@ -97,20 +99,22 @@ namespace RiseOfMitra
                 //Console.Write("Press enter to continue...");
                 //Console.ReadLine();
                 turn++;
+                //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
                 //Console.WriteLine("Turno: " + turn);
                 Console.Clear();
             } while (Play);
             if (CurPlayer.GetCenter() == null || CurPlayer.GetCenter().GetCurrLife() <= 0) {
+                Console.WriteLine(GetOponent().GetCulture() + " wins in " + cron.Elapsed);
                 if (CurPlayer.GetCulture() == ECultures.DALRIONS) {
                     win++;
                 }
-                Console.WriteLine("Finished in {0} turns.", turn);
-                Console.ReadLine();
             }
         }
 
         public void ChangeState(Node state, bool isSimulation = false) {
-            if(state != null && Node.ValidateNode(state)) {
+            if (state == null)
+                SetNextPlayer();
+            else if(Node.ValidateNode(state)) {
                 state.Cmd.SetUp(Boards, CurPlayer, GetOponent());
                 bool validCmd = state.Cmd.IsValid();
                 if (validCmd) {
@@ -146,7 +150,7 @@ namespace RiseOfMitra
             }
         }
         
-        private void SetNextPlayer() {
+        public void SetNextPlayer() {
             CurPlayer.SetTurn();
             CurPlayer.ExecuteTurnEvents(Boards);
 

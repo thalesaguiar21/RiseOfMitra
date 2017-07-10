@@ -67,7 +67,7 @@ namespace Units.Pawns
                     SetMovePoints(GetMovePoints() + 1);
                     break;
                 case ETerrain.DESERT:
-                    SetMovePoints(GetMovePoints() + 2);
+                    SetMovePoints(GetMovePoints() - 2);
                     break;
                 default:
                     break;

@@ -22,7 +22,7 @@ namespace RiseOfMitra.MonteCarlo
             if (validMoves.Count > 0) {
                 double maxValue = 0;
                 foreach (Node tmpNode in validMoves) {
-                    double meanPayout = tmpNode.Cmd.Value() / tmpNode.VisitCount;
+                    double meanPayout = tmpNode.Value / tmpNode.VisitCount;
                     double curValue = meanPayout +
                         Math.Sqrt((2 * Math.Log(tmpNode.VisitCount)) / maxPlayouts);
                     if (curValue >= maxValue) {

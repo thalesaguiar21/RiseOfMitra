@@ -19,6 +19,17 @@ namespace Juno
             }
         }
 
+        public int OccupiedTerrains() {
+            int total = 0;
+
+            foreach (ETerrain terrain in PPTs.Keys.ToList()) {
+                if (PPTs[terrain] > 0)
+                    total += PPTs[terrain];
+            }
+
+            return total;
+        }
+
         public void IncreasePawnsAt(ETerrain terrain) {
             if (PPTs.ContainsKey(terrain))
                 PPTs[terrain] += 1;

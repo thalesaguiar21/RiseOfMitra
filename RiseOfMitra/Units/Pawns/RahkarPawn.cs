@@ -47,10 +47,10 @@ namespace Units.Pawns
 
             switch (curTerrain) {
                 case ETerrain.MOUNTAIN:
-                    SetMovePoints(GetMovePoints() + 1);
+                    SetMovePoints(GetMovePoints() - 1);
                     break;
                 case ETerrain.PLAIN:
-                    SetDef(GetDef() - 1);
+                    SetDef(GetDef() + 1);
                     break;
                 case ETerrain.RIVER:
                     SetMovePoints(GetMovePoints() - 1);
@@ -59,12 +59,12 @@ namespace Units.Pawns
                     SetDef(GetDef() + 1);
                     break;
                 case ETerrain.MARSH:
-                    SetAtk(GetAtk() + 2);
+                    SetAtk(GetAtk() - 2);
                     break;
                 case ETerrain.FOREST:
                     break;
                 case ETerrain.DESERT:
-                    SetAtk(GetAtk() - 1);
+                    SetAtk(GetAtk() + 1);
                     break;
                 default:
                     break;

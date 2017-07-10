@@ -22,7 +22,7 @@ namespace Units.Pawns
                 case ECultures.DALRIONS:
                     pawn = new DalrionPawn();
                     if (Validate)
-                        values = new Object[] { 10, 10, 5, 2, 1, 5 };
+                        values = new Object[] { 10, 10, 5, 2, 1, 3 };
                     pawn.SetCulture(ECultures.DALRIONS);
                     break;
 
@@ -59,7 +59,7 @@ namespace Units.Pawns
                 isValid &= pawn.GetAtk() == 5;
                 isValid &= pawn.GetAtkRange() == 2;
                 isValid &= pawn.GetDef() == 1;
-                isValid &= pawn.GetMovePoints() == 5;
+                isValid &= pawn.GetMovePoints() == 3;
                 isValid &= (pawn.GetPos().X == 0 && pawn.GetPos().Y == 0);
                 isValid &= pawn.GetSize() == 1;
             } else if (pawn.NativeOf() == ECultures.RAHKARS) {

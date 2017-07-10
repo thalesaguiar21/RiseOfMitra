@@ -33,8 +33,8 @@ namespace RiseOfMitra.Players.Commands
             double remainingHealth = Oponent.GetUnitAt(Target).GetCurrLife() / Oponent.GetUnitAt(Target).GetTotalLife();
             if (remainingHealth < 0.5)
                 total += 3.0;
-            if(Coord.Distance(Target, CurPlayer.GetCenter().GetPos()) < 10) {
-                total += 2.0;
+            if(Coord.Distance(Target, CurPlayer.GetCenter().GetPos()) < BoardConsts.MAX_COL / 2) {
+                total += 1 + 100 / Coord.Distance(Target, CurPlayer.GetCenter().GetPos());
             }
             return total;
         }
