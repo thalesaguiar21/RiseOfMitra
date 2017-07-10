@@ -132,13 +132,13 @@ namespace Juno
                 //Console.ReadLine();
             }
 
-            /*Console.WriteLine(DalrionPpts);
+            Console.WriteLine(DalrionPpts);
             Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}", 
                 DalrionStatistcs[ALLY_DIST], DalrionStatistcs[ENMY_DIST], DalrionStatistcs[CENTER_RISK]));
 
             Console.WriteLine(RahkarPpts);
             Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}",
-                RahkarStatistcs[ALLY_DIST], RahkarStatistcs[ENMY_DIST], RahkarStatistcs[CENTER_RISK]));*/
+                RahkarStatistcs[ALLY_DIST], RahkarStatistcs[ENMY_DIST], RahkarStatistcs[CENTER_RISK]));
         }
 
         private void InspectField(Player playerOne, Player playerTwo, Board boards) {

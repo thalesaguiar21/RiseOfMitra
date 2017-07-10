@@ -41,18 +41,20 @@ namespace Units
         }
 
         public void Erase(Board boards) {
+            Coord tmpPos = new Coord(Pos.X - Size / 2, Pos.Y - Size / 2);
             for (int i = 0; i < GetSize(); i++) {
                 for (int k = 0; k < GetSize(); k++) {
-                    Coord pos = new Coord(GetPos().X + i, GetPos().Y + k);
+                    Coord pos = new Coord(tmpPos.X + i, tmpPos.Y + k);
                     boards.SetCellAt(pos, BoardConsts.EMPTY);
                 }
             }
         }
 
         public void Place(Board boards) {
+            Coord tmpPos = new Coord(Pos.X - Size / 2, Pos.Y - Size / 2);
             for (int i = 0; i < GetSize(); i++) {
                 for (int k = 0; k < GetSize(); k++) {
-                    Coord pos = new Coord(GetPos().X + i, GetPos().Y + k);
+                    Coord pos = new Coord(tmpPos.X + i, tmpPos.Y + k);
                     boards.SetCellAt(pos, ToString());
                 }
             }

@@ -16,7 +16,8 @@ namespace Units.Centers
                     center.SetTotalLife(30);
                     center.SetDef(0);
                     center.SetLifePerSec(2);
-                    center.SetPos(new Coord(1, 1));
+                    int dSize = center.GetSize() / 2;
+                    center.SetPos(new Coord(1 + dSize, 1 + dSize));
                     center.SetSpawnPoint(boards, new Coord(center.GetPos().X, center.GetPos().Y + center.GetSize()));
                     break;
                 case ECultures.RAHKARS:
@@ -25,8 +26,8 @@ namespace Units.Centers
                     center.SetTotalLife(35);
                     center.SetDef(0);
                     center.SetLifePerSec(1);
-                    int buildSize = center.GetSize() + 1;
-                    center.SetPos(new Coord(BoardConsts.MAX_LIN - buildSize, BoardConsts.MAX_COL - buildSize));
+                    int rSize = center.GetSize() / 2;
+                    center.SetPos(new Coord(BoardConsts.MAX_LIN - rSize - 2, BoardConsts.MAX_COL - rSize - 2));
                     center.SetSpawnPoint(boards, new Coord(center.GetPos().X, center.GetPos().Y - 1));
                     break;
                 default:
