@@ -43,6 +43,14 @@ namespace RiseOfMitra
             CurPlayer = game.CurPlayer.Copy(Boards);
         }
 
+        private void DrawLine(string str, int size) {
+            Console.WriteLine();
+            for (int i = 0; i < size; i++) {
+                Console.Write(str);
+            }
+            Console.WriteLine();
+        }
+
         private void CreateUnits() {
             if (Gamers != null && Gamers.Length == 2) {
                 PawnFactory pawnFac = new PawnFactory();
@@ -87,21 +95,16 @@ namespace RiseOfMitra
 
         public void Start() {
             Gaia gaia = new Gaia();
-            int turn = 0;
+            int turn = 1;
             Stopwatch cron = new Stopwatch();
             cron.Start();
             do {
-                gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
                 Boards.PrintBoard();
-                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                DrawLine("-", 2 * BoardConsts.MAX_COL);
                 Node state = CurPlayer.PrepareAction(Boards, GetOponent());
                 ChangeState(state, true);
-
-                //Console.Write("Press enter to continue...");
-                //Console.ReadLine();
+                gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
                 turn++;
-                //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
-                //Console.WriteLine("Turno: " + turn);
                 Console.Clear();
             } while (Play);
             if (CurPlayer.GetCenter() == null || CurPlayer.GetCenter().GetCurrLife() <= 0) {
