@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Utils;
 
 namespace Units
 {
@@ -23,7 +24,7 @@ namespace Units
 
         public void SetLifePerSec(int lifePerSec) {
             if (lifePerSec < 0 || lifePerSec > MAX_LIFEPERSEC)
-                Console.WriteLine(lifePerSec + " isn't a valid regen rate!");
+                UserUtils.PrintError(lifePerSec + " isn't a valid regen rate!");
             else {
                 LifePerSec = lifePerSec;
             }

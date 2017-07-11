@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Utils;
 using Utils.Types;
 using Utils.Space;
 using Juno;
@@ -137,20 +138,19 @@ namespace RiseOfMitra
                         if (!expanded) {
                             op.GameTree = state;
                         }
-
                     }
-                    state.Cmd.Execute(isSimulation);
-                    SetNextPlayer();
+                    if(state.Cmd.Execute(isSimulation))
+                        SetNextPlayer();
                     
                     foreach (Player player in Gamers) {
                         if (player.GetCenter() == null || player.GetCenter().GetCurrLife() <= 0)
                             Play = false;
                     }
                 } else {
-                    Console.WriteLine("INVALID CMD!");
+                    UserUtils.PrintError("Invalid command!");
                 }
             } else {
-                Console.WriteLine("INVALID CMD!");
+                UserUtils.PrintError("Invalid node!");
             }
         }
         
@@ -222,16 +222,6 @@ namespace RiseOfMitra
             }
 
             return validAtks;
-        }
-
-        private void ShowValidMoves() {
-            List<ACommand> cmds = GetValidCommands();
-            Console.WriteLine("Valid moves count: " + cmds.Count);
-            foreach (ACommand command in cmds) {
-                Console.Write(command);
-                Console.WriteLine();
-            }
-
         }
 
         public void SetCurPlayer(Player player) {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Boards;
 using Units;
+using Utils;
 using Utils.Space;
 using Utils.Types;
 using Units.Pawns;
@@ -35,7 +36,7 @@ namespace RiseOfMitra.Players.Commands
                     ErrorMsg = OUT_OF_RANGE;
                 }
             }
-            if (!ErrorMsg.Equals("") && !isSimualtion) Console.Write(ErrorMsg);
+            if (!ErrorMsg.Equals("") && !isSimualtion) UserUtils.PrintError(ErrorMsg);
             return valid;
         }
 

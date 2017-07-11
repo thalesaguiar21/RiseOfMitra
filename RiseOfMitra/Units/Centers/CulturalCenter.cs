@@ -1,5 +1,6 @@
 ﻿
 using System;
+using Utils;
 using Utils.Space;
 using Utils.Types;
 using Units.Pawns;
@@ -48,7 +49,7 @@ namespace Units.Centers
             APawn pawn = factory.Create(NativeOf());
             Coord pos = PlacementPosition(boards);
             if (pos == null) {
-                Console.Write("Can not generate more pawns!");
+                UserUtils.PrintError("Can not generate more pawns!");
                 return null;
             } else {
                 pawn.SetPos(pos);

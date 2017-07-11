@@ -1,5 +1,6 @@
 ﻿using System;
 using Boards;
+using Utils;
 using Utils.Types;
 using Utils.Space;
 
@@ -31,7 +32,8 @@ namespace Units.Centers
                     center.SetSpawnPoint(boards, new Coord(center.GetPos().X, center.GetPos().Y - 1));
                     break;
                 default:
-                    Console.WriteLine("Invalid culture. Can't create cultural center!");
+                    UserUtils.PrintError("Invalid culture. Can't create cultural center!");
+                    Console.ReadLine();
                     break;
             }
             if (!Validate(center))

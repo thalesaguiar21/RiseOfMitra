@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Units;
 using Boards;
+using Utils;
 using Utils.Space;
 
 namespace RiseOfMitra.Players.Commands
@@ -25,11 +26,12 @@ namespace RiseOfMitra.Players.Commands
                         Boards.SetStatus(unit.GetStatus().Split('\n'));
                         Console.Clear();
                         Boards.PrintBoard();
+                        Console.ReadLine();
                         break;
                     }
                 }
             } else {
-                Console.Write(ErrorMsg);
+                UserUtils.PrintError(ErrorMsg);
             }            
             return false;
         }

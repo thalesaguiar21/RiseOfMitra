@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RiseOfMitra.Players;
+using Utils;
 using Utils.Types;
 using Utils.Space;
 using RiseOfMitra.Players.Commands;
@@ -148,8 +149,7 @@ namespace RiseOfMitra.MonteCarlo
                 }
             }
             if (nextMoves == null) {
-                Console.WriteLine("no moves!");
-                Console.ReadLine();
+                UserUtils.PrintError("No moves left!");
             }
                 
             return nextMoves;

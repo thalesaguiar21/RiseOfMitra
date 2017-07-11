@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Units;
 using Boards;
+using Utils;
 using Utils.Space;
 using Utils.Types;
 using Units.Pawns;
@@ -61,7 +62,7 @@ namespace RiseOfMitra.Players.Commands
                     }
                 } 
             }
-            Console.Write((valid && !isSimulation) ? (HitMsg) : (ErrorMsg));
+            UserUtils.PrintSucess((valid && !isSimulation) ? (HitMsg) : (ErrorMsg));
             return valid;
         }
 

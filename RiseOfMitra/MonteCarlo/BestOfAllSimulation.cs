@@ -60,10 +60,6 @@ namespace RiseOfMitra.MonteCarlo
                 }
             }
 
-            if(bestOfAll == null || bestOfAll.Count == 0) {
-                Console.ReadLine();
-            }
-
             return bestOfAll;
         }
     }

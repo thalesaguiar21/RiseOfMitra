@@ -61,7 +61,7 @@
     <Compile Include="Players\Commands\AttackCommand.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="Utils\Space\BoardConsts.cs" />
-    <Compile Include="Utils\Space\UserUtils.cs" />
+    <Compile Include="Utils\UserUtils.cs" />
     <Compile Include="Utils\Types\Command.cs" />
     <Compile Include="Utils\Space\Coord.cs" />
     <Compile Include="Units\Centers\CulturalCenter.cs" />
@@ -82,8 +82,8 @@
     <Compile Include="Players\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\Pawns\RahkarPawn.cs" />
-    <Compile Include="MonteCarlo\SelectionStrategy.cs" />
-    <Compile Include="MonteCarlo\SimulationStrategy.cs" />
+    <Compile Include="MonteCarlo\ISelectionStrategy.cs" />
+    <Compile Include="MonteCarlo\ISimulationStrategy.cs" />
     <Compile Include="Units\Temples\Temple.cs" />
     <Compile Include="Units\Unit.cs" />
   </ItemGroup>

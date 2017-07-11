@@ -1,5 +1,6 @@
 ﻿using System;
 using Boards;
+using Utils;
 using Utils.Types;
 using Utils.Space;
 
@@ -33,8 +34,8 @@ namespace Units.Pawns
                     pawn.SetCulture(ECultures.RAHKARS);
                     break;
                 default:
-                    pawn = new DalrionPawn();
-                    Console.WriteLine(nature + " isn't a valid culture!");
+                    UserUtils.PrintError(nature + " isn't a valid culture!");
+                    Console.ReadLine();
                     break;
             }
             pawn.SetPos(new Coord(0, 0));

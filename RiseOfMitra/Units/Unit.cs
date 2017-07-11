@@ -2,6 +2,7 @@
 using System.Text;
 using System.Runtime.CompilerServices;
 using Boards;
+using Utils;
 using Utils.Types;
 using Utils.Space;
 
@@ -73,7 +74,7 @@ namespace Units
 
         public void SetCurrLife(int life) {
             if (life > MAX_LIFE) {
-                Console.WriteLine("Unit life can't exceed " + MAX_LIFE);
+                UserUtils.PrintError("Unit life can't exceed " + MAX_LIFE);
             } else {
                 CurrLife = life;
             }
@@ -86,7 +87,7 @@ namespace Units
 
         public void SetDef(int def) {
             if (def > MAX_DEF || def < 0)
-                Console.WriteLine("Unit's defense can't exceed " + MAX_DEF + " or be lower than 0!");
+                UserUtils.PrintError("Unit's defense can't exceed " + MAX_DEF + " or be lower than 0!");
             else {
                 Def = def;
             }
@@ -95,7 +96,7 @@ namespace Units
         public void SetPos(Coord pos) {
             if (pos.X >= BoardConsts.MAX_LIN || pos.X < 0
                 || pos.Y >= BoardConsts.MAX_COL || pos.Y < 0)
-                Console.WriteLine(pos + " isn't a valid position!");
+                UserUtils.PrintError(pos + " isn't a valid position!");
             else {
                 Pos = pos;
             }
@@ -103,7 +104,7 @@ namespace Units
 
         protected void SetSize(int size) {
             if (size <= 0 || size > MAX_SIZE)
-                Console.WriteLine(size + " isn't a valid size!");
+                UserUtils.PrintError(size + " isn't a valid size!");
             else {
                 Size = size;
             }
