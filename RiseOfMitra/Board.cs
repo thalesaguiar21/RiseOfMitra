@@ -16,7 +16,7 @@ namespace Boards
         private Dictionary<ECultures, ConsoleColor> CultColors;
         private Dictionary<string, bool> Cmds;
         private string[] Legend;
-        private string[] Status;
+        private string[] Status { get; set; }
 
 
         public Board(Board board) {
@@ -135,10 +135,6 @@ namespace Boards
             return auxBoard;
         }
 
-        public Coord SelectUnit(Unit unit) {
-            return null;
-        }
-
         public Coord SelectUnit(IEnumerable<Unit> units) {
             if(units == null || units.Count() == 0) {
                 UserUtils.PrintError("There are no pawns!");
@@ -172,7 +168,7 @@ namespace Boards
                             break;
                     }
 
-                    index = GetIndex(currUnit, units.Count());
+                    index = SelectionIndex(currUnit, units.Count());
                     unitPosition = units.ElementAt(index).GetPos();
                 } while (!selected);
 
@@ -181,53 +177,13 @@ namespace Boards
             return null;
         }
 
-        private int GetIndex(int curr, int max) {
+        private int SelectionIndex(int curr, int max) {
             int index = curr;
             if(curr < 0) {
                 index = max - Math.Abs(curr);
             }
 
             return index;
-        }
-
-        public Coord SelectPosition(Coord cursor) {
-            bool selected = false;
-            Coord selection = null;
-            do {
-                Console.Clear();
-                PrintBoard(cursor);
-
-                var move = Console.ReadKey(false).Key;
-                switch (move) {
-                    case ConsoleKey.Enter:
-                        selected = true;
-                        selection = new Coord(cursor.X, cursor.Y);
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        if (cursor.Y > 1)
-                            cursor.Y--;
-                        break;
-                    case ConsoleKey.UpArrow:
-                        if (cursor.X > 1)
-                            cursor.X--;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        if (cursor.Y < BoardConsts.MAX_COL - 2)
-                            cursor.Y++;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        if (cursor.X < BoardConsts.MAX_LIN - 2)
-                            cursor.X++;
-                        break;
-                    case ConsoleKey.Escape:
-                        selected = true;
-                        break;
-                    default:
-                        break;
-                }
-            } while (!selected);
-
-            return selection;
         }
 
         public Coord SelectPosition(Coord cursor, Coord prevSelec, string cmd, List<Coord> avaiableCells) {
@@ -292,8 +248,6 @@ namespace Boards
                     else Console.Write(MainBoard[i, j] + " ");
                     Console.ResetColor();
                 }
-                Console.Write("\t");
-
                 PrintSideInfos(i);
             }
         }
@@ -394,10 +348,6 @@ namespace Boards
         public void SetTerrainAt(Coord pos, ETerrain value) {
             if (Coord.IsValid(pos))
                 Terrains[pos.X, pos.Y] = value;
-        }
-
-        public void SetStatus(string[] status) {
-            Status = status;
         }
 
         public bool Equals(Board otherOboard) {
