@@ -63,6 +63,7 @@ namespace RiseOfMitra.Players.Commands
                 } 
             }
             UserUtils.PrintSucess((valid && !isSimulation) ? (HitMsg) : (ErrorMsg));
+            Console.ReadLine();
             return valid;
         }
 

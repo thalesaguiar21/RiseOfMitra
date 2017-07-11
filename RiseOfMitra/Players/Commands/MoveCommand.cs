@@ -36,7 +36,11 @@ namespace RiseOfMitra.Players.Commands
                     ErrorMsg = OUT_OF_RANGE;
                 }
             }
-            if (!ErrorMsg.Equals("") && !isSimualtion) UserUtils.PrintError(ErrorMsg);
+            if (!ErrorMsg.Equals("") && !isSimualtion) {
+                UserUtils.PrintError(ErrorMsg);
+                Console.ReadLine();
+            }
+                
             return valid;
         }
 

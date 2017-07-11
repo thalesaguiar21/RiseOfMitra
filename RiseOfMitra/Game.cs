@@ -103,7 +103,7 @@ namespace RiseOfMitra
                 Boards.PrintBoard();
                 DrawLine("-", 2 * BoardConsts.MAX_COL);
                 Node state = CurPlayer.PrepareAction(Boards, GetOponent());
-                ChangeState(state, true);
+                ChangeState(state);
                 //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
                 turn++;
                 Console.Clear();
