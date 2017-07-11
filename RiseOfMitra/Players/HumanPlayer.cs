@@ -41,12 +41,14 @@ namespace RiseOfMitra.Players
         }
 
         private ACommand GetCmd(Board boards, Player oponent) {
-            Console.Write(String.Format("YOUR TURN.\nType in a command: ", GetCulture()));
+            Console.Write("YOUR TURN.");
             bool validCmd = false;
             ACommand playerCommand = null;
+            string userCmd = "";
 
             while (!validCmd) {
-                string userCmd = Console.ReadLine().Trim().ToUpper();
+                Console.Write("\nType in a command: ");
+                userCmd = Console.ReadLine().Trim().ToUpper();
                 switch (userCmd) {
                     case Command.ATTACK:
                         playerCommand = SetUpAttack(boards, oponent);
@@ -61,15 +63,36 @@ namespace RiseOfMitra.Players
                         validCmd = true;
                         break;
                     case Command.EXIT:
+                        
+                        break;
+                    case Command.HELP:
+                        SetUpHelp();
                         break;
                     default:
-                        Console.Write(userCmd + " IS NOT A VALID COMMAND! Please, try again...");
-                        Console.ReadLine();
+                        if (userCmd == "\n" || userCmd == "")
+                            UserUtils.PrintError("Please, type in a command!");
+                        else
+                            UserUtils.PrintError(userCmd + " is not a valid command! Please, try again!");
                         break;
                 }
 
             }
             return playerCommand;
+        }
+
+        private void SetUpHelp() {
+            string str = "To interact with the game, type in one of the following commands.\n" +
+                "The game command processing is not case sensitive. \n\n" +
+                "Avaiable commands are: ";
+            StringBuilder msg = new StringBuilder(str);
+            int numOfCmds = Command.GetCommands().Count;
+            for (int i = 0; i < numOfCmds; i++) {
+                if (i == numOfCmds - 1)
+                    msg.Append(Command.GetCommands()[i]);
+                else
+                    msg.Append(Command.GetCommands()[i] + " | ");
+            }
+            UserUtils.PrintSucess(msg.ToString());
         }
 
         private AttackCommand SetUpAttack(Board boards, Player oponent) {

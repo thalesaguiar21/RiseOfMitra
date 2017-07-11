@@ -61,6 +61,7 @@
     <Compile Include="Players\Commands\AttackCommand.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="Utils\Space\BoardConsts.cs" />
+    <Compile Include="Utils\Space\UserUtils.cs" />
     <Compile Include="Utils\Types\Command.cs" />
     <Compile Include="Utils\Space\Coord.cs" />
     <Compile Include="Units\Centers\CulturalCenter.cs" />

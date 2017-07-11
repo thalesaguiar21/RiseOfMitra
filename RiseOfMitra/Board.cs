@@ -54,8 +54,9 @@ namespace Boards
             Dictionary<string, bool> tmpDic = new Dictionary<string, bool>();
             tmpDic.Add(Command.ATTACK, true);
             tmpDic.Add(Command.MOVE, true);
-            //tmpDic.Add(Commands.CONQUER, false);
+            tmpDic.Add(Command.CONQUER, false);
             tmpDic.Add(Command.INSPECT, true);
+            tmpDic.Add(Command.HELP, true);
             tmpDic.Add(Command.EXIT, true);
 
             return tmpDic;
@@ -236,16 +237,7 @@ namespace Boards
                 }
                 Console.Write("\t");
 
-                if (i == 0) Console.Write("Commands: ");
-                else if (i - 1 < Cmds.Count) {
-                    string cCmd = Cmds.Keys.ToArray()[i - 1];
-                    ColoredPrint("- " + cCmd, (Cmds[cCmd]) ? (ConsoleColor.Green) : (ConsoleColor.Red));
-                } else if (i - 1 == Cmds.Count) {
-                    Console.Write("Legenda:");
-                } else if (i - 2 - Cmds.Count < Legend.Length) {
-                    ColoredPrint("- " + Legend[i - 2 - Cmds.Count], ConsoleColor.DarkMagenta);
-                }
-                Console.Write("\n");
+                PrintSideInfos(i);
             }
         }
 
@@ -261,22 +253,7 @@ namespace Boards
                     else Console.Write(MainBoard[i, j] + " ");
                     Console.ResetColor();
                 }
-                Console.Write("\t");
-
-                if (i == 0) Console.Write("Commands: ");
-                else if (i - 1 < Cmds.Count) {
-                    string cCmd = Cmds.Keys.ToArray()[i - 1];
-                    ColoredPrint("- " + cCmd, (Cmds[cCmd]) ? (ConsoleColor.Green) : (ConsoleColor.Red));
-                } else if (i - 1 == Cmds.Count) {
-                    Console.Write("Legenda:");
-                } else if (i - 2 - Cmds.Count < Legend.Length) {
-                    ColoredPrint("- " + Legend[i - 2 - Cmds.Count], ConsoleColor.DarkMagenta);
-                } else if (i - 2 - Cmds.Count == Legend.Length) {
-                    Console.Write("Info:");
-                } else if (Status != null && i - 3 - Cmds.Count - Legend.Length < Status.Length - 1) {
-                    ColoredPrint("- " + Status[i - 3 - Cmds.Count - Legend.Length], ConsoleColor.Cyan);
-                }
-                Console.Write("\n");
+                PrintSideInfos(i);
             }
             Status = null;
         }
@@ -295,19 +272,28 @@ namespace Boards
                     else Console.Write(MainBoard[i, j] + " ");
                     Console.ResetColor();
                 }
-                Console.Write("\t");
-
-                if (i == 0) Console.Write("Commands: ");
-                else if (i - 1 < Cmds.Count) {
-                    string cCmd = Cmds.Keys.ToArray()[i - 1];
-                    ColoredPrint("- " + cCmd, (Cmds[cCmd]) ? (ConsoleColor.Green) : (ConsoleColor.Red));
-                } else if (i - 1 == Cmds.Count) {
-                    Console.Write("Legenda:");
-                } else if (i - 2 - Cmds.Count < Legend.Length) {
-                    ColoredPrint("- " + Legend[i - 2 - Cmds.Count], ConsoleColor.DarkMagenta);
-                } 
-                Console.Write("\n");
+                PrintSideInfos(i);
             }
+        }
+
+        private void PrintSideInfos(int i) {
+            Console.Write("\t");
+
+            if (i == 0) Console.Write("Commands: ");
+            else if (i - 1 < Cmds.Count) {
+                string cCmd = Cmds.Keys.ToArray()[i - 1];
+                ColoredPrint("- " + cCmd, (Cmds[cCmd]) ? (ConsoleColor.DarkGreen) : (ConsoleColor.DarkRed));
+            } else if (i - 1 == Cmds.Count) {
+                Console.Write("Legenda:");
+            } else if (i - 2 - Cmds.Count < Legend.Length) {
+                ColoredPrint("- " + Legend[i - 2 - Cmds.Count], ConsoleColor.DarkMagenta);
+            } else if (i - 2 - Cmds.Count == Legend.Length) {
+                Console.Write("Info:");
+            } else if (Status != null && i - 3 - Cmds.Count - Legend.Length < Status.Length - 1) {
+                ColoredPrint("- " + Status[i - 3 - Cmds.Count - Legend.Length], ConsoleColor.Cyan);
+            }
+            Console.Write("\n");
+
         }
 
         private void ColoredPrint(string msg, ConsoleColor color) {
