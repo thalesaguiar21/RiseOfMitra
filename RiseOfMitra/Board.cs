@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using Utils.Types;
 using Utils.Space;
+using Units;
 
 namespace Boards
 {
@@ -43,22 +44,22 @@ namespace Boards
         }
 
         private Dictionary<ECultures, ConsoleColor> InitColors() {
-            Dictionary<ECultures, ConsoleColor> tmpColors = new Dictionary<ECultures, ConsoleColor>();
-            tmpColors.Add(ECultures.DALRIONS, ConsoleColor.Blue);
-            tmpColors.Add(ECultures.RAHKARS, ConsoleColor.Yellow);
-
+            Dictionary<ECultures, ConsoleColor> tmpColors = new Dictionary<ECultures, ConsoleColor> {
+                { ECultures.DALRIONS, ConsoleColor.Blue },
+                { ECultures.RAHKARS, ConsoleColor.Yellow }
+            };
             return tmpColors;
         }
 
         private Dictionary<string, bool> InitCommands() {
-            Dictionary<string, bool> tmpDic = new Dictionary<string, bool>();
-            tmpDic.Add(Command.ATTACK, true);
-            tmpDic.Add(Command.MOVE, true);
-            tmpDic.Add(Command.CONQUER, false);
-            tmpDic.Add(Command.INSPECT, true);
-            tmpDic.Add(Command.HELP, true);
-            tmpDic.Add(Command.EXIT, true);
-
+            Dictionary<string, bool> tmpDic = new Dictionary<string, bool> {
+                { Command.ATTACK, true },
+                { Command.MOVE, true },
+                { Command.CONQUER, false },
+                { Command.INSPECT, true },
+                { Command.HELP, true },
+                { Command.EXIT, true }
+            };
             return tmpDic;
         }
 
@@ -131,6 +132,61 @@ namespace Boards
             }
             file.Close();
             return auxBoard;
+        }
+
+        public Coord SelectUnit(Unit unit) {
+            return null;
+        }
+
+        public Coord SelectUnit(IEnumerable<Unit> units) {
+            if(units == null || units.Count() == 0) {
+                UserUtils.PrintError("There are no pawns!");
+            } else {
+                
+                Coord unitPosition = units.ElementAt(0).GetPos();
+                int currUnit = 0;
+                bool selected = false;
+                int index = 0;
+                do {
+                    Console.Clear();
+                    PrintBoard(unitPosition);
+
+                    var move = Console.ReadKey(false).Key;
+                    switch (move) {
+                        case ConsoleKey.Enter:
+                            selected = true;
+                            break;
+                        case ConsoleKey.LeftArrow:
+                            // Select the previous pawn on the list
+                            currUnit = (currUnit - 1) % units.Count();                            
+                            break;
+                        case ConsoleKey.RightArrow:
+                            // Select the next pawn on the list
+                            currUnit = (currUnit + 1) % units.Count();
+                            break;
+                        case ConsoleKey.Escape:
+                            selected = false;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    index = GetIndex(currUnit, units.Count());
+                    unitPosition = units.ElementAt(index).GetPos();
+                } while (!selected);
+
+                return unitPosition;
+            }
+            return null;
+        }
+
+        private int GetIndex(int curr, int max) {
+            int index = curr;
+            if(curr < 0) {
+                index = max - Math.Abs(curr);
+            }
+
+            return index;
         }
 
         public Coord SelectPosition(Coord cursor) {

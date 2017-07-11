@@ -97,11 +97,13 @@ namespace RiseOfMitra.Players
 
         private AttackCommand SetUpAttack(Board boards, Player oponent) {
             AttackCommand attackCmd = new AttackCommand();
-            Coord selPos = boards.SelectPosition(Cursor);
+            Coord selPos = boards.SelectUnit(Pawns);
+            Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
+            Cursor = selPos;
             if (GetPawnAt(selPos) is ABasicPawn ally) {
                 Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.GetAtkRange());
                 List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
-                Coord enemyPos = boards.SelectPosition(Cursor, selPos, Command.ATTACK, atkRange);
+                Coord enemyPos = boards.SelectPosition(cursorCp, selPos, Command.ATTACK, atkRange);
 
                 // Set up command variables
                 attackCmd.SetUp(selPos, enemyPos, this, oponent, boards);
@@ -111,12 +113,14 @@ namespace RiseOfMitra.Players
 
         private MoveCommand SetUpMove(Board boards) {
             MoveCommand move = new MoveCommand();
-            Coord selPos = boards.SelectPosition(Cursor);
+            Coord selPos = boards.SelectUnit(Pawns);
             APawn ally = GetPawnAt(selPos);
-            if(ally != null) {
+            Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
+            Cursor = selPos;
+            if (ally != null) {
                 Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.GetMovePoints());
                 List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
-                Coord target = boards.SelectPosition(Cursor, selPos, Command.MOVE, moveRange);
+                Coord target = boards.SelectPosition(cursorCp, selPos, Command.MOVE, moveRange);
 
                 // Set up command variables
                 move.SetUp(this, selPos, target, boards);
@@ -126,10 +130,11 @@ namespace RiseOfMitra.Players
 
         private InspectCommand SetUpInspect(Board boards, Player oponent) {
             InspectCommand inspect = new InspectCommand();
-            Coord selPos = boards.SelectPosition(Cursor);
             List<Unit> allUnits = new List<Unit>();
             allUnits.AddRange(GetUnits());
             allUnits.AddRange(oponent.GetUnits());
+            Coord selPos = boards.SelectUnit(allUnits);
+            Cursor = selPos;
 
             inspect.SetUp(selPos, boards, allUnits);
             return inspect;

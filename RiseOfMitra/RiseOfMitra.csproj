@@ -57,7 +57,7 @@
     <Compile Include="Units\Pawns\ABasicPawn.cs" />
     <Compile Include="Units\ABuilding.cs" />
     <Compile Include="Players\Commands\ACommand.cs" />
-    <Compile Include="Units\Pawns\APawn.cs" />
+    <Compile Include="Units\APawn.cs" />
     <Compile Include="Players\Commands\AttackCommand.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="Utils\Space\BoardConsts.cs" />

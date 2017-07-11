@@ -7,7 +7,7 @@ using Boards;
 using RiseOfMitra.MonteCarlo;
 using RiseOfMitra.Players.Commands;
 using Utils.Space;
-using Units.Pawns;
+using Units;
 using Utils.Types;
 
 namespace RiseOfMitra.Players

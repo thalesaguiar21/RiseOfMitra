@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Boards;
+using Units;
 using Utils.Space;
 using Utils.Types;
 using Units.Pawns;
