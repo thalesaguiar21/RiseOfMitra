@@ -11,13 +11,13 @@ namespace Units.Pawns
         public DalrionPawn() {
             PositiveTerrains = new ETerrain[] { ETerrain.MOUNTAIN, ETerrain.MARSH, ETerrain.DESERT };
             BOARD_CHAR = BoardConsts.DALRION_PAWN;
-            SetCurrLife(0);
-            SetTotalLife(0);
-            SetAtk(0);
-            SetAtkRange(0);
+            SetCurrLife(23);
+            SetTotalLife(23);
+            SetAtk(9);
+            SetAtkRange(5);
             SetCulture(ECultures.DALRIONS);
-            SetDef(0);
-            SetMovePoints(1);
+            SetDef(5);
+            SetMovePoints(4);
             SetPos(new Coord(0, 0));
             SetSize(1);
         }

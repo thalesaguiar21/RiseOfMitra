@@ -8,13 +8,13 @@ namespace Units.Pawns
         public RahkarPawn() {
             PositiveTerrains = new ETerrain[] { ETerrain.MOUNTAIN, ETerrain.RIVER, ETerrain.MARSH };
             BOARD_CHAR = BoardConsts.RAHKAR_PAWN;
-            SetCurrLife(0);
-            SetTotalLife(0);
-            SetAtk(0);
-            SetAtkRange(0);
+            SetCurrLife(14);
+            SetTotalLife(14);
+            SetAtk(8);
+            SetAtkRange(5);
             SetCulture(ECultures.RAHKARS);
-            SetDef(0);
-            SetMovePoints(1);
+            SetDef(9);
+            SetMovePoints(5);
             SetPos(new Coord(0, 0));
             SetSize(1);
         }

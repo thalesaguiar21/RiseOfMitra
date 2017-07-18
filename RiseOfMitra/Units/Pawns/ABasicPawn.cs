@@ -11,6 +11,10 @@ namespace Units.Pawns
 {
     public class ABasicPawn : APawn
     {
+        private int Atk;
+        private int AtkRange;
+        private const int MAX_ATK = 10;
+
         public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
             throw new NotImplementedException();
         }
@@ -37,6 +41,30 @@ namespace Units.Pawns
             pawn.SetSize(GetSize());
 
             return pawn;
+        }
+
+        public override string GetStatus() {
+            StringBuilder msg = new StringBuilder(base.GetStatus());
+            msg.Append("Atk: " + Atk + "\n");
+            msg.Append("Atk range: " + AtkRange + "\n");
+            return msg.ToString();
+        }
+
+
+        public int GetAtk() { return Atk; }
+        public int GetAtkRange() { return AtkRange; }
+
+        public void SetAtkRange(int atkRange) {
+            if (atkRange > 0 && atkRange <= MAX_RANGE)
+                AtkRange = atkRange;
+        }
+
+        public void SetAtk(int atk) {
+            if (atk < 0 || atk > MAX_ATK)
+                Console.WriteLine(atk + " isn't a valid atack point!");
+            else {
+                Atk = atk;
+            }
         }
     }
 }
