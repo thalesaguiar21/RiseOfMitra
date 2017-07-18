@@ -16,7 +16,7 @@ namespace Boards
         private Dictionary<ECultures, ConsoleColor> CultColors;
         private Dictionary<string, bool> Cmds;
         private string[] Legend;
-        private string[] Status { get; set; }
+        public string[] Status { get; set; }
 
 
         public Board(Board board) {

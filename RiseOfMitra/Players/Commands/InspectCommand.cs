@@ -23,7 +23,7 @@ namespace RiseOfMitra.Players.Commands
             if (valid) {
                 foreach (Unit unit in Units) {
                     if (unit.InUnit(Target)) {
-                        Boards.SetStatus(unit.GetStatus().Split('\n'));
+                        Boards.Status =  unit.GetStatus().Split('\n');
                         Console.Clear();
                         Boards.PrintBoard();
                         Console.ReadLine();
