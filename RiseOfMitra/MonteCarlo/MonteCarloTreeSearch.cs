@@ -25,7 +25,7 @@ namespace RiseOfMitra.MonteCarlo
         private const int MAX_DEPTH = 4; // Define o quão profundo será a simulação
 
         public MonteCarloTreeSearch(ECultures cult, Game game, int strat = 1) {
-            GameTree = new Node(0, game.GetState(), null);
+            GameTree = new Node(0, game.GetBoards(), null);
             CurGame = game;
             Selection = null;
             Culture = cult;
@@ -86,7 +86,7 @@ namespace RiseOfMitra.MonteCarlo
                 Random rand = new Random();
                 int depth = 0;
                 while (depth < MAX_DEPTH) {
-                    if (MCTSGame.GameOver()) {
+                    if (MCTSGame.IsOver()) {
                         break;
                     }
                     List<ACommand> mctsCmds = MCTSGame.GetValidCommands();
@@ -100,7 +100,7 @@ namespace RiseOfMitra.MonteCarlo
                     
                     int chosen = rand.Next(bestCmds.Count);
                     Node nextState = new Node(bestCmds[chosen].Value(), 
-                                              new Board(MCTSGame.GetState()),
+                                              new Board(MCTSGame.GetBoards()),
                                               bestCmds[chosen]);
                     // Saves the current path taken
                     path.Add(nextState);
@@ -136,7 +136,7 @@ namespace RiseOfMitra.MonteCarlo
                     // Increments the node visit count, create a copy of the current player
                     // and executes the new state in the game copy
                     nextState.VisitCount++;
-                    Player playerCp = MCTSGame.GetCurPlayer().Copy(MCTSGame.GetState());
+                    Player playerCp = MCTSGame.GetCurPlayer().Copy(MCTSGame.GetBoards());
                     MCTSGame.ChangeState(nextState, true);
 
                     nextState.Cmd.SetCurPlayer(playerCp);

@@ -89,8 +89,6 @@ namespace RiseOfMitra
         public void Start() {
             Gaia gaia = new Gaia();
             int turn = 1;
-            Stopwatch cron = new Stopwatch();
-            cron.Start();
             do {
                 Boards.PrintBoard();
                 Node state = CurPlayer.PrepareAction(Boards, GetOponent());
@@ -99,11 +97,15 @@ namespace RiseOfMitra
                 turn++;
                 Console.Clear();
             } while (Play);
+
             if (CurPlayer.GetCenter() == null || CurPlayer.GetCenter().GetCurrLife() <= 0) {
-                Console.WriteLine(GetOponent().GetCulture() + " wins in " + cron.Elapsed);
+                string winner = "";
                 if (CurPlayer.GetCulture() == ECultures.DALRIONS) {
-                    win++;
+                    winner = "Rahkars";
+                } else {
+                    winner = "Dalrions";
                 }
+                string winnerMsg = String.Format("Congratulations! Now, {0} own the monopoly of Argyros!", winner);
             }
         }
 
@@ -163,11 +165,11 @@ namespace RiseOfMitra
                 return Gamers[0];
         }
 
-        public Board GetState() {
+        public Board GetBoards() {
             return Boards;
         }
 
-        public bool GameOver() {
+        public bool IsOver() {
             return !Play;
         }
 
@@ -184,7 +186,7 @@ namespace RiseOfMitra
         }
 
         private List<ACommand> GetValidMoviments() {
-            List<ACommand> validMvs = new List<ABasicPawn>().Cast<ACommand>().ToList();
+            List<ACommand> validMvs = new List<ACommand>();
             foreach (APawn pawn in CurPlayer.GetPawns()) {
                 Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.GetPos(), pawn.GetMovePoints());
                 List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
@@ -200,7 +202,7 @@ namespace RiseOfMitra
         }
 
         private List<ACommand> GetValidAttacks() {
-            List<ACommand> validAtks = new List<ABasicPawn>().Cast<ACommand>().ToList();
+            List<ACommand> validAtks = new List<ACommand>();
             foreach(ABasicPawn pawn in CurPlayer.GetPawns()) {
                 Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.GetPos(), pawn.GetAtkRange());
                 List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
@@ -221,17 +223,12 @@ namespace RiseOfMitra
 
         public static void Main() {
             try {
-                int i = 0;
-                while (i < 10) {
-                    Game rom = new Game();
-                    rom.Start();
-                    i++;
-                }
-                Console.WriteLine("Winrate: {0}/{1}", Game.win, 10);
+                Game rom = new Game();
+                rom.Start();
             } catch (FormatException) {
-                Console.WriteLine("Invalid Terrain file format!");
+                Console.WriteLine("Invalid Terrain or Board file format!");
             } catch (IOException) {
-                Console.WriteLine("Could not find Terrain file!");
+                Console.WriteLine("Could not find Terrain or Board file!");
             } catch (ArgumentException ae) {
                 Console.WriteLine(ae.Message);
             } finally {
