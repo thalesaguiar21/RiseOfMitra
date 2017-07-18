@@ -250,6 +250,7 @@ namespace Boards
                 }
                 PrintSideInfos(i);
             }
+            DrawLine("-", 2 * BoardConsts.MAX_COL);
         }
 
         public void PrintBoard() {
@@ -267,6 +268,7 @@ namespace Boards
                 PrintSideInfos(i);
             }
             Status = null;
+            DrawLine("-", 2 * BoardConsts.MAX_COL);
         }
 
         public void PrintBoard(Coord cursor) {
@@ -285,6 +287,7 @@ namespace Boards
                 }
                 PrintSideInfos(i);
             }
+            DrawLine("-", 2 * BoardConsts.MAX_COL);
         }
 
         private void PrintSideInfos(int i) {
@@ -348,6 +351,14 @@ namespace Boards
         public void SetTerrainAt(Coord pos, ETerrain value) {
             if (Coord.IsValid(pos))
                 Terrains[pos.X, pos.Y] = value;
+        }
+
+        private void DrawLine(string str, int size) {
+            Console.WriteLine();
+            for (int i = 0; i < size; i++) {
+                Console.Write(str);
+            }
+            Console.WriteLine();
         }
 
         public bool Equals(Board otherOboard) {

@@ -44,14 +44,6 @@ namespace RiseOfMitra
             CurPlayer = game.CurPlayer.Copy(Boards);
         }
 
-        private void DrawLine(string str, int size) {
-            Console.WriteLine();
-            for (int i = 0; i < size; i++) {
-                Console.Write(str);
-            }
-            Console.WriteLine();
-        }
-
         private void CreateUnits() {
             if (Gamers != null && Gamers.Length == 2) {
                 PawnFactory pawnFac = new PawnFactory();
@@ -101,10 +93,9 @@ namespace RiseOfMitra
             cron.Start();
             do {
                 Boards.PrintBoard();
-                DrawLine("-", 2 * BoardConsts.MAX_COL);
                 Node state = CurPlayer.PrepareAction(Boards, GetOponent());
                 ChangeState(state);
-                //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
+                gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
                 turn++;
                 Console.Clear();
             } while (Play);
