@@ -10,6 +10,7 @@ using Units.Pawns;
 using Utils.Types;
 using Utils.Space;
 using Boards;
+using Utils;
 
 
 
@@ -87,20 +88,24 @@ namespace Juno
                 if (currPpt.PPTs[(ETerrain)terrains.GetValue(terrain)] < 2) {
                     if (currStatistics[ENMY_DIST] < 1) {
                         if(currPpt.OccupiedTerrains() > 3) {
-                            msg += "increase the atk of pawns at " + (ETerrain)terrains.GetValue(terrain);
+                            msg += "increase the defense of pawns at " + (ETerrain)terrains.GetValue(terrain);
                             foreach (APawn pawn in playerPawns) {
-                                if((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain))
-                                    pawn.SetDef(pawn.GetDef() + pawn.GetAtk());
+                                if((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain)) {
+                                    pawn.SetDef(pawn.GetDef() + 3);
+                                }
                             }
                         } else {
                             msg += "set the atk of pawns at " + (ETerrain)terrains.GetValue(terrain) + " to 1!";
                             foreach (APawn pawn in playerPawns) {
-                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain))
-                                    pawn.SetAtk(1);
+                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain)
+                                    && pawn is ABasicPawn) {
+                                    ABasicPawn bPawn = (ABasicPawn)pawn;
+                                    bPawn.SetAtk(1);
+                                }
                             }
                         }
                     } else if (currStatistics[ENMY_DIST] >= 1 && currStatistics[ENMY_DIST] < 3) {
-                        msg += "increase the move range of pawns at " + (ETerrain)terrains.GetValue(terrain);
+                        msg += "increase the move points of pawns at " + (ETerrain)terrains.GetValue(terrain);
                         foreach (APawn pawn in playerPawns) {
                             if ((ETerrain)boards.TerrainAt(pawn.GetPos()) != (ETerrain)terrains.GetValue(terrain))
                                 pawn.SetMovePoints(pawn.GetMovePoints() + 2);
@@ -113,10 +118,13 @@ namespace Juno
                                     pawn.SetMovePoints(1);
                             }
                         } else if (currStatistics[ALLY_DIST] >= 3  && currStatistics[ALLY_DIST] < 7) {
-                            msg += "increase the atk range of pawns at " + (ETerrain)terrains.GetValue(terrain);
+                            msg += "increase the attack range of pawns at " + (ETerrain)terrains.GetValue(terrain);
                             foreach (APawn pawn in playerPawns) {
-                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain))
-                                    pawn.SetAtkRange(pawn.GetAtkRange() + 2);
+                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain)
+                                    && pawn is ABasicPawn) {
+                                    ABasicPawn bPawn = (ABasicPawn)pawn;
+                                    bPawn.SetAtkRange(bPawn.GetAtkRange() + 2);
+                                }
                             }
                         } else {
                             msg += "set the def of pawns at " + (ETerrain)terrains.GetValue(terrain) + " to 1!";
@@ -128,17 +136,9 @@ namespace Juno
                     }
                 }
 
-                //UserUtils.PrintSucess(msg + " For " + currPlayer.GetCulture());
-                //Console.ReadLine();
+                UserUtils.PrintSucess(msg + " For " + currPlayer.GetCulture());
+                Console.ReadLine();
             }
-
-            Console.WriteLine(DalrionPpts);
-            Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}", 
-                DalrionStatistcs[ALLY_DIST], DalrionStatistcs[ENMY_DIST], DalrionStatistcs[CENTER_RISK]));
-
-            Console.WriteLine(RahkarPpts);
-            Console.WriteLine(String.Format("ALY_DIST: {0} | ENMY_DIST: {1} | CENTER_RISK: {2}",
-                RahkarStatistcs[ALLY_DIST], RahkarStatistcs[ENMY_DIST], RahkarStatistcs[CENTER_RISK]));
         }
 
         private void InspectField(Player playerOne, Player playerTwo, Board boards) {

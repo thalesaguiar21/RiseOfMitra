@@ -24,7 +24,6 @@ namespace RiseOfMitra
         private bool Play;
         private bool ValidCmd;
         private Board Boards;
-        private static int win = 0;
 
         public Game() {
             Play = true;
@@ -93,7 +92,7 @@ namespace RiseOfMitra
                 Boards.PrintBoard();
                 Node state = CurPlayer.PrepareAction(Boards, GetOponent());
                 ChangeState(state);
-                gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
+                //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
                 turn++;
                 Console.Clear();
             } while (Play);
@@ -204,13 +203,13 @@ namespace RiseOfMitra
         private List<ACommand> GetValidAttacks() {
             List<ACommand> validAtks = new List<ACommand>();
             foreach(ABasicPawn pawn in CurPlayer.GetPawns()) {
-                Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.GetPos(), pawn.GetAtkRange());
-                List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
-                foreach (Coord pos in atkRange) {
-                    AttackCommand atk = new AttackCommand();
-                    atk.SetUp(Boards, CurPlayer, GetOponent());
-                    atk.SetUp(pawn.GetPos(), pos, CurPlayer, GetOponent(), Boards);
-                    if (atk.IsValid(atkRange)) validAtks.Add(atk);
+                foreach (ABasicPawn enemy in GetOponent().GetPawns()) {
+                    if(Coord.Distance(pawn.GetPos(), enemy.GetPos()) < pawn.GetAtkRange()) {
+                        AttackCommand atk = new AttackCommand();
+                        atk.SetUp(Boards, CurPlayer, GetOponent());
+                        atk.SetUp(pawn.GetPos(), enemy.GetPos(), CurPlayer, GetOponent(), Boards);
+                        if (atk.IsValid()) validAtks.Add(atk);
+                    }
                 }
             }
 
