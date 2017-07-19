@@ -12,8 +12,8 @@ namespace Units
     {
         private int MovePoints;
         protected ETerrain[] PositiveTerrains;
-        private const int MAX_MOVE = 10;
-        protected const int MAX_RANGE = 8;
+        private const int MAX_MOVE = 25;
+        protected const int MAX_RANGE = 10;
 
         public override string GetStatus() {
             StringBuilder msg = new StringBuilder(base.GetStatus());

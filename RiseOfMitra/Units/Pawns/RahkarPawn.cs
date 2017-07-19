@@ -11,9 +11,9 @@ namespace Units.Pawns
             SetCurrLife(14);
             SetTotalLife(14);
             SetAtk(8);
-            SetAtkRange(5);
+            SetAtkRange(7);
             SetCulture(ECultures.RAHKARS);
-            SetDef(9);
+            SetDef(7);
             SetMovePoints(5);
             SetPos(new Coord(0, 0));
             SetSize(1);

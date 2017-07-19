@@ -51,7 +51,7 @@ namespace RiseOfMitra.Players.Commands
                     Unit enemyUnit = Oponent.GetUnitAt(Target);
                     int damage = allyPawn.GetAtk() - enemyUnit.GetDef();
                     if(damage > 0) {
-                        HitMsg = String.Format("YOU HAVE DEALT {0} DAMAGE!", damage);
+                        HitMsg = String.Format("{0} HAVE DEALT {1} DAMAGE!", allyPawn.NativeOf(), damage);
                         enemyUnit.SetCurrLife(enemyUnit.GetCurrLife() - damage);
                         if(enemyUnit.GetCurrLife() <= 0) {
                             Oponent.RemoveUnitAt(Target, Boards);
@@ -62,8 +62,10 @@ namespace RiseOfMitra.Players.Commands
                     }
                 } 
             }
-            UserUtils.PrintSucess((valid && !isSimulation) ? (HitMsg) : (ErrorMsg));
-            Console.ReadLine();
+            if (!isSimulation) {
+                UserUtils.PrintSucess((valid) ? (HitMsg) : (ErrorMsg));
+                Console.ReadLine();
+            }
             return valid;
         }
 

@@ -13,7 +13,7 @@ namespace Units.Pawns
     {
         private int Atk;
         private int AtkRange;
-        private const int MAX_ATK = 10;
+        private const int MAX_ATK = 25;
 
         public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
             throw new NotImplementedException();

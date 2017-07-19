@@ -28,10 +28,7 @@ namespace Units.Pawns
                     UserUtils.PrintError(nature + " isn't a valid culture!");
                     Console.ReadLine();
                     break;
-            }
-            if (Validate)
-                pawn = null;
-            
+            }            
             return pawn;
         }
     }
