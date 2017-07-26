@@ -57,15 +57,11 @@ namespace RiseOfMitra.MonteCarlo
 
         // The AI Algorithm
         public override Node PrepareAction(Board boards, Player oponent) {
-
-            //Console.Write("Musashi is thinking...");
             if (GameTree.Childs == null || GameTree.Childs.Count <= 0) {
                 GameTree.Childs = RunSimulation();
             }
-            //Console.WriteLine("Finisehd");
             Selection = new OMCSelection(GameTree.Childs, MAX_PLAYOUTS);
             GameTree = Selection.Execute();
-            //Console.WriteLine(GameTree.Cmd.ToString());
             return GameTree;
         }
 
@@ -89,6 +85,7 @@ namespace RiseOfMitra.MonteCarlo
                     if (MCTSGame.IsOver()) {
                         break;
                     }
+
                     List<ACommand> mctsCmds = MCTSGame.GetValidCommands();
                     if(mctsCmds == null || mctsCmds.Count == 0) {
                         MCTSGame.SetNextPlayer();
@@ -100,7 +97,7 @@ namespace RiseOfMitra.MonteCarlo
                     
                     int chosen = rand.Next(bestCmds.Count);
                     Node nextState = new Node(bestCmds[chosen].Value(), 
-                                              new Board(MCTSGame.GetBoards()),
+                                              MCTSGame.GetBoards(),
                                               bestCmds[chosen]);
                     // Saves the current path taken
                     path.Add(nextState);

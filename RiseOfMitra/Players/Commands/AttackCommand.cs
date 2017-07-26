@@ -62,10 +62,10 @@ namespace RiseOfMitra.Players.Commands
                     }
                 } 
             }
-            if (!isSimulation) {
-                UserUtils.PrintSucess((valid) ? (HitMsg) : (ErrorMsg));
-                Console.ReadLine();
-            }
+            //if (!isSimulation) {
+            //    UserUtils.PrintSucess((valid) ? (HitMsg) : (ErrorMsg));
+            //    Console.ReadLine();
+            //}
             return valid;
         }
 
@@ -84,12 +84,17 @@ namespace RiseOfMitra.Players.Commands
                 ErrorMsg = NO_BOARDS;
                 valid = false;
             } else {
-                ABasicPawn allyPawn = CurPlayer.GetPawnAt(AllyPos) as ABasicPawn;
-                if (allyPawn == null) {
-                    ErrorMsg = NO_PAWN;
-                    valid = false;
-                } else if (Oponent.GetUnitAt(Target) == null) {
-                    ErrorMsg = NO_PAWN;
+                APawn allyPawn = CurPlayer.GetPawnAt(AllyPos);
+                if (allyPawn is ABasicPawn) {
+                    ABasicPawn allyAttackerPawn = CurPlayer.GetPawnAt(AllyPos) as ABasicPawn;
+                    if (allyPawn == null) {
+                        ErrorMsg = NO_PAWN;
+                        valid = false;
+                    } else if (Oponent.GetUnitAt(Target) == null) {
+                        ErrorMsg = NO_PAWN;
+                        valid = false;
+                    }
+                } else {
                     valid = false;
                 }
             }            
