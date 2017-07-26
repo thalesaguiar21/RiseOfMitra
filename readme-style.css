@@ -1,0 +1,14 @@
+
+.imageBlock {
+    height: 300px;
+    width: 50%;
+    background-color: powderblue;
+}
+
+.miniImage {
+    width: 50%;
+    float: left;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px; 
+}
