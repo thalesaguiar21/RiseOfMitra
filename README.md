@@ -1,14 +1,10 @@
 <head>
 	<style>
 		.imageBlock {
-		    height: 300px;
-		    width: 50%;
 		    background-color: powderblue;
 		}
 
 		.miniImage {
-			height: 50%;
-		    width: 50px;
 		    float: left;
 		    text-align: center;
 		    margin-top: 15px;
@@ -31,13 +27,13 @@ Rise of Mitra tells the history of a battle for resources between two races in t
 <div class="imageBlock">
 	<div class="miniImage">
 		<figure>
-			<img src="/imgs_md/inspect.PNG"  />
+			<img src="/imgs_md/inspect.PNG"  width="200px" height="300px" />
 			<figcaption>Rise of Mitra inspect illustration.</figcaption>
 		</figure>
 	</div>	
 	<div class="miniImage">
 		<figure>
-			<img src="/imgs_md/move.PNG"  />
+			<img src="/imgs_md/move.PNG"  width="200px" height="300px" />
 			<figcaption>Rise of Mitra move illustration.</figcaption>
 		</figure>
 	</div>	
