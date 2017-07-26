@@ -1,5 +1,20 @@
 <head>
-<link rel="stylesheet" type="text/css" href="readme-style.css">
+	<style>
+		.imageBlock {
+		    height: 300px;
+		    width: 50%;
+		    background-color: powderblue;
+		}
+
+		.miniImage {
+			height: 50%;
+		    width: 50px;
+		    float: left;
+		    text-align: center;
+		    margin-top: 15px;
+		    margin-bottom: 15px; 
+		}
+	</style>
 </head>
 
 <p align="middle">
@@ -17,9 +32,9 @@ Rise of Mitra tells the history of a battle for resources between two races in t
 	<div class="miniImage">
 		<figure>
 			<img src="/imgs_md/inspect.PNG"  />
-			<figcaption>Rise of Mitra inspection illustration.</figcaption>
+			<figcaption>Rise of Mitra inspect illustration.</figcaption>
 		</figure>
-	</div>
+	</div>	
 	<div class="miniImage">
 		<figure>
 			<img src="/imgs_md/move.PNG"  />
