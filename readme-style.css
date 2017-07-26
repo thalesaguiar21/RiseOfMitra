@@ -6,7 +6,8 @@
 }
 
 .miniImage {
-    width: 50%;
+	height: 50%;
+    width: 40%;
     float: left;
     text-align: center;
     margin-top: 15px;
