@@ -27,13 +27,13 @@ Rise of Mitra tells the history of a battle for resources between two races in t
 <div class="imageBlock">
 	<div class="miniImage">
 		<figure>
-			<img src="/imgs_md/inspect.PNG"  width="200px" height="300px" />
+			<img src="/imgs_md/inspect.PNG"  width="25%" height="25%" />
 			<figcaption>Rise of Mitra inspect illustration.</figcaption>
 		</figure>
 	</div>	
 	<div class="miniImage">
 		<figure>
-			<img src="/imgs_md/move.PNG"  width="200px" height="300px" />
+			<img src="/imgs_md/move.PNG"  width="25%" height="25%" />
 			<figcaption>Rise of Mitra move illustration.</figcaption>
 		</figure>
 	</div>	
