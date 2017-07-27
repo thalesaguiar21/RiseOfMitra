@@ -22,33 +22,8 @@ namespace Units.Pawns
             SetSize(1);
         }
 
-        public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
-            switch (prevTerrain) {
-                case ETerrain.MOUNTAIN:
-                    SetMovePoints(GetMovePoints() + 1);
-                    break;
-                case ETerrain.PLAIN:
-                    break;
-                case ETerrain.RIVER:
-                    SetAtk(GetAtk() - 1);
-                    break;
-                case ETerrain.FIELD:
-                    SetDef(GetDef() - 1);
-                    break;
-                case ETerrain.MARSH:
-                    SetDef(GetDef() + 1);
-                    break;
-                case ETerrain.FOREST:
-                    SetMovePoints(GetMovePoints() - 1);
-                    break;
-                case ETerrain.DESERT:
-                    SetMovePoints(GetMovePoints() + 2);
-                    break;
-                default:
-                    break;
-            }
-
-            switch (curTerrain) {
+        public override void ReAdapt(ETerrain terrain) {
+            switch (terrain) {
                 case ETerrain.MOUNTAIN:
                     SetMovePoints(GetMovePoints() - 1);
                     break;
@@ -70,7 +45,34 @@ namespace Units.Pawns
                     SetMovePoints(GetMovePoints() - 2);
                     break;
                 default:
+                    throw new InvalidOperationException("Could not readapat for " + terrain);
+            }
+        }
+
+        public override void UnAdapt(ETerrain terrain) {
+            switch (terrain) {
+                case ETerrain.MOUNTAIN:
+                    SetMovePoints(GetMovePoints() + 1);
                     break;
+                case ETerrain.PLAIN:
+                    break;
+                case ETerrain.RIVER:
+                    SetAtk(GetAtk() - 1);
+                    break;
+                case ETerrain.FIELD:
+                    SetDef(GetDef() - 1);
+                    break;
+                case ETerrain.MARSH:
+                    SetDef(GetDef() + 1);
+                    break;
+                case ETerrain.FOREST:
+                    SetMovePoints(GetMovePoints() - 1);
+                    break;
+                case ETerrain.DESERT:
+                    SetMovePoints(GetMovePoints() + 2);
+                    break;
+                default:
+                    throw new InvalidOperationException("Could not unadapat for " + terrain);
             }
         }
     }

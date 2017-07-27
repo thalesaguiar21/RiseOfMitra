@@ -9,19 +9,14 @@ using Utils.Space;
 
 namespace Units.Pawns
 {
-    public class ABasicPawn : APawn
+    /// <summary>
+    /// This class represents every game pawn that can perform an attack.
+    /// </summary>
+    public abstract class ABasicPawn : APawn
     {
         private int Atk;
         private int AtkRange;
         private const int MAX_ATK = 25;
-
-        public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
-            throw new NotImplementedException();
-        }
-
-        public override bool Move(Coord cursor) {
-            throw new NotImplementedException();
-        }
 
         public override APawn Copy(Board boards) {
             ABasicPawn pawn;
@@ -49,7 +44,6 @@ namespace Units.Pawns
             msg.Append("Atk range: " + AtkRange + "\n");
             return msg.ToString();
         }
-
 
         public int GetAtk() { return Atk; }
         public int GetAtkRange() { return AtkRange; }

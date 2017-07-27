@@ -32,6 +32,7 @@ namespace RiseOfMitra.Players.Commands
                     allyPawn.Erase(Boards);
                     allyPawn.SetPos(Target);
                     allyPawn.Place(Boards);
+                    allyPawn.Adapt(Boards.TerrainAt(AllyPos), Boards.TerrainAt(Target));
                 } else {
                     ErrorMsg = OUT_OF_RANGE;
                 }

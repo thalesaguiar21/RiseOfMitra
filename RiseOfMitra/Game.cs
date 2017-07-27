@@ -69,7 +69,7 @@ namespace RiseOfMitra
         private void InitPlayers() {
             Gamers = new Player[2];
 
-            Gamers[0] = new RandomPlayer(ECultures.DALRIONS, this);
+            Gamers[0] = new HumanPlayer(ECultures.DALRIONS);
             CurPlayer = Gamers[0];
 
             Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, this);

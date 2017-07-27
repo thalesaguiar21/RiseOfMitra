@@ -331,15 +331,15 @@ namespace Boards
             return CellAt(new Coord(i, j));
         }
 
-        public Object TerrainAt(Coord pos) {
+        public ETerrain TerrainAt(Coord pos) {
             if (Coord.IsValid(pos)) {
                 return Terrains[pos.X, pos.Y];
             } else {
-                return null;
+                throw new InvalidOperationException("Could not find a terrain for position " + pos);
             }
         }
 
-        public Object TerrainAt(int i, int j) {
+        public ETerrain TerrainAt(int i, int j) {
             return TerrainAt(new Coord(i, j));
         }
 

@@ -1,5 +1,6 @@
 ﻿using Utils.Types;
 using Utils.Space;
+using System;
 
 namespace Units.Pawns
 {
@@ -18,34 +19,9 @@ namespace Units.Pawns
             SetPos(new Coord(0, 0));
             SetSize(1);
         }
-        
-        public override void Adapt(ETerrain prevTerrain, ETerrain curTerrain) {
-            switch (prevTerrain) {
-                case ETerrain.MOUNTAIN:
-                    SetMovePoints(GetMovePoints() + 1);
-                    break;
-                case ETerrain.PLAIN:
-                    SetDef(GetDef() - 1);
-                    break;
-                case ETerrain.RIVER:
-                    SetMovePoints(GetMovePoints() + 1);
-                    break;
-                case ETerrain.FIELD:
-                    SetDef(GetDef() - 1);
-                    break;
-                case ETerrain.MARSH:
-                    SetAtk(GetAtk() + 2);
-                    break;
-                case ETerrain.FOREST:
-                    break;
-                case ETerrain.DESERT:
-                    SetAtk(GetAtk() - 1);
-                    break;
-                default:
-                    break;
-            }
 
-            switch (curTerrain) {
+        public override void ReAdapt(ETerrain terrain) {
+            switch (terrain) {
                 case ETerrain.MOUNTAIN:
                     SetMovePoints(GetMovePoints() - 1);
                     break;
@@ -67,8 +43,37 @@ namespace Units.Pawns
                     SetAtk(GetAtk() + 1);
                     break;
                 default:
-                    break;
+                    throw new InvalidOperationException("Could not readapt for " + terrain);
             }
         }
+
+        public override void UnAdapt(ETerrain terrain) {
+            switch (terrain) {
+                case ETerrain.MOUNTAIN:
+                    SetMovePoints(GetMovePoints() + 1);
+                    break;
+                case ETerrain.PLAIN:
+                    SetDef(GetDef() - 1);
+                    break;
+                case ETerrain.RIVER:
+                    SetMovePoints(GetMovePoints() + 1);
+                    break;
+                case ETerrain.FIELD:
+                    SetDef(GetDef() - 1);
+                    break;
+                case ETerrain.MARSH:
+                    SetAtk(GetAtk() + 2);
+                    break;
+                case ETerrain.FOREST:
+                    break;
+                case ETerrain.DESERT:
+                    SetAtk(GetAtk() - 1);
+                    break;
+                default:
+                    throw new InvalidOperationException("Could not unadapt for " + terrain);
+            }
+        }
+
     }
+
 }
