@@ -60,7 +60,7 @@ namespace RiseOfMitra.MonteCarlo
             if (GameTree.Childs == null || GameTree.Childs.Count <= 0) {
                 GameTree.Childs = RunSimulation();
             }
-            Selection = new OMCSelection(GameTree.Childs, MAX_PLAYOUTS);
+            Selection = new OMCSelection(GameTree.Childs);
             GameTree = Selection.Execute();
             return GameTree;
         }

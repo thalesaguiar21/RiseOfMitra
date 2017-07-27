@@ -102,7 +102,7 @@ namespace RiseOfMitra.Players
             Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
             Cursor = selPos;
             if (GetPawnAt(selPos) is ABasicPawn ally) {
-                Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.GetAtkRange());
+                Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.AtkRange);
                 List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
                 Coord enemyPos = boards.SelectPosition(cursorCp, selPos, Command.ATTACK, atkRange);
 
@@ -119,7 +119,7 @@ namespace RiseOfMitra.Players
             Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
             Cursor = selPos;
             if (ally != null) {
-                Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.GetMovePoints());
+                Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.MovePoints);
                 List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
                 Coord target = boards.SelectPosition(cursorCp, selPos, Command.MOVE, moveRange);
 

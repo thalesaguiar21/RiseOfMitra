@@ -17,26 +17,26 @@ namespace Units.Centers
         public CulturalCenter(ECultures native) {
             if (native == ECultures.DALRIONS) BOARD_CHAR = BoardConsts.DALRION_CENTER;
             else if (native == ECultures.RAHKARS) BOARD_CHAR = BoardConsts.RAHKAR_CENTER;
-            SetCulture(native);
-            SetCurrLife(0);
-            SetTotalLife(0);
-            SetDef(0);
-            SetLifePerSec(0);
-            SetPos(new Coord(0, 0));
-            SetSize(5);
+            Culture = native;
+            CurrLife = 0;
+            TotalLife = 0;
+            Def = 0;
+            LifePerSec = 0;
+            Position = new Coord(0, 0);
+            Size = 5;
             UnitPerTurn = 10;
             SpawnPoint = new Coord(0, 0);
             SpawnRange = 4;
         }
 
         public CulturalCenter Copy(Board board) {
-            CulturalCenter tmpCenter = new CulturalCenter(NativeOf());
-            tmpCenter.SetCurrLife(GetCurrLife());
-            tmpCenter.SetTotalLife(GetTotalLife());
-            tmpCenter.SetDef(GetDef());
-            tmpCenter.SetLifePerSec(GetLifePerSec());
-            tmpCenter.SetPos(GetPos());
-            tmpCenter.SetSize(GetSize());
+            CulturalCenter tmpCenter = new CulturalCenter(Culture);
+            tmpCenter.CurrLife = CurrLife;
+            tmpCenter.TotalLife = TotalLife;
+            tmpCenter.Def = Def;
+            tmpCenter.LifePerSec = LifePerSec;
+            tmpCenter.Position = Position;
+            tmpCenter.Size = Size;
             tmpCenter.SetUnitPerTurn(UnitPerTurn);
             tmpCenter.SetSpawnPoint(board, new Coord(SpawnPoint.X, SpawnPoint.Y));
             tmpCenter.SetSpawnRange(SpawnRange);
@@ -46,13 +46,13 @@ namespace Units.Centers
 
         public APawn GeneratePawn(Board boards) {
             PawnFactory factory = new PawnFactory();
-            APawn pawn = factory.Create(NativeOf());
+            APawn pawn = factory.Create(Culture);
             Coord pos = PlacementPosition(boards);
             if (pos == null) {
                 UserUtils.PrintError("Can not generate more pawns!");
                 return null;
             } else {
-                pawn.SetPos(pos);
+                pawn.Position = Position;
                 return pawn;
             }
             

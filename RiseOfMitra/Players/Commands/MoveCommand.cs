@@ -25,12 +25,12 @@ namespace RiseOfMitra.Players.Commands
             bool valid = false;
             if (Validate()) {
                 APawn allyPawn = CurPlayer.GetPawnAt(AllyPos);
-                Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.GetMovePoints());
+                Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.MovePoints);
                 List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
                 if (moveRange.Contains(Target)) {
                     valid = true;
                     allyPawn.Erase(Boards);
-                    allyPawn.SetPos(Target);
+                    allyPawn.Position = Target;
                     allyPawn.Place(Boards);
                     allyPawn.Adapt(Boards.TerrainAt(AllyPos), Boards.TerrainAt(Target));
                 } else {
@@ -48,13 +48,13 @@ namespace RiseOfMitra.Players.Commands
         public override double Value() {
             double total = 1;
             
-            if(Coord.Distance(Target, Oponent.GetCultCenter().GetPos()) < 
-                Coord.Distance(AllyPos, Oponent.GetCultCenter().GetPos())) {
-                total += 2 * (1 + 1.0 / Coord.Distance(AllyPos, Oponent.GetCultCenter().GetPos()));
+            if(Coord.Distance(Target, Oponent.GetCultCenter().Position) < 
+                Coord.Distance(AllyPos, Oponent.GetCultCenter().Position)) {
+                total += 2 * (1 + 1.0 / Coord.Distance(AllyPos, Oponent.GetCultCenter().Position));
             }
 
             ETerrain terrainAtTarget = Boards.TerrainAt(Target);
-            foreach (ETerrain terrain in CurPlayer.GetPawnAt(AllyPos).GetPositiveTerrains()) {
+            foreach (ETerrain terrain in CurPlayer.GetPawnAt(AllyPos).PositiveTerrains) {
                 if(terrainAtTarget == terrain) {
                     total += 1;
                     break;
@@ -62,9 +62,9 @@ namespace RiseOfMitra.Players.Commands
             }
 
             foreach (ABasicPawn enemy in Oponent.GetAttackers()) {
-                if(Coord.Distance(enemy.GetPos(), CurPlayer.GetCultCenter().GetPos()) < BoardConsts.MAX_COL / 2
-                    && Coord.Distance(Target, enemy.GetPos()) < Coord.Distance(AllyPos, enemy.GetPos())) {
-                    total += 3.0 * (1 + 1.0 / Coord.Distance(AllyPos, enemy.GetPos()));
+                if(Coord.Distance(enemy.Position, CurPlayer.GetCultCenter().Position) < BoardConsts.MAX_COL / 2
+                    && Coord.Distance(Target, enemy.Position) < Coord.Distance(AllyPos, enemy.Position)) {
+                    total += 3.0 * (1 + 1.0 / Coord.Distance(AllyPos, enemy.Position));
                 }
             }
 

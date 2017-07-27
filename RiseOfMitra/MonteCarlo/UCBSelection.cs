@@ -13,8 +13,13 @@ namespace RiseOfMitra.MonteCarlo
         private int maxPlayouts;
 
         public UCBSelection(List<Node> validMoves, int maxPlayouts) {
-            this.validMoves = validMoves;
-            this.maxPlayouts = maxPlayouts;
+            if(validMoves != null && maxPlayouts >= 0) {
+                this.validMoves = validMoves;
+                this.maxPlayouts = maxPlayouts;
+            } else {
+                this.validMoves = new List<Node>();
+                this.maxPlayouts = 0;
+            }
         }
 
         public Node Execute() {

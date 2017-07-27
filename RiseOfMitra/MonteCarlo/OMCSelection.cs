@@ -9,13 +9,9 @@ namespace RiseOfMitra.MonteCarlo
     class OMCSelection : ISelectionStrategy
     {
         private List<Node> ValidStates;
-        private double NumOfPlayouts;
 
-        public OMCSelection(List<Node> validStates, double numOfPlayouts) {
-            if(validStates != null && numOfPlayouts > 0) {
-                ValidStates = validStates;
-                NumOfPlayouts = numOfPlayouts;
-            }
+        public OMCSelection(List<Node> validStates) {
+            ValidStates = validStates;
         }
 
         private List<Meta.Numerics.Complex> Urgency(List<Node> states) {

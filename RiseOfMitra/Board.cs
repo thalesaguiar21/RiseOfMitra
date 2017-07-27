@@ -140,7 +140,7 @@ namespace Boards
                 UserUtils.PrintError("There are no pawns!");
             } else {
                 
-                Coord unitPosition = units.ElementAt(0).GetPos();
+                Coord unitPosition = units.ElementAt(0).Position;
                 int currUnit = 0;
                 bool selected = false;
                 int index = 0;
@@ -169,7 +169,7 @@ namespace Boards
                     }
 
                     index = SelectionIndex(currUnit, units.Count());
-                    unitPosition = units.ElementAt(index).GetPos();
+                    unitPosition = units.ElementAt(index).Position;
                 } while (!selected);
 
                 return unitPosition;

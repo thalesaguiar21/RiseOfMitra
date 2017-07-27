@@ -6,7 +6,7 @@ namespace Units
 {
     public abstract class ABuilding : Unit
     {
-        private int LifePerSec;
+        private int lifePerSec;
         private const int MAX_LIFEPERSEC = 3;
 
         public override string GetStatus() {
@@ -15,19 +15,18 @@ namespace Units
             return msg.ToString();
         }
 
-        public void Regen() {
-            if(GetCurrLife() < GetTotalLife())
-                SetCurrLife(GetCurrLife() + LifePerSec);
+        public int LifePerSec {
+
+            get { return lifePerSec; }
+            set {
+                if ((value >= 0) && (value <= MAX_LIFEPERSEC))
+                    lifePerSec = value;
+            }
         }
 
-        public int GetLifePerSec() { return LifePerSec; }
-
-        public void SetLifePerSec(int lifePerSec) {
-            if (lifePerSec < 0 || lifePerSec > MAX_LIFEPERSEC)
-                UserUtils.PrintError(lifePerSec + " isn't a valid regen rate!");
-            else {
-                LifePerSec = lifePerSec;
-            }
+        public void Regen() {
+            if(CurrLife < TotalLife)
+                CurrLife = CurrLife + LifePerSec;
         }
     }
 }

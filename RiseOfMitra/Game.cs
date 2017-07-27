@@ -47,11 +47,11 @@ namespace RiseOfMitra
                 PawnFactory pawnFac = new PawnFactory();
                 for (int i = 0; i < BoardConsts.INITIAL_PAWNS; i++) {
                     APawn dPawn = pawnFac.Create(ECultures.DALRIONS);
-                    dPawn.SetPos(new Coord(1 + i, 7));
+                    dPawn.Position = new Coord(1 + i, 7);
                     Gamers[0].AddPawn(dPawn);
 
                     APawn rPawn = pawnFac.Create(ECultures.RAHKARS);
-                    rPawn.SetPos(new Coord(BoardConsts.MAX_LIN - 2 - i, BoardConsts.MAX_COL - 8));
+                    rPawn.Position = new Coord(BoardConsts.MAX_LIN - 2 - i, BoardConsts.MAX_COL - 8);
                     Gamers[1].AddPawn(rPawn);
                 }
 
@@ -96,7 +96,7 @@ namespace RiseOfMitra
                 Console.Clear();
             } while (Play);
 
-            if (CurPlayer.GetCultCenter() == null || CurPlayer.GetCultCenter().GetCurrLife() <= 0) {
+            if (CurPlayer.GetCultCenter() == null || CurPlayer.GetCultCenter().CurrLife <= 0) {
                 string winner = "";
                 if (CurPlayer.GetCulture() == ECultures.DALRIONS) {
                     winner = "Rahkars";
@@ -134,7 +134,7 @@ namespace RiseOfMitra
                         SetNextPlayer();
                     
                     foreach (Player player in Gamers) {
-                        if (player.GetCultCenter() == null || player.GetCultCenter().GetCurrLife() <= 0)
+                        if (player.GetCultCenter() == null || player.GetCultCenter().CurrLife <= 0)
                             Play = false;
                     }
                 } else {
@@ -186,12 +186,12 @@ namespace RiseOfMitra
         private List<ACommand> GetValidMoviments() {
             List<ACommand> validMvs = new List<ACommand>();
             foreach (APawn pawn in CurPlayer.GetPawns()) {
-                Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.GetPos(), pawn.GetMovePoints());
+                Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.Position, pawn.MovePoints);
                 List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
                 foreach (Coord cell in moveRange) {
                     MoveCommand mv = new MoveCommand();
                     mv.SetUp(Boards, CurPlayer, GetOponent());
-                    mv.SetUp(CurPlayer, pawn.GetPos(), cell, Boards);
+                    mv.SetUp(CurPlayer, pawn.Position, cell, Boards);
                     if (mv.IsValid()) validMvs.Add(mv);
                 }
             }
@@ -203,10 +203,10 @@ namespace RiseOfMitra
             List<ACommand> validAtks = new List<ACommand>();
             foreach(ABasicPawn pawn in CurPlayer.GetPawns()) {
                 foreach (ABasicPawn enemy in GetOponent().GetPawns()) {
-                    if(Coord.Distance(pawn.GetPos(), enemy.GetPos()) < pawn.GetAtkRange()) {
+                    if(Coord.Distance(pawn.Position, enemy.Position) < pawn.MovePoints) {
                         AttackCommand atk = new AttackCommand();
                         atk.SetUp(Boards, CurPlayer, GetOponent());
-                        atk.SetUp(pawn.GetPos(), enemy.GetPos(), CurPlayer, GetOponent(), Boards);
+                        atk.SetUp(pawn.Position, enemy.Position, CurPlayer, GetOponent(), Boards);
                         if (atk.IsValid()) validAtks.Add(atk);
                     }
                 }

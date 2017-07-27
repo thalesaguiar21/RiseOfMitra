@@ -31,11 +31,11 @@ namespace RiseOfMitra.Players.Commands
             if(Oponent.GetUnitAt(Target) is CulturalCenter) {
                 total += 1.0;
             }
-            double remainingHealth = Oponent.GetUnitAt(Target).GetCurrLife() / Oponent.GetUnitAt(Target).GetTotalLife();
+            double remainingHealth = Oponent.GetUnitAt(Target).CurrLife / Oponent.GetUnitAt(Target).TotalLife;
             if (remainingHealth < 0.5)
                 total += 3.0;
-            if(Coord.Distance(Target, CurPlayer.GetCultCenter().GetPos()) < BoardConsts.MAX_COL / 2) {
-                total += 1 + 100 / Coord.Distance(Target, CurPlayer.GetCultCenter().GetPos());
+            if(Coord.Distance(Target, CurPlayer.GetCultCenter().Position) < BoardConsts.MAX_COL / 2) {
+                total += 1 + 100 / Coord.Distance(Target, CurPlayer.GetCultCenter().Position);
             }
             return total;
         }
@@ -44,16 +44,16 @@ namespace RiseOfMitra.Players.Commands
             bool valid = false;
             if (Validate()) {
                 ABasicPawn allyPawn = (ABasicPawn) CurPlayer.GetPawnAt(AllyPos);
-                Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.GetAtkRange());
+                Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.AtkRange);
                 List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
                 if (PosValidate(atkRange)) {
                     valid = true;
                     Unit enemyUnit = Oponent.GetUnitAt(Target);
-                    int damage = allyPawn.GetAtk() - enemyUnit.GetDef();
+                    int damage = allyPawn.Atk - enemyUnit.Def;
                     if(damage > 0) {
-                        HitMsg = String.Format("{0} HAVE DEALT {1} DAMAGE!", allyPawn.NativeOf(), damage);
-                        enemyUnit.SetCurrLife(enemyUnit.GetCurrLife() - damage);
-                        if(enemyUnit.GetCurrLife() <= 0) {
+                        HitMsg = String.Format("{0} HAVE DEALT {1} DAMAGE!", allyPawn.Culture, damage);
+                        enemyUnit.CurrLife = enemyUnit.CurrLife - damage;
+                        if(enemyUnit.CurrLife <= 0) {
                             Oponent.RemoveUnitAt(Target, Boards);
                             HitMsg += " ENEMY KILLED!!";
                         }
@@ -122,7 +122,7 @@ namespace RiseOfMitra.Players.Commands
             bool valid = Validate();
             if (valid) {
                 ABasicPawn allyPawn = (ABasicPawn)CurPlayer.GetPawnAt(AllyPos);
-                Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.GetAtkRange());
+                Dijkstra didi = new Dijkstra(Boards.GetBoard(), AllyPos, allyPawn.AtkRange);
                 List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
                 valid = PosValidate(atkRange);
             }

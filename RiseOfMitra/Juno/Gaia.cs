@@ -90,47 +90,47 @@ namespace Juno
                         if(currPpt.OccupiedTerrains() > 3) {
                             msg += "increase the defense of pawns at " + (ETerrain)terrains.GetValue(terrain);
                             foreach (APawn pawn in playerPawns) {
-                                if((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain)) {
-                                    pawn.SetDef(pawn.GetDef() + 3);
+                                if(boards.TerrainAt(pawn.Position) == (ETerrain)terrains.GetValue(terrain)) {
+                                    pawn.Def += 3;
                                 }
                             }
                         } else {
                             msg += "set the atk of pawns at " + (ETerrain)terrains.GetValue(terrain) + " to 1!";
                             foreach (APawn pawn in playerPawns) {
-                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain)
+                                if (boards.TerrainAt(pawn.Position) == (ETerrain)terrains.GetValue(terrain)
                                     && pawn is ABasicPawn) {
                                     ABasicPawn bPawn = (ABasicPawn)pawn;
-                                    bPawn.SetAtk(1);
+                                    bPawn.Atk = 1;
                                 }
                             }
                         }
                     } else if (currStatistics[ENMY_DIST] >= 1 && currStatistics[ENMY_DIST] < 3) {
                         msg += "increase the move points of pawns at " + (ETerrain)terrains.GetValue(terrain);
                         foreach (APawn pawn in playerPawns) {
-                            if ((ETerrain)boards.TerrainAt(pawn.GetPos()) != (ETerrain)terrains.GetValue(terrain))
-                                pawn.SetMovePoints(pawn.GetMovePoints() + 2);
+                            if (boards.TerrainAt(pawn.Position) != (ETerrain)terrains.GetValue(terrain))
+                                pawn.MovePoints += 2;
                         }
                     } else {
                         if(currStatistics[ALLY_DIST] < 3) {
                             msg += "set the move range of pawns at " + (ETerrain)terrains.GetValue(terrain) + " to 1!";
                             foreach (APawn pawn in playerPawns) {
-                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain))
-                                    pawn.SetMovePoints(1);
+                                if (boards.TerrainAt(pawn.Position) == (ETerrain)terrains.GetValue(terrain))
+                                    pawn.MovePoints = 1;
                             }
                         } else if (currStatistics[ALLY_DIST] >= 3  && currStatistics[ALLY_DIST] < 7) {
                             msg += "increase the attack range of pawns at " + (ETerrain)terrains.GetValue(terrain);
                             foreach (APawn pawn in playerPawns) {
-                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) == (ETerrain)terrains.GetValue(terrain)
+                                if (boards.TerrainAt(pawn.Position) == (ETerrain)terrains.GetValue(terrain)
                                     && pawn is ABasicPawn) {
                                     ABasicPawn bPawn = (ABasicPawn)pawn;
-                                    bPawn.SetAtkRange(bPawn.GetAtkRange() + 2);
+                                    bPawn.AtkRange += 2;
                                 }
                             }
                         } else {
                             msg += "set the def of pawns at " + (ETerrain)terrains.GetValue(terrain) + " to 1!";
                             foreach (APawn pawn in playerPawns) {
-                                if ((ETerrain)boards.TerrainAt(pawn.GetPos()) != (ETerrain)terrains.GetValue(terrain))
-                                    pawn.SetDef(1);
+                                if (boards.TerrainAt(pawn.Position) != (ETerrain)terrains.GetValue(terrain))
+                                    pawn.Def = 1;
                             }
                         }
                     }
@@ -162,15 +162,15 @@ namespace Juno
                         List<int> distances = new List<int>();
                         for (int j = 1; j < allies.Count; j++) {
                             if (i != j) {
-                                distances.Add(Coord.Distance(allies[i].GetPos(), allies[j].GetPos()));
+                                distances.Add(Coord.Distance(allies[i].Position, allies[j].Position));
                             }
                         }
                         totalDist += distances.Min();
                     }
                     if (totalDist > 0)
-                        SetMeanAllyDistance(allies[0].NativeOf(), totalDist / allies.Count);
+                        SetMeanAllyDistance(allies[0].Culture, totalDist / allies.Count);
                 } else
-                    SetMeanAllyDistance(allies[0].NativeOf(), 0);
+                    SetMeanAllyDistance(allies[0].Culture, 0);
             }            
         }
 
@@ -179,31 +179,31 @@ namespace Juno
                 if(allies.Count > 0 && enemies.Count > 0) {
                     double totalDist = 0;
                     for (int i = 0; i < allies.Count; i++) {
-                        int min = Coord.Distance(allies[i].GetPos(), enemies[0].GetPos());
+                        int min = Coord.Distance(allies[i].Position, enemies[0].Position);
                         for (int j = 1; j < enemies.Count; j++) {
-                            int currDist = Coord.Distance(allies[i].GetPos(), enemies[j].GetPos());
+                            int currDist = Coord.Distance(allies[i].Position, enemies[j].Position);
                             if (currDist < min) min = currDist;
                         }
                         totalDist += min;
                     }
                     if (totalDist > 0)
-                        SetMeanEnemyDist(allies[0].NativeOf(), totalDist / allies.Count);
+                        SetMeanEnemyDist(allies[0].Culture, totalDist / allies.Count);
                 }
             }
         }
 
         private void SetPawnsPerTerrain(List<APawn> pawns, Board boards) {
             if(pawns != null && pawns.Count > 0) {
-                if (pawns[0].NativeOf() == ECultures.DALRIONS)
+                if (pawns[0].Culture == ECultures.DALRIONS)
                     DalrionPpts.ResetNumbers();
                 else
                     RahkarPpts.ResetNumbers();
 
                 foreach (APawn pawn in pawns) {
-                    if (pawn.NativeOf() == ECultures.DALRIONS)
-                        DalrionPpts.IncreasePawnsAt((ETerrain)boards.TerrainAt(pawn.GetPos()));
+                    if (pawn.Culture == ECultures.DALRIONS)
+                        DalrionPpts.IncreasePawnsAt(boards.TerrainAt(pawn.Position));
                     else
-                        RahkarPpts.IncreasePawnsAt((ETerrain)boards.TerrainAt(pawn.GetPos()));
+                        RahkarPpts.IncreasePawnsAt(boards.TerrainAt(pawn.Position));
                 }
             }
         }
@@ -214,10 +214,10 @@ namespace Juno
                     double risk = 0;
                     risk += RiskPerEnemyProximity(enemies, center);
                     risk += RiskPerAllyCloseToEnemy(allies);
-                    if(center.GetCurrLife() > 0) risk += Math.Exp(1.0 / center.GetCurrLife());
-                    SetCenterRisk(allies[0].NativeOf(), risk);
+                    if(center.CurrLife > 0) risk += Math.Exp(1.0 / center.CurrLife);
+                    SetCenterRisk(allies[0].Culture, risk);
                 } else if (allies.Count > 0){
-                    SetCenterRisk(allies[0].NativeOf(), 0);
+                    SetCenterRisk(allies[0].Culture, 0);
                 } else {
                     // No enemies or allies on the board, both center are in no risk
                     SetCenterRisk(ECultures.DALRIONS, 0);
@@ -231,8 +231,8 @@ namespace Juno
             int nearAllies = 0;
             foreach (ABasicPawn ally in allies) {
                 foreach (ABasicPawn enemy in NearEnemies) {
-                    double dist = Coord.Distance(ally.GetPos(), enemy.GetPos());
-                    if (dist <= ally.GetMovePoints()) {
+                    double dist = Coord.Distance(ally.Position, enemy.Position);
+                    if (dist <= ally.MovePoints) {
                         nearAllies++;
                     }
                 }
@@ -248,7 +248,7 @@ namespace Juno
             if(enemies != null && center != null) {
                 if(enemies.Count > 0) {
                     foreach (ABasicPawn enemy in enemies) {
-                        double dist = Math.Exp(1.0 / Coord.Distance(enemy.GetPos(), center.GetPos()));
+                        double dist = Math.Exp(1.0 / Coord.Distance(enemy.Position, center.Position));
                         result += dist;
                         if (dist <= CRITICAL_DIST)
                             NearEnemies.Add(enemy);

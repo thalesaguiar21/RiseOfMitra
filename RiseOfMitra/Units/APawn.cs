@@ -14,10 +14,26 @@ namespace Units
     /// </summary>
     public abstract class APawn : Unit, IAdaptable
     {
-        private int MovePoints;
-        protected ETerrain[] PositiveTerrains;
+        private int movePoints;
+        protected ETerrain[] positiveTerrains;
         private const int MAX_MOVE = 25;
-        protected const int MAX_RANGE = 10;
+
+        public int MovePoints {
+            get { return movePoints; }
+            set
+            {
+                if ((value > 0) && (value <= MAX_MOVE))
+                    movePoints = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets all terrains that give positive bonuses for this pawn.
+        /// </summary>
+        public ETerrain[] PositiveTerrains {
+            get { return positiveTerrains; }
+            set { positiveTerrains = value; }
+        }
 
         public override string GetStatus() {
             StringBuilder msg = new StringBuilder(base.GetStatus());
@@ -25,6 +41,11 @@ namespace Units
             return msg.ToString();
         }
 
+        /// <summary>
+        /// A copy method for pawns.
+        /// </summary>
+        /// <param name="boards">The board where it must be placed.</param>
+        /// <returns>A copy of the current Pawn instance.</returns>
         public abstract APawn Copy(Board boards);
 
         public abstract void UnAdapt(ETerrain terrain);
@@ -34,24 +55,6 @@ namespace Units
         public void Adapt(ETerrain prev, ETerrain actual) {
             UnAdapt(prev);
             ReAdapt(actual);
-        }
-
-
-        /// <summary>
-        /// This method returns all the terrains which gives a positive bonus to the actual
-        /// instance.
-        /// </summary>
-        /// <returns></returns>
-        public ETerrain[] GetPositiveTerrains() { return PositiveTerrains; }
-
-        public int GetMovePoints() { return MovePoints; }
-
-        public void SetMovePoints(int movePoints) {
-            if (movePoints < 1 || movePoints > MAX_MOVE)
-                Console.WriteLine("Move points must be between {0} and {1}", 1, MAX_MOVE);
-            else {
-                MovePoints = movePoints;
-            }
         }
     }
 }

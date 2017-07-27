@@ -27,7 +27,7 @@ namespace RiseOfMitra.Players
 
         public APawn GetPawnAt(Coord pos) {
             for (int i = 0; i < Pawns.Count; i++) {
-                if (Pawns[i].GetPos().Equals(pos))
+                if (Pawns[i].Position.Equals(pos))
                     return Pawns[i];
             }
             return null;
@@ -55,7 +55,7 @@ namespace RiseOfMitra.Players
         }
 
         public void AddPawn(APawn pawn) {
-            if (pawn != null && pawn.NativeOf() == Culture) {
+            if (pawn != null && pawn.Culture == Culture) {
                 Pawns.Add(pawn);
             }
         }
