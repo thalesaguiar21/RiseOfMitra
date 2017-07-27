@@ -59,8 +59,8 @@ namespace RiseOfMitra
                 ABuilding dCenter = centFac.Create(ECultures.DALRIONS, Boards);
                 ABuilding rCenter = centFac.Create(ECultures.RAHKARS, Boards);
 
-                Gamers[0].SetCulturalCenter((CulturalCenter)dCenter);
-                Gamers[1].SetCulturalCenter((CulturalCenter)rCenter);
+                Gamers[0].SetCultCenter((CulturalCenter)dCenter);
+                Gamers[1].SetCultCenter((CulturalCenter)rCenter);
             } else {
                 throw new ArgumentException("Invalid player array!");
             }
@@ -96,7 +96,7 @@ namespace RiseOfMitra
                 Console.Clear();
             } while (Play);
 
-            if (CurPlayer.GetCenter() == null || CurPlayer.GetCenter().GetCurrLife() <= 0) {
+            if (CurPlayer.GetCultCenter() == null || CurPlayer.GetCultCenter().GetCurrLife() <= 0) {
                 string winner = "";
                 if (CurPlayer.GetCulture() == ECultures.DALRIONS) {
                     winner = "Rahkars";
@@ -134,7 +134,7 @@ namespace RiseOfMitra
                         SetNextPlayer();
                     
                     foreach (Player player in Gamers) {
-                        if (player.GetCenter() == null || player.GetCenter().GetCurrLife() <= 0)
+                        if (player.GetCultCenter() == null || player.GetCultCenter().GetCurrLife() <= 0)
                             Play = false;
                     }
                 } else {
@@ -146,7 +146,7 @@ namespace RiseOfMitra
         }
         
         public void SetNextPlayer() {
-            CurPlayer.SetTurn();
+            CurPlayer.IncreaseTurn();
             CurPlayer.ExecuteTurnEvents(Boards);
 
             if (CurPlayer == Gamers[0]) {

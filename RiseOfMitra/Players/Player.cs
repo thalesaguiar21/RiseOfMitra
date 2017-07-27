@@ -8,14 +8,20 @@ using Utils.Space;
 using Units.Centers;
 using Units;
 using RiseOfMitra.MonteCarlo;
+using Utils;
 
 namespace RiseOfMitra.Players
 {
+    /// <summary>
+    /// This class represents a player in Rise of Mitra. Every type of playr must inherit from this
+    /// class. With it, player can perform turn events like receiving more pawns and prepare actions
+    /// to be performed by the game.
+    /// </summary>
     public abstract class Player
     {
         protected ECultures Culture;
         protected List<APawn> Pawns;
-        protected CulturalCenter Center;
+        protected CulturalCenter CultCenter;
         protected Coord Cursor;
         protected int Turn;
 
@@ -30,7 +36,7 @@ namespace RiseOfMitra.Players
         public List<Unit> GetUnits() {
             List<Unit> playerUnits = new List<Unit>();
             playerUnits.AddRange(Pawns);
-            playerUnits.Add(Center);
+            playerUnits.Add(CultCenter);
             return playerUnits;
         }
 
@@ -57,8 +63,8 @@ namespace RiseOfMitra.Players
         public bool RemoveUnitAt(Coord pos, Board boards) {
             bool found = false;
 
-            if (Center.InUnit(pos)) {
-                Center = null;
+            if (CultCenter.InUnit(pos)) {
+                CultCenter = null;
                 found = true;
             } else {
                 for (int i = 0; i < Pawns.Count; i++) {
@@ -72,30 +78,45 @@ namespace RiseOfMitra.Players
             return found;
         }
 
+        /// <summary>
+        /// This method will execute every turn event for the player. For instance, a pawn respawn
+        /// rate.
+        /// </summary>
+        /// <param name="boards">The board where events should be executed.</param>
         public void ExecuteTurnEvents(Board boards) {
-            Center.Regen();
-            if (Turn % Center.GetUnitsPerTurn() == 0 && Pawns.Count < 6) {
-                APawn pawn = Center.GeneratePawn(boards);
+            CultCenter.Regen();
+            if (Turn % CultCenter.GetUnitsPerTurn() == 0 && Pawns.Count < 6) {
+                APawn pawn = CultCenter.GeneratePawn(boards);
                 if(pawn != null) {
                     pawn.Place(boards);
                     AddPawn(pawn);
                 } else {
-                    //Console.Write("Can not create more pawns!");
-                    //Console.ReadLine();
+                    UserUtils.PrintError("Can not create more pawns!");
+                    Console.ReadLine();
                 }
             }
         }
-
+        /// <summary>
+        /// This method allows the player to set up a certain command before executing it. This prevents
+        /// some exceptions, and add a more defensive programming to the game.
+        /// </summary>
+        /// <param name="boards">Where the command should configurated.</param>
+        /// <param name="oponent">The oponent of the current player.</param>
+        /// <returns></returns>
         public abstract Node PrepareAction(Board boards, Player oponent);
+
+        /// <summary>
+        /// This is a copy constructor.
+        /// </summary>
+        /// <param name="board">The new board where units should be placed.</param>
+        /// <returns></returns>
         public abstract Player Copy(Board board);
-
-
-        public ECultures GetCulture() { return Culture; }
-
-        public List<APawn> GetPawns() {
-            return Pawns;
-        }
-
+        
+        /// <summary>
+        /// Pawns may have a wide variety, but sometimes its only necessary to acess a determined
+        /// type of pawns.
+        /// </summary>
+        /// <returns>A list of pawns that can perform attacks.</returns>
         public List<ABasicPawn> GetAttackers() {
             List<ABasicPawn> attackers = new List<ABasicPawn>();
 
@@ -106,29 +127,53 @@ namespace RiseOfMitra.Players
             return attackers;
         }
 
-        public CulturalCenter GetCenter() { return Center; }
-        public Coord GetCursor() { return Cursor; }
+        public ECultures GetCulture() { return Culture; }
 
         public void SetCulture(ECultures cult) {
             Culture = cult;
         }
 
+        public List<APawn> GetPawns() { return Pawns; }
+        
+        /// <summary>
+        /// Assign a new list of pawns to the player attribute. The new list can not be null, int that
+        /// case the list of pawns will not be assigned, that is, the list stays without modifications.
+        /// </summary>
+        /// <param name="pawns">The new list of pawns.</param>
         public void SetPawns(List<APawn> pawns) {
             if (pawns != null)
                 Pawns = pawns;
         }
 
-        public void SetCulturalCenter(CulturalCenter center) {
+        public CulturalCenter GetCultCenter() { return CultCenter; }
+
+        /// <summary>
+        /// Assign a new cultural center to the player attribute. The new cultural center can not be null, int that
+        /// case cultural center will not be assigned, that is, it stays without modifications.
+        /// </summary>
+        /// <param name="center">The new cultural center.</param>
+        public void SetCultCenter(CulturalCenter center) {
             if (center != null)
-                Center = center;
+                CultCenter = center;
         }
 
+        public Coord GetCursor() { return Cursor; }
+
+        /// <summary>
+        /// Assign a new postion to the player's cursor. That attribute represents the player's 
+        /// actual selected position. Only valid positions can be assigned to the cursor. 
+        /// For informations on valid positions, see: <see cref="Coord"/>
+        /// </summary>
+        /// <param name="nCursor">The cursor new position.</param>
         public void SetCursor(Coord nCursor) {
             if (Coord.IsValid(nCursor))
                 Cursor = nCursor;
         }
 
-        public void SetTurn() {
+        /// <summary>
+        /// This method will increase the player turn by 1.
+        /// </summary>
+        public void IncreaseTurn() {
             Turn += 1;
         }
     }

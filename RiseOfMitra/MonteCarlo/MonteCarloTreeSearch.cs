@@ -31,7 +31,7 @@ namespace RiseOfMitra.MonteCarlo
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
-            Center = null;
+            CultCenter = null;
             this.strat = strat;
         }
 
@@ -40,7 +40,7 @@ namespace RiseOfMitra.MonteCarlo
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
-            Center = null;
+            CultCenter = null;
         }
 
         public override Player Copy(Board board) {
@@ -50,7 +50,7 @@ namespace RiseOfMitra.MonteCarlo
                 APawn tmpPawn = GetPawns()[i].Copy(board);
                 mcts.AddPawn(tmpPawn);
             }
-            mcts.SetCulturalCenter(Center.Copy(board));
+            mcts.SetCultCenter(CultCenter.Copy(board));
             mcts.SetCursor(tmpCursor);
             return mcts;
         }

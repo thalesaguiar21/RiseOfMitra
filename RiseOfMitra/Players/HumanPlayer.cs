@@ -19,7 +19,7 @@ namespace RiseOfMitra.Players
         public HumanPlayer(ECultures native) {
             Culture = native;
             Pawns = new List<APawn>();
-            Center = null;
+            CultCenter = null;
             Cursor = new Coord(1, 1);
         }
 
@@ -36,7 +36,7 @@ namespace RiseOfMitra.Players
                 APawn tmpPawn = GetPawns()[i].Copy(board);
                 human.AddPawn(tmpPawn);
             }
-            human.SetCulturalCenter(Center.Copy(board));
+            human.SetCultCenter(CultCenter.Copy(board));
             human.SetCursor(tmpCursor);
             return human;
         }

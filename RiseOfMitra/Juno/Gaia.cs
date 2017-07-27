@@ -146,12 +146,12 @@ namespace Juno
             SetPawnsPerTerrain(playerOne.GetPawns(), boards);
             CalculateMeanAllyDistance(playerOne.GetUnits());
             CalculateMeanEnemyDistance(playerOne.GetUnits(), playerTwo.GetUnits());
-            CalculateCulturalCenterRisk(playerOne.GetAttackers(), playerTwo.GetAttackers(), playerOne.GetCenter());
+            CalculateCulturalCenterRisk(playerOne.GetAttackers(), playerTwo.GetAttackers(), playerOne.GetCultCenter());
             // Calculating player two statistics 
             SetPawnsPerTerrain(playerTwo.GetPawns(), boards);
             CalculateMeanAllyDistance(playerTwo.GetUnits());
             CalculateMeanEnemyDistance(playerTwo.GetUnits(), playerOne.GetUnits());
-            CalculateCulturalCenterRisk(playerTwo.GetAttackers(), playerOne.GetAttackers(), playerTwo.GetCenter());
+            CalculateCulturalCenterRisk(playerTwo.GetAttackers(), playerOne.GetAttackers(), playerTwo.GetCultCenter());
         }
 
         private void CalculateMeanAllyDistance(List<Unit> allies) {

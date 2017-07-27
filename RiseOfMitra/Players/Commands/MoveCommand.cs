@@ -48,12 +48,12 @@ namespace RiseOfMitra.Players.Commands
         public override double Value() {
             double total = 1;
             
-            if(Coord.Distance(Target, Oponent.GetCenter().GetPos()) < 
-                Coord.Distance(AllyPos, Oponent.GetCenter().GetPos())) {
-                total += 2 * (1 + 1.0 / Coord.Distance(AllyPos, Oponent.GetCenter().GetPos()));
+            if(Coord.Distance(Target, Oponent.GetCultCenter().GetPos()) < 
+                Coord.Distance(AllyPos, Oponent.GetCultCenter().GetPos())) {
+                total += 2 * (1 + 1.0 / Coord.Distance(AllyPos, Oponent.GetCultCenter().GetPos()));
             }
 
-            ETerrain terrainAtTarget = (ETerrain)Boards.TerrainAt(Target);
+            ETerrain terrainAtTarget = Boards.TerrainAt(Target);
             foreach (ETerrain terrain in CurPlayer.GetPawnAt(AllyPos).GetPositiveTerrains()) {
                 if(terrainAtTarget == terrain) {
                     total += 1;
@@ -62,7 +62,7 @@ namespace RiseOfMitra.Players.Commands
             }
 
             foreach (ABasicPawn enemy in Oponent.GetAttackers()) {
-                if(Coord.Distance(enemy.GetPos(), CurPlayer.GetCenter().GetPos()) < BoardConsts.MAX_COL / 2
+                if(Coord.Distance(enemy.GetPos(), CurPlayer.GetCultCenter().GetPos()) < BoardConsts.MAX_COL / 2
                     && Coord.Distance(Target, enemy.GetPos()) < Coord.Distance(AllyPos, enemy.GetPos())) {
                     total += 3.0 * (1 + 1.0 / Coord.Distance(AllyPos, enemy.GetPos()));
                 }

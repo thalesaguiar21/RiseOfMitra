@@ -20,7 +20,7 @@ namespace RiseOfMitra.Players
             CurGame = curGame;
             Culture = cult;
             Pawns = new List<APawn>();
-            Center = null;
+            CultCenter = null;
             Cursor = new Coord(1, 1);
         }
 
@@ -31,7 +31,7 @@ namespace RiseOfMitra.Players
                 APawn tmpPawn = GetPawns()[i].Copy(board);
                 random.AddPawn(tmpPawn);
             }
-            random.SetCulturalCenter(Center.Copy(board));
+            random.SetCultCenter(CultCenter.Copy(board));
             random.SetCursor(tmpCursor);
             return random;
         }
