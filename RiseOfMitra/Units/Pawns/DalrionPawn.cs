@@ -19,7 +19,7 @@ namespace Units.Pawns
             Size = 1;
             Atk = 9;
             AtkRange = 5;
-            MovePoints = 4;
+            MovePoints = 5;
         }
 
         public override void ReAdapt(ETerrain terrain) {

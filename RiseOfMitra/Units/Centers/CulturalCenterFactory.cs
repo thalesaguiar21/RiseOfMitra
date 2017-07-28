@@ -13,8 +13,8 @@ namespace Units.Centers
             switch (native) {
                 case ECultures.DALRIONS:
                     center = new CulturalCenter(ECultures.DALRIONS);
-                    center.TotalLife = 30;
-                    center.CurrLife = 30;
+                    center.TotalLife = 100;
+                    center.CurrLife = 100;
                     center.Def = 3;
                     center.LifePerSec = 2;
                     int dSize = center.Size / 2;
@@ -23,8 +23,8 @@ namespace Units.Centers
                     break;
                 case ECultures.RAHKARS:
                     center = new CulturalCenter(ECultures.RAHKARS);
-                    center.TotalLife = 35;
-                    center.CurrLife = 35;
+                    center.TotalLife = 65;
+                    center.CurrLife = 65;
                     center.Def = 4;
                     center.LifePerSec = 1;
                     int rSize = center.Size / 2;
@@ -44,13 +44,13 @@ namespace Units.Centers
         private bool Validate(CulturalCenter center) {
             bool valid = true;
             if(center.Culture == ECultures.DALRIONS) {
-                valid &= center.CurrLife == 30;
+                valid &= center.CurrLife == 100;
                 valid &= center.CurrLife == center.TotalLife;
                 valid &= center.Def == 3;
                 valid &= center.LifePerSec == 2;
 
             } else {
-                valid &= center.CurrLife == 35;
+                valid &= center.CurrLife == 65;
                 valid &= center.CurrLife == center.TotalLife;
                 valid &= center.Def == 4;
                 valid &= center.LifePerSec == 1;
