@@ -23,6 +23,7 @@ namespace RiseOfMitra
         private bool Play;
         private bool ValidCmd;
         private Board Boards;
+        public static int wins = 0;
 
         public Game() {
             Play = true;
@@ -100,6 +101,7 @@ namespace RiseOfMitra
                 string winner = "";
                 if (CurPlayer.GetCulture() == ECultures.DALRIONS) {
                     winner = "Rahkars";
+                    wins++;
                 } else {
                     winner = "Dalrions";
                 }
@@ -222,8 +224,8 @@ namespace RiseOfMitra
 
         public static void Main() {
             try {
-                Game rom = new Game();
-                rom.Start();
+                 Game rom = new Game();
+                 rom.Start();
             } catch (FormatException) {
                 Console.WriteLine("Invalid Terrain or Board file format!");
             } catch (IOException) {

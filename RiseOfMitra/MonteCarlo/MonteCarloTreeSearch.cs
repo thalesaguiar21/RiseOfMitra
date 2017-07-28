@@ -17,7 +17,6 @@ namespace RiseOfMitra.MonteCarlo
         public Node GameTree;
         private Game CurGame;
         private Game MCTSGame;
-        private int strat;
         private ISelectionStrategy Selection;
         private ISimulationStrategy SimulationStrat;
         private const int MAX_PLAYOUTS = 100;
@@ -26,7 +25,7 @@ namespace RiseOfMitra.MonteCarlo
         // Defines the simulation depth
         private const int MAX_DEPTH = 10; 
 
-        public MonteCarloTreeSearch(ECultures cult, Game game, int strat = 1) {
+        public MonteCarloTreeSearch(ECultures cult, Game game) {
             GameTree = new Node(0, game.GetBoards(), null);
             CurGame = game;
             Selection = null;
@@ -34,7 +33,6 @@ namespace RiseOfMitra.MonteCarlo
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
             CultCenter = null;
-            this.strat = strat;
         }
 
         private MonteCarloTreeSearch(ECultures cult) {
@@ -71,43 +69,36 @@ namespace RiseOfMitra.MonteCarlo
             // Childs of the current game state
             List<Node> nextMoves = new List<Node>();
             Node GameTreeCp = new Node(GameTree.Value, GameTree.Boards, GameTree.Cmd);
+            
+            for (int i = 0; i < MAX_PLAYOUTS; i++) {
 
-            Stopwatch cron = new Stopwatch();
-            cron.Start();
-
-            int playouts = 0;
-            while(playouts < MAX_PLAYOUTS) {
                 MCTSGame = new Game(CurGame);
                 Node curr = GameTreeCp;
                 List<Node> path = new List<Node>();
-
                 Random rand = new Random();
                 int depth = 0;
+
                 while (depth < MAX_DEPTH) {
+
                     if (MCTSGame.IsOver()) {
                         break;
                     }
 
                     List<ACommand> mctsCmds = MCTSGame.GetValidCommands();
-                    if(mctsCmds == null || mctsCmds.Count == 0) {
+
+                    // If the current player has no pawns left
+                    if (mctsCmds == null || mctsCmds.Count == 0) {
                         MCTSGame.SetNextPlayer();
                         mctsCmds = MCTSGame.GetValidCommands();
                     }
-                    SimulationStrat = new BestOfAllSimulation(mctsCmds);
 
-                    //List<ACommand> bestCmds = SimulationStrat.Execute();
-                    
                     int chosen = rand.Next(mctsCmds.Count);
                     Node nextState = new Node(mctsCmds[chosen].Value(), MCTSGame.GetBoards(), mctsCmds[chosen]);
-                    //Node nextState = new Node(bestCmds[chosen].Value(), 
-                    //                          MCTSGame.GetBoards(),
-                    //                          bestCmds[chosen]);
-                    // Saves the current path taken
                     path.Add(nextState);
 
                     // If the node is a directly descendent, it checks if its already added 
                     // to the next moves.
-                    if(depth == 0) {
+                    if (depth == 0) {
                         bool visited = false;
                         foreach (Node node in nextMoves) {
                             if (node.Equals(nextState)) {
@@ -115,17 +106,17 @@ namespace RiseOfMitra.MonteCarlo
                                 break;
                             }
                         }
-                        if(!visited)
+                        if (!visited)
                             nextMoves.Add(nextState);
                     }
 
                     // Checks if the state is in the game tree, if not then
                     // expands the game tree by adding the new state
                     bool expanded = false;
-                    for (int i = 0; i < curr.Childs.Count; i++) {
-                        if (curr.Childs[i].Equals(nextState)) {
+                    for (int k = 0; k < curr.Childs.Count; k++) {
+                        if (curr.Childs[k].Equals(nextState)) {
                             expanded = true;
-                            nextState = curr.Childs[i];
+                            nextState = curr.Childs[k];
                             break;
                         }
                     }
@@ -143,14 +134,13 @@ namespace RiseOfMitra.MonteCarlo
                     curr = nextState;
                     depth++;
                 }
-                playouts++;
-                for (int i = path.Count - 1; i > 0; i--) {
-                    path[i - 1].Value += path[i].Value;
+
+                // Backpropagates the value of nodes in the simulation path until
+                for (int j = path.Count - 1; j > 0; j--) {
+                    path[j - 1].Value += path[j].Value;
+                    path[j - 1].Value /= j;
                 }
-            }
-            if (nextMoves == null) {
-                UserUtils.PrintError("No moves left!");
-            }
+            }             
                 
             return nextMoves;
         }
