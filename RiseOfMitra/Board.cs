@@ -21,15 +21,13 @@ namespace Boards
 
         public Board(Board board) {
             MainBoard = new string[BoardConsts.MAX_LIN, BoardConsts.MAX_COL];
-            Terrains = new ETerrain[BoardConsts.MAX_LIN, BoardConsts.MAX_COL];
 
             for (int i = 0; i < board.GetBoard().GetLongLength(0); i++) {
                 for (int j = 0; j < board.GetBoard().GetLongLength(1); j++) {
                     MainBoard[i, j] = board.MainBoard[i, j];
-                    Terrains[i, j] = board.Terrains[i, j];
                 }
             }
-            SetCellAt(new Coord(30, 3), "AQUI");
+            Terrains = board.Terrains;
             CultColors = board.CultColors;
             Cmds = board.Cmds;
             Legend = board.Legend;
