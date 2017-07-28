@@ -20,9 +20,11 @@ namespace RiseOfMitra.MonteCarlo
         private int strat;
         private ISelectionStrategy Selection;
         private ISimulationStrategy SimulationStrat;
-        private const int MAX_PLAYOUTS = 50;
-        private const int MAX_SIMULATION_TIME = 4; // Define um tempo máximo de execução de simulações
-        private const int MAX_DEPTH = 4; // Define o quão profundo será a simulação
+        private const int MAX_PLAYOUTS = 100;
+        // Define the simulation max maximum time
+        private const int MAX_SIMULATION_TIME = 4;
+        // Defines the simulation depth
+        private const int MAX_DEPTH = 10; 
 
         public MonteCarloTreeSearch(ECultures cult, Game game, int strat = 1) {
             GameTree = new Node(0, game.GetBoards(), null);
@@ -93,12 +95,13 @@ namespace RiseOfMitra.MonteCarlo
                     }
                     SimulationStrat = new BestOfAllSimulation(mctsCmds);
 
-                    List<ACommand> bestCmds = SimulationStrat.Execute();
+                    //List<ACommand> bestCmds = SimulationStrat.Execute();
                     
-                    int chosen = rand.Next(bestCmds.Count);
-                    Node nextState = new Node(bestCmds[chosen].Value(), 
-                                              MCTSGame.GetBoards(),
-                                              bestCmds[chosen]);
+                    int chosen = rand.Next(mctsCmds.Count);
+                    Node nextState = new Node(mctsCmds[chosen].Value(), MCTSGame.GetBoards(), mctsCmds[chosen]);
+                    //Node nextState = new Node(bestCmds[chosen].Value(), 
+                    //                          MCTSGame.GetBoards(),
+                    //                          bestCmds[chosen]);
                     // Saves the current path taken
                     path.Add(nextState);
 

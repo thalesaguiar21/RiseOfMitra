@@ -3,7 +3,7 @@
 </p>
 
 
-# RiseOfMitra
+# Rise Of Mitra
 Rise of Mitra is a turn-based board game with a discrete world and imperfect information. This game is being used as a test environment for a <b>Monte Carlo Tree Search</b>(MCTS) algorithm. MCTS is a incomplete tree search algorithm that aims to get the best outcomes by selecting random samples from a given solution domain. This procedure is a new family of algorithms with a increasingly number of applications, primarly in <b>AI</b>.
 
 ![](/imgs_md/inspect.PNG)                  |  ![](/imgs_md/move.PNG)

@@ -69,7 +69,7 @@ namespace RiseOfMitra
         private void InitPlayers() {
             Gamers = new Player[2];
 
-            Gamers[0] = new HumanPlayer(ECultures.DALRIONS);
+            Gamers[0] = new RandomPlayer(ECultures.DALRIONS, this);
             CurPlayer = Gamers[0];
 
             Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, this);
@@ -104,6 +104,7 @@ namespace RiseOfMitra
                     winner = "Dalrions";
                 }
                 string winnerMsg = String.Format("Congratulations! Now, {0} own the monopoly of Argyros!", winner);
+                Console.WriteLine(winnerMsg);
             }
         }
 
