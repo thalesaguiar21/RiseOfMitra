@@ -52,7 +52,7 @@ namespace Units.Centers
                 UserUtils.PrintError("Can not generate more pawns!");
                 return null;
             } else {
-                pawn.Position = Position;
+                pawn.Position = pos;
                 return pawn;
             }
             
@@ -62,8 +62,9 @@ namespace Units.Centers
             Coord spawnPoint = null;
             for(int i = 0; i < BoardConsts.MAX_LIN; i++) {
                 for(int j=0; j < BoardConsts.MAX_COL; j++) {
-                    if (boards.CellAt(i, j) == BoardConsts.EMPTY && Coord.Distance(SpawnPoint, new Coord(i, j)) <= SpawnRange) {
+                    if ((boards.CellAt(i, j) == BoardConsts.EMPTY) && (Coord.Distance(SpawnPoint, new Coord(i, j)) <= SpawnRange)) {
                         spawnPoint = new Coord(i, j);
+                        break;
                     }
                 }
             }
@@ -80,7 +81,7 @@ namespace Units.Centers
         }
 
         public void SetSpawnPoint(Board boards, Coord cell) {
-            if(cell != null && boards.CellAt(cell) == BoardConsts.EMPTY) {
+            if(cell != null) {
                 SpawnPoint = cell;
             }
         }

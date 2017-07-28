@@ -19,7 +19,7 @@ namespace Units.Centers
                     center.LifePerSec = 2;
                     int dSize = center.Size / 2;
                     center.Position = new Coord(1 + dSize, 1 + dSize);
-                    center.SetSpawnPoint(boards, new Coord(center.Position.X, center.Position.Y + center.Size));
+                    center.SetSpawnPoint(boards, new Coord(1, center.Position.Y + dSize + 2));
                     break;
                 case ECultures.RAHKARS:
                     center = new CulturalCenter(ECultures.RAHKARS);
@@ -29,7 +29,7 @@ namespace Units.Centers
                     center.LifePerSec = 1;
                     int rSize = center.Size / 2;
                     center.Position = new Coord(BoardConsts.MAX_LIN - rSize - 2, BoardConsts.MAX_COL - rSize - 2);
-                    center.SetSpawnPoint(boards, new Coord(center.Position.X, center.Position.Y - 1));
+                    center.SetSpawnPoint(boards, new Coord(BoardConsts.MAX_LIN - 1, center.Position.Y - rSize - 2));
                     break;
                 default:
                     UserUtils.PrintError("Invalid culture. Can't create cultural center!");
