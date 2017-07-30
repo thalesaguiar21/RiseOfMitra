@@ -85,7 +85,13 @@ namespace RiseOfMitra
             }
         }
 
+        public void Menu() {
+            UI menu = new UI();
+            menu.PrintMenu();
+        }
+
         public void Start() {
+            Menu();
             Gaia gaia = new Gaia();
             int turn = 1;
             do {

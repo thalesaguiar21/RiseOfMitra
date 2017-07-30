@@ -48,12 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EMenuOptions.cs" />
     <Compile Include="MonteCarlo\BestOfAllSimulation.cs" />
     <Compile Include="MonteCarlo\DefaultSelection.cs" />
     <Compile Include="MonteCarlo\Node.cs" />
     <Compile Include="MonteCarlo\OMCSelection.cs" />
     <Compile Include="MonteCarlo\UCBSelection.cs" />
     <Compile Include="Players\RandomPlayer.cs" />
+    <Compile Include="UI.cs" />
     <Compile Include="Units\Pawns\ABasicPawn.cs" />
     <Compile Include="Units\ABuilding.cs" />
     <Compile Include="Players\Commands\ACommand.cs" />
