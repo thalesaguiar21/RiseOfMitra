@@ -21,13 +21,11 @@ namespace RiseOfMitra
         private Player[] Gamers;
         private Player CurPlayer;
         private bool Play;
-        private bool ValidCmd;
         private Board Boards;
         public static int wins = 0;
 
         public Game() {
             Play = true;
-            ValidCmd = false;
             Boards = new Board();
             InitPlayers();
             CreateUnits();
@@ -37,7 +35,6 @@ namespace RiseOfMitra
         public Game(Game game) {
             Boards = new Board(game.Boards);
             Play = game.Play;
-            ValidCmd = game.ValidCmd;
             Gamers = new Player[2] { game.Gamers[0].Copy(Boards),
                                           game.Gamers[1].Copy(Boards) };
             CurPlayer = game.CurPlayer.Copy(Boards);
@@ -68,12 +65,12 @@ namespace RiseOfMitra
         }
 
         private void InitPlayers() {
+
             Gamers = new Player[2];
-
             Gamers[0] = new RandomPlayer(ECultures.DALRIONS, this);
-            CurPlayer = Gamers[0];
-
             Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, this);
+
+            CurPlayer = Gamers[0];
             Gamers[1].SetCursor(new Coord(BoardConsts.MAX_LIN - 2, BoardConsts.MAX_COL - 2));
         }
 
@@ -125,20 +122,6 @@ namespace RiseOfMitra
                 if (validCmd) {
                     if (state.Value == 0)
                         state.Value = state.Cmd.Value();
-                    if (!(CurPlayer is MonteCarloTreeSearch)) {
-                        MonteCarloTreeSearch op = (MonteCarloTreeSearch)GetOponent();
-                        bool expanded = false;
-                        for (int i = 0; i < op.GameTree.Childs.Count; i++) {
-                            if (op.GameTree.Childs[i].Equals(state)) {
-                                expanded = true;
-                                op.GameTree = op.GameTree.Childs[i];
-                                break;
-                            }
-                        }
-                        if (!expanded) {
-                            op.GameTree = state;
-                        }
-                    }
                     if(state.Cmd.Execute(isSimulation))
                         SetNextPlayer();
                     

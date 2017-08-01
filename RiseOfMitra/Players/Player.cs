@@ -61,8 +61,8 @@ namespace RiseOfMitra.Players
         }
 
         public bool RemoveUnitAt(Coord pos, Board boards) {
-            bool found = false;
 
+            bool found = false;
             if (CultCenter.InUnit(pos)) {
                 CultCenter = null;
                 found = true;

@@ -25,8 +25,8 @@ namespace RiseOfMitra.Players
         }
 
         public override Player Copy(Board board) {
-            Player random = new HumanPlayer(GetCulture());
-            Coord tmpCursor = new Coord(GetCursor().X, GetCursor().Y);
+            Player random = new RandomPlayer(Culture, CurGame);
+            Coord tmpCursor = new Coord(0, 0);
             for (int i = 0; i < GetPawns().Count; i++) {
                 APawn tmpPawn = GetPawns()[i].Copy(board);
                 random.AddPawn(tmpPawn);
@@ -37,7 +37,7 @@ namespace RiseOfMitra.Players
         }
 
         public override Node PrepareAction(Board boards, Player oponent) {
-            //Console.WriteLine("Random player's turn!");
+
             Random rand = new Random();
             List<ACommand> validCmds = CurGame.GetValidCommands();
 
@@ -59,7 +59,6 @@ namespace RiseOfMitra.Players
             } else {
                 return null;
             }
-
         }
     }
 }

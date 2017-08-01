@@ -136,8 +136,8 @@ namespace Juno
                     }
                 }
 
-                UserUtils.PrintSucess(msg + " For " + currPlayer.GetCulture());
-                Console.ReadLine();
+                //UserUtils.PrintSucess(msg + " For " + currPlayer.GetCulture());
+               // Console.ReadLine();
             }
         }
 
