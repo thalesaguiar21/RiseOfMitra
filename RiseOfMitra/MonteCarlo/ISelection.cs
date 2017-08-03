@@ -7,8 +7,8 @@ using RiseOfMitra.Players.Commands;
 
 namespace RiseOfMitra.MonteCarlo
 {
-    interface ISelectionStrategy
+    public interface ISelection
     {
-        Node Execute();
+        Node Execute(List<Node> validNodes);
     }
 }
