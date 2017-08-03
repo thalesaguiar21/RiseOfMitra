@@ -31,8 +31,8 @@ namespace Units.Centers
 
         public CulturalCenter Copy(Board board) {
             CulturalCenter tmpCenter = new CulturalCenter(Culture);
-            tmpCenter.CurrLife = CurrLife;
             tmpCenter.TotalLife = TotalLife;
+            tmpCenter.CurrLife = CurrLife;
             tmpCenter.Def = Def;
             tmpCenter.LifePerSec = LifePerSec;
             tmpCenter.Position = Position;
