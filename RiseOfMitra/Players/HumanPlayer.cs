@@ -23,9 +23,9 @@ namespace RiseOfMitra.Players
             Cursor = new Coord(1, 1);
         }
 
-        public override Node PrepareAction(Board boards, Player oponent) {
-            ACommand partialCommand = GetCmd(boards, oponent);
-            Node state = new Node(0, boards, partialCommand);
+        public override Node PrepareAction(Node currState, Player oponent) {
+            ACommand partialCommand = GetCmd(currState.Boards, oponent);
+            Node state = new Node(0, currState.Boards, partialCommand);
             return state;
         }
 

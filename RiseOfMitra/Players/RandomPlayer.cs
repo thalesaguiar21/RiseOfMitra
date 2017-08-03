@@ -36,7 +36,7 @@ namespace RiseOfMitra.Players
             return random;
         }
 
-        public override Node PrepareAction(Board boards, Player oponent) {
+        public override Node PrepareAction(Node currState, Player oponent) {
 
             Random rand = new Random();
             List<ACommand> validCmds = CurGame.GetValidCommands();
@@ -55,7 +55,7 @@ namespace RiseOfMitra.Players
                 }
 
                 int selected = rand.Next(someCmds.Count);
-                return new Node(0.0, boards, someCmds[selected]);
+                return new Node(0.0, currState.Boards, someCmds[selected]);
             } else {
                 return null;
             }

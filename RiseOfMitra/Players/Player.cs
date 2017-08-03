@@ -103,7 +103,7 @@ namespace RiseOfMitra.Players
         /// <param name="boards">Where the command should configurated.</param>
         /// <param name="oponent">The oponent of the current player.</param>
         /// <returns></returns>
-        public abstract Node PrepareAction(Board boards, Player oponent);
+        public abstract Node PrepareAction(Node currState, Player oponent);
 
         /// <summary>
         /// This is a copy constructor.
