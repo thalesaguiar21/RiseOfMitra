@@ -19,6 +19,7 @@ namespace RiseOfMitra.MonteCarlo
         public Board Boards;
         public ACommand Cmd;
         public List<Node> Childs;
+        public int WinRate;
 
 
         public Node(double value, Board boards, ACommand cmd) {
@@ -43,12 +44,17 @@ namespace RiseOfMitra.MonteCarlo
             return valid;
         }
 
-        public bool Equals(Node otherNode) {
-            if(otherNode is Node) {
-                return Boards.Equals(otherNode.Boards) && Cmd.Equals(otherNode.Cmd);
+        public override bool Equals(object obj) {
+            if(obj is Node) {
+                Node other = (Node)obj;
+                return Boards.Equals(other.Boards) && Cmd.Equals(other.Cmd);
             } else {
                 return false;
             }
+        }
+
+        public override int GetHashCode() {
+            return base.GetHashCode();
         }
     }
 }
