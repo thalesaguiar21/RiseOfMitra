@@ -7,23 +7,23 @@ using System.Threading.Tasks;
 
 namespace RiseOfMitra.MonteCarlo
 {
-    class DefaultSelection : ISelectionStrategy
+    class DefaultSelection : ISelection
     {
         private List<Node> ValidStates;
         private double Threshold;
 
-        public DefaultSelection(List<Node> validStates, double threshold = 0.15) {
-            ValidStates = validStates;
+        public DefaultSelection(double threshold = 0.15) {
             Threshold = threshold;
             if(Threshold < 0) {
                 Threshold = 0.0;
             }
         }
 
-        public Node Execute() {
+        public Node Execute(List<Node> validStates) {
             Node chosen = null;
             List<Node> bestNodes = new List<Node>();
-            if (ValidStates.Count > 0) {
+            if (validStates != null && validStates.Count > 0) {
+                ValidStates = validStates;
                 double highestValue = ValidStates[0].Value;
                 for (int i = 1; i < ValidStates.Count; i++) {
                     double currValue = ValidStates[i].Cmd.Value();

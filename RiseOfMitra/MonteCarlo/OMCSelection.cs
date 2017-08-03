@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace RiseOfMitra.MonteCarlo
 {
-    class OMCSelection : ISelectionStrategy
+    class OMCSelection : ISelection
     {
         private List<Node> ValidStates;
-
-        public OMCSelection(List<Node> validStates) {
-            ValidStates = validStates;
-        }
 
         private List<Meta.Numerics.Complex> Urgency(List<Node> states) {
             List<Meta.Numerics.Complex> stateUrgency = new List<Meta.Numerics.Complex>();
@@ -49,8 +45,9 @@ namespace RiseOfMitra.MonteCarlo
             return fairnessValues;
         }
 
-        public Node Execute() {
-            if(ValidStates != null) {
+        public Node Execute(List<Node> validStates) {
+            if(validStates != null) {
+                ValidStates = validStates;
                 List<Meta.Numerics.Complex> urgencies = Urgency(ValidStates);
                 List<Meta.Numerics.Complex> fairnessValues = Fairness(urgencies, ValidStates);
                 double max = 0;
