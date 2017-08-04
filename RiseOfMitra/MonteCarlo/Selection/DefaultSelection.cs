@@ -5,7 +5,7 @@ using RiseOfMitra.Players.Commands;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RiseOfMitra.MonteCarlo
+namespace RiseOfMitra.MonteCarlo.Selection
 {
     class DefaultSelection : ISelection
     {

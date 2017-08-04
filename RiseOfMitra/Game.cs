@@ -13,6 +13,8 @@ using Units;
 using Units.Pawns;
 using Units.Centers;
 using RiseOfMitra.MonteCarlo;
+using RiseOfMitra.MonteCarlo.Selection;
+using RiseOfMitra.MonteCarlo.Simulation;
 
 namespace RiseOfMitra
 {

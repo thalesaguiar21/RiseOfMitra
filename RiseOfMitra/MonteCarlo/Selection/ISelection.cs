@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RiseOfMitra.Players.Commands;
 
-namespace RiseOfMitra.MonteCarlo
+namespace RiseOfMitra.MonteCarlo.Selection
 {
     public interface ISelection
     {

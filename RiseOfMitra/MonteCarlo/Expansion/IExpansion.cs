@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RiseOfMitra.MonteCarlo
+namespace RiseOfMitra.MonteCarlo.Expansion
 {
     public interface IExpansion
     {

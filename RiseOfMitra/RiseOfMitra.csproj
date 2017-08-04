@@ -49,14 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EMenuOptions.cs" />
-    <Compile Include="MonteCarlo\BestOfAllSimulation.cs" />
-    <Compile Include="MonteCarlo\DefaultSelection.cs" />
-    <Compile Include="MonteCarlo\ExpandAll.cs" />
-    <Compile Include="MonteCarlo\IExpansion.cs" />
+    <Compile Include="MonteCarlo\SImulation\BestOfAllSimulation.cs" />
+    <Compile Include="MonteCarlo\Selection\DefaultSelection.cs" />
+    <Compile Include="MonteCarlo\Expansion\ExpandAll.cs" />
+    <Compile Include="MonteCarlo\Expansion\IExpansion.cs" />
     <Compile Include="MonteCarlo\Node.cs" />
-    <Compile Include="MonteCarlo\OMCSelection.cs" />
-    <Compile Include="MonteCarlo\SelectionParameters.cs" />
-    <Compile Include="MonteCarlo\UCTSelection.cs" />
+    <Compile Include="MonteCarlo\Selection\OMCSelection.cs" />
+    <Compile Include="MonteCarlo\Selection\SelectionParameters.cs" />
+    <Compile Include="MonteCarlo\Selection\UCTSelection.cs" />
     <Compile Include="Players\RandomPlayer.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="Units\Pawns\ABasicPawn.cs" />
@@ -87,8 +87,8 @@
     <Compile Include="Players\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\Pawns\RahkarPawn.cs" />
-    <Compile Include="MonteCarlo\ISelection.cs" />
-    <Compile Include="MonteCarlo\ISimulation.cs" />
+    <Compile Include="MonteCarlo\Selection\ISelection.cs" />
+    <Compile Include="MonteCarlo\SImulation\ISimulation.cs" />
     <Compile Include="Units\Temples\Temple.cs" />
     <Compile Include="Units\Unit.cs" />
   </ItemGroup>

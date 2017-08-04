@@ -9,6 +9,9 @@ using RiseOfMitra.Players.Commands;
 using Boards;
 using Units;
 using System.Diagnostics;
+using RiseOfMitra.MonteCarlo.Expansion;
+using RiseOfMitra.MonteCarlo.Selection;
+using RiseOfMitra.MonteCarlo.Simulation;
 
 namespace RiseOfMitra.MonteCarlo
 {
