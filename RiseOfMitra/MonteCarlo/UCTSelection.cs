@@ -30,7 +30,7 @@ namespace RiseOfMitra.MonteCarlo
                 double maxValue = 0;
                 foreach (Node state in ValidStates) {
                     double meanPayout = state.Value / state.VisitCount;
-                    double curValue = meanPayout + Math.Sqrt((2 * Math.Log(state.VisitCount)) / Root.VisitCount);
+                    double curValue = meanPayout + Math.Sqrt((Beta * Math.Log(state.VisitCount)) / Root.VisitCount);
                     if (curValue >= maxValue) {
                         chosen = state;
                         maxValue = curValue;
