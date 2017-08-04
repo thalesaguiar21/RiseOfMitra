@@ -17,22 +17,26 @@ namespace RiseOfMitra.MonteCarlo
         public Node GameTree;
         private Game CurGame;
         private Game MCTSGame;
-        private ISelectionStrategy Selection;
-        private ISimulationStrategy SimulationStrat;
+        private ISelection Selection;
+        private ISimulation Simulation;
+        private IExpansion Expansion;
         private const int MAX_PLAYOUTS = 100;
         // Define the simulation max maximum time
-        private const int MAX_SIMULATION_TIME = 4;
+        private const int MAX_TIME = 4;
         // Defines the simulation depth
-        private const int MAX_DEPTH = 10; 
+        private const int MAX_SIMULATION_DEPTH = 5; 
 
-        public MonteCarloTreeSearch(ECultures cult, Game game) {
+        public MonteCarloTreeSearch(ECultures cult, ISelection selection, ISimulation simulation, Game game) {
             GameTree = new Node(0, game.GetBoards(), null);
             CurGame = game;
-            Selection = null;
+            Selection = selection;
+            Simulation = simulation;
+            Expansion = new ExpandAll();
             Culture = cult;
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
             CultCenter = null;
+
         }
 
         private MonteCarloTreeSearch(ECultures cult) {
@@ -54,95 +58,110 @@ namespace RiseOfMitra.MonteCarlo
             mcts.SetCursor(tmpCursor);
             return mcts;
         }
+        
+        public override Node PrepareAction(Node currState, Player oponent) {
 
-        // The AI Algorithm
-        public override Node PrepareAction(Board boards, Player oponent) {
-            if (GameTree.Childs == null || GameTree.Childs.Count <= 0) {
-                GameTree.Childs = RunSimulation();
-            }
-            Selection = new OMCSelection(GameTree.Childs);
-            GameTree = Selection.Execute();
-            return GameTree;
-        }
-
-        private List<Node> RunSimulation() {
-            // Childs of the current game state
-            List<Node> nextMoves = new List<Node>();
-            Node GameTreeCp = new Node(GameTree.Value, GameTree.Boards, GameTree.Cmd);
-            
-            for (int i = 0; i < MAX_PLAYOUTS; i++) {
-
-                MCTSGame = new Game(CurGame);
-                Node curr = GameTreeCp;
-                List<Node> path = new List<Node>();
-                Random rand = new Random();
-                int depth = 0;
-
-                while (depth < MAX_DEPTH) {
-
-                    if (MCTSGame.IsOver()) {
+            Node nextPlay = null;
+            // Verify if the last state belongs to the mcts game tree
+            if (!GameTree.Childs.Contains(currState)) {
+                GameTree = currState;
+            } else {
+                foreach (Node node in GameTree.Childs) {
+                    if(node.Equals(currState)) {
+                        GameTree = node;
                         break;
                     }
+                }
+            }
 
-                    List<ACommand> mctsCmds = MCTSGame.GetValidCommands();
+            if (Selection != null && Simulation != null) {
+                List<Node> selectionPath = new List<Node>();
+                Stopwatch cron = new Stopwatch();
+                TimeSpan max = new TimeSpan(0, 0, MAX_TIME);
+                int simulationResult = 0;
+                int simulations = 0;
+                Node auxRoot = null;
 
-                    // If the current player has no pawns left
-                    if (mctsCmds == null || mctsCmds.Count == 0) {
-                        MCTSGame.SetNextPlayer();
-                        mctsCmds = MCTSGame.GetValidCommands();
-                    }
-
-                    int chosen = rand.Next(mctsCmds.Count);
-                    Node nextState = new Node(mctsCmds[chosen].Value(), MCTSGame.GetBoards(), mctsCmds[chosen]);
-                    path.Add(nextState);
-
-                    // If the node is a directly descendent, it checks if its already added 
-                    // to the next moves.
-                    if (depth == 0) {
-                        bool visited = false;
-                        foreach (Node node in nextMoves) {
-                            if (node.Equals(nextState)) {
-                                visited = true;
-                                break;
-                            }
+                selectionPath.Add(GameTree);
+                cron.Start();
+                while (cron.Elapsed < max) {
+                    auxRoot = GameTree;
+                    if (auxRoot != null) {
+                        while ((auxRoot.Childs != null) && (auxRoot.Childs.Count > 0)) {
+                            auxRoot = Selection.Execute(auxRoot.Childs);
+                            auxRoot.VisitCount++;
+                            selectionPath.Add(auxRoot);
                         }
-                        if (!visited)
-                            nextMoves.Add(nextState);
-                    }
 
-                    // Checks if the state is in the game tree, if not then
-                    // expands the game tree by adding the new state
-                    bool expanded = false;
-                    for (int k = 0; k < curr.Childs.Count; k++) {
-                        if (curr.Childs[k].Equals(nextState)) {
-                            expanded = true;
-                            nextState = curr.Childs[k];
-                            break;
-                        }
+                        simulationResult = RunSimulation(auxRoot);
+                        Backpropagation(selectionPath, simulationResult);
+                        selectionPath.Clear();
+                        simulations++;
                     }
-                    if (!expanded) {
-                        curr.Childs.Add(nextState);
-                    }
+                    auxRoot = GameTree;
+                }
+                Random rnd = new Random();
+                nextPlay = GameTree.Childs.ElementAt(rnd.Next(auxRoot.Childs.Count));
+                GameTree = nextPlay;
+            }
+            return nextPlay;
+        }
 
-                    // Increments the node visit count, create a copy of the current player
-                    // and executes the new state in the game copy
-                    nextState.VisitCount++;
-                    Player playerCp = MCTSGame.GetCurPlayer().Copy(MCTSGame.GetBoards());
-                    MCTSGame.ChangeState(nextState, true);
 
-                    nextState.Cmd.SetCurPlayer(playerCp);
-                    curr = nextState;
-                    depth++;
+        /// <summary>
+        /// Plays k simulated games using the given Simulation Strategy.
+        /// </summary>
+        /// <param name="state">The game tree root</param>
+        /// <returns>
+        /// 1 case the AI wins, -1 case it loses and 0 if the simulation dos not reach
+        /// a leaf node that finish the game.
+        /// </returns>
+        private int RunSimulation(Node state) {
+
+            MCTSGame = new Game(CurGame);
+            int result = 0;
+            int playouts = 0;
+            Random rnd = new Random();
+            List<ACommand> simulatedCmds;
+            List<ACommand> validCmds;
+            
+            while (playouts < MAX_SIMULATION_DEPTH) {
+
+                if (MCTSGame.IsOver()) {
+                    break;
                 }
 
-                // Backpropagates the value of nodes in the simulation path until
-                for (int j = path.Count - 1; j > 0; j--) {
-                    path[j - 1].Value += path[j].Value;
-                    path[j - 1].Value /= j;
+                validCmds = MCTSGame.GetValidCommands();
+                Simulation.SetUp(validCmds);
+                simulatedCmds = Simulation.Execute();
+
+                int index = rnd.Next(simulatedCmds.Count);
+                Player playerCp = MCTSGame.GetCurPlayer().Copy(MCTSGame.GetBoards());
+                Node nextState = new Node(simulatedCmds[index].Value(), MCTSGame.GetBoards(), simulatedCmds[index]);
+
+                Expansion.Expand(state, nextState);
+
+                MCTSGame.ChangeState(nextState, true);
+                nextState.Cmd.SetCurPlayer(playerCp);
+                state = nextState;
+                playouts++;
+            }
+            return result;
+        }
+
+        private void Backpropagation(List<Node> path, int result) {
+
+            if (path != null && path.Count > 0) {
+                if (result == 0 || result == 1 || result == -1) {
+                    foreach (Node state in path) {
+                        state.WinRate += result;
+                        state.VisitCount++;
+                    }
+                } else {
+                    UserUtils.PrintError(result + " is not a valid simulation result!");
+                    Console.ReadLine();
                 }
-            }             
-                
-            return nextMoves;
+            }
         }
 
         public void SetGame(Game game) {
