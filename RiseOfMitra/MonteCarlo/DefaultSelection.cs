@@ -9,7 +9,6 @@ namespace RiseOfMitra.MonteCarlo
 {
     class DefaultSelection : ISelection
     {
-        private List<Node> ValidStates;
         private double Threshold;
 
         public DefaultSelection(double threshold = 0.15) {
@@ -19,22 +18,21 @@ namespace RiseOfMitra.MonteCarlo
             }
         }
 
-        public Node Execute(List<Node> validStates) {
+        public Node Execute(SelectionParameters args) {
             Node chosen = null;
             List<Node> bestNodes = new List<Node>();
-            if (validStates != null && validStates.Count > 0) {
-                ValidStates = validStates;
-                double highestValue = ValidStates[0].Value;
-                for (int i = 1; i < ValidStates.Count; i++) {
-                    double currValue = ValidStates[i].Cmd.Value();
+            if (args.validStates != null && args.validStates.Count > 0) {
+                double highestValue = args.validStates[0].Value;
+                for (int i = 1; i < args.validStates.Count; i++) {
+                    double currValue = args.validStates[i].Cmd.Value();
                     if (currValue > highestValue) {
                         highestValue = currValue;
                     }
                 }
-                for (int i = 1; i < ValidStates.Count; i++) {
-                    double currValue = ValidStates[i].Cmd.Value();
+                for (int i = 1; i < args.validStates.Count; i++) {
+                    double currValue = args.validStates[i].Cmd.Value();
                     if (currValue > highestValue * (1 - Threshold)) {
-                        bestNodes.Add(ValidStates[i]);
+                        bestNodes.Add(args.validStates[i]);
                     }
                 }
                 Random rnd = new Random();

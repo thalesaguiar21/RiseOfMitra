@@ -8,8 +8,6 @@ namespace RiseOfMitra.MonteCarlo
 {
     class OMCSelection : ISelection
     {
-        private List<Node> ValidStates;
-
         private List<Meta.Numerics.Complex> Urgency(List<Node> states) {
             List<Meta.Numerics.Complex> stateUrgency = new List<Meta.Numerics.Complex>();
             double bestValue = 0.0;
@@ -45,17 +43,16 @@ namespace RiseOfMitra.MonteCarlo
             return fairnessValues;
         }
 
-        public Node Execute(List<Node> validStates) {
-            if(validStates != null) {
-                ValidStates = validStates;
-                List<Meta.Numerics.Complex> urgencies = Urgency(ValidStates);
-                List<Meta.Numerics.Complex> fairnessValues = Fairness(urgencies, ValidStates);
+        public Node Execute(SelectionParameters args) {
+            if(args.validStates != null) {
+                List<Meta.Numerics.Complex> urgencies = Urgency(args.validStates);
+                List<Meta.Numerics.Complex> fairnessValues = Fairness(urgencies, args.validStates);
                 double max = 0;
                 Node chosen = null;
                 for (int i = 0; i < fairnessValues.Count; i++) {
                     if(fairnessValues[i].Re > max) {
                         max = fairnessValues[i].Re;
-                        chosen = ValidStates[i];
+                        chosen = args.validStates[i];
                     }
                 }
                 return chosen;

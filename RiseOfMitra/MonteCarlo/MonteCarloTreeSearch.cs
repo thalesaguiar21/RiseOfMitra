@@ -82,14 +82,18 @@ namespace RiseOfMitra.MonteCarlo
                 List<Node> selectionPath = new List<Node>();
                 Stopwatch cron = new Stopwatch();
                 TimeSpan max = new TimeSpan(0, 0, MAX_TIME);
+                SelectionParameters args;
                 int simulationResult = 0;
-                int simulations = 0;
                 Node auxRoot = GameTree;
                 selectionPath.Add(auxRoot);
                 // Traverse the game tree searching until it reaches a node that has no childs
                 if(auxRoot != null) {
                     while ((auxRoot.Childs != null) && (auxRoot.Childs.Count > 0)) {
-                        auxRoot = Selection.Execute(auxRoot.Childs);
+                        
+                        args.root = auxRoot;
+                        args.validStates = auxRoot.Childs;
+
+                        auxRoot = Selection.Execute(args);
                         auxRoot.VisitCount++;
                         selectionPath.Add(auxRoot);
                     }
@@ -101,7 +105,6 @@ namespace RiseOfMitra.MonteCarlo
                         simulationResult = RunSimulation(auxRoot);
                         Backpropagation(selectionPath, simulationResult);
                         selectionPath.Clear();
-                        simulations++;
                     }
                     auxRoot = GameTree;
                 }

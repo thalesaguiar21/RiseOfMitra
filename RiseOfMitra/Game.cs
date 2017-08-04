@@ -97,7 +97,7 @@ namespace RiseOfMitra
                 Node state = CurPlayer.PrepareAction(current, GetOponent());
                 ChangeState(state);
                 current = state;
-                //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
+                gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
                 turn++;
                 Console.Clear();
             } while (Play);

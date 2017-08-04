@@ -55,6 +55,7 @@
     <Compile Include="MonteCarlo\IExpansion.cs" />
     <Compile Include="MonteCarlo\Node.cs" />
     <Compile Include="MonteCarlo\OMCSelection.cs" />
+    <Compile Include="MonteCarlo\SelectionParameters.cs" />
     <Compile Include="MonteCarlo\UCTSelection.cs" />
     <Compile Include="Players\RandomPlayer.cs" />
     <Compile Include="UI.cs" />

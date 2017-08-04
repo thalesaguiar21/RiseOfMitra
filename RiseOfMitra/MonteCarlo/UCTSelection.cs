@@ -9,28 +9,20 @@ namespace RiseOfMitra.MonteCarlo
 {
     class UCTSelection : ISelection
     {
-        private List<Node> ValidStates;
         private double Beta;
-        private Node Root;
 
         public UCTSelection (double beta) {
             if (beta > 0)
                 Beta = beta;    
         }
 
-        public void SetRoot(Node root) {
-            if (root != null)
-                Root = root;
-        }
-
-        public Node Execute(List<Node> validStates) {
+        public Node Execute(SelectionParameters args) {
             Node chosen = null;
-            if (validStates != null && validStates.Count > 0 && Root != null) {
-                ValidStates = validStates;
+            if (args.validStates != null && args.validStates.Count > 0 && args.root != null) {
                 double maxValue = 0;
-                foreach (Node state in ValidStates) {
+                foreach (Node state in args.validStates) {
                     double meanPayout = state.Value / state.VisitCount;
-                    double curValue = meanPayout + Math.Sqrt((Beta * Math.Log(state.VisitCount)) / Root.VisitCount);
+                    double curValue = meanPayout + Math.Sqrt((Beta * Math.Log(state.VisitCount)) / args.root.VisitCount);
                     if (curValue >= maxValue) {
                         chosen = state;
                         maxValue = curValue;
