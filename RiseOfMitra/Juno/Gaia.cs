@@ -215,9 +215,9 @@ namespace Juno
                     risk += RiskPerEnemyProximity(enemies, center);
                     risk += RiskPerAllyCloseToEnemy(allies);
                     if(center.CurrLife > 0) risk += Math.Exp(1.0 / center.CurrLife);
-                    SetCenterRisk(allies[0].Culture, risk);
+                    SetCenterRisk(center.Culture, risk);
                 } else if (allies.Count > 0){
-                    SetCenterRisk(allies[0].Culture, 0);
+                    SetCenterRisk(center.Culture, 0);
                 } else {
                     // No enemies or allies on the board, both center are in no risk
                     SetCenterRisk(ECultures.DALRIONS, 0);
