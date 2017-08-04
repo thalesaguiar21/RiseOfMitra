@@ -7,15 +7,9 @@ using System.Threading.Tasks;
 
 namespace RiseOfMitra.MonteCarlo
 {
-    class BestOfAllSimulation : ISimulationStrategy
+    class BestOfAllSimulation : ISimulation
     {
         List<ACommand> ValidCmds;
-
-        public BestOfAllSimulation(List<ACommand> validCmds) {
-            if(validCmds != null) {
-                ValidCmds = validCmds;
-            }
-        }
 
         private double Mean(List<ACommand> commands) {
             double mean = 0;
@@ -43,24 +37,31 @@ namespace RiseOfMitra.MonteCarlo
         }
 
         public List<ACommand> Execute() {
+
             List<ACommand> bestOfAll = new List<ACommand>();
-            double mean = Mean(ValidCmds);
-            double stDev = StandartDeviation(ValidCmds, mean);
-            double max = 0;
+            if (ValidCmds != null) {
+                double mean = Mean(ValidCmds);
+                double stDev = StandartDeviation(ValidCmds, mean);
+                double max = 0;
 
-            for (int i = 0; i < ValidCmds.Count; i++) {
-                if (ValidCmds[i].Value() > max)
-                    max = ValidCmds[i].Value();
-            }
+                for (int i = 0; i < ValidCmds.Count; i++) {
+                    if (ValidCmds[i].Value() > max)
+                        max = ValidCmds[i].Value();
+                }
 
-            foreach (ACommand cmd in ValidCmds) {
-                double cValue = cmd.Value();
-                if(cValue >= max - stDev) {
-                    bestOfAll.Add(cmd);
+                foreach (ACommand cmd in ValidCmds) {
+                    double cValue = cmd.Value();
+                    if (cValue >= max - stDev) {
+                        bestOfAll.Add(cmd);
+                    }
                 }
             }
 
             return bestOfAll;
+        }
+
+        public void SetUp(List<ACommand> validCmds) {
+            ValidCmds = validCmds;
         }
     }
 }
