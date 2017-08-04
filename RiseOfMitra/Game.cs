@@ -225,8 +225,6 @@ namespace RiseOfMitra
                 Console.WriteLine("Invalid Terrain or Board file format!");
             } catch (IOException) {
                 Console.WriteLine("Could not find Terrain or Board file!");
-            } catch (ArgumentException ae) {
-                Console.WriteLine(ae.Message);
             } finally {
                 Console.ReadLine();
             }

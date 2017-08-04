@@ -63,13 +63,17 @@ namespace RiseOfMitra.MonteCarlo
 
             Node nextPlay = null;
             // Verify if the last state belongs to the mcts game tree
-            if (!GameTree.Childs.Contains(currState)) {
-                GameTree = currState;
-            } else {
-                foreach (Node node in GameTree.Childs) {
-                    if(node.Equals(currState)) {
-                        GameTree = node;
-                        break;
+            // If the curr state is null, that means the previous player had no moves
+            // and the game state did not changed.
+            if(currState != null) {
+                if (!GameTree.Childs.Contains(currState)) {
+                    GameTree = currState;
+                } else {
+                    foreach (Node node in GameTree.Childs) {
+                        if (node.Equals(currState)) {
+                            GameTree = node;
+                            break;
+                        }
                     }
                 }
             }
@@ -80,19 +84,20 @@ namespace RiseOfMitra.MonteCarlo
                 TimeSpan max = new TimeSpan(0, 0, MAX_TIME);
                 int simulationResult = 0;
                 int simulations = 0;
-                Node auxRoot = null;
-
-                selectionPath.Add(GameTree);
+                Node auxRoot = GameTree;
+                selectionPath.Add(auxRoot);
+                // Traverse the game tree searching until it reaches a node that has no childs
+                if(auxRoot != null) {
+                    while ((auxRoot.Childs != null) && (auxRoot.Childs.Count > 0)) {
+                        auxRoot = Selection.Execute(auxRoot.Childs);
+                        auxRoot.VisitCount++;
+                        selectionPath.Add(auxRoot);
+                    }
+                }
+                // Starts to simulate games from the last node visited in the previous loop
                 cron.Start();
                 while (cron.Elapsed < max) {
-                    auxRoot = GameTree;
                     if (auxRoot != null) {
-                        while ((auxRoot.Childs != null) && (auxRoot.Childs.Count > 0)) {
-                            auxRoot = Selection.Execute(auxRoot.Childs);
-                            auxRoot.VisitCount++;
-                            selectionPath.Add(auxRoot);
-                        }
-
                         simulationResult = RunSimulation(auxRoot);
                         Backpropagation(selectionPath, simulationResult);
                         selectionPath.Clear();
@@ -100,6 +105,7 @@ namespace RiseOfMitra.MonteCarlo
                     }
                     auxRoot = GameTree;
                 }
+
                 Random rnd = new Random();
                 nextPlay = GameTree.Childs.ElementAt(rnd.Next(auxRoot.Childs.Count));
                 GameTree = nextPlay;
@@ -126,12 +132,14 @@ namespace RiseOfMitra.MonteCarlo
             List<ACommand> validCmds;
             
             while (playouts < MAX_SIMULATION_DEPTH) {
-
-                if (MCTSGame.IsOver()) {
-                    break;
+                
+                validCmds = MCTSGame.GetValidCommands();
+                // If the current player has no pawns left
+                if(validCmds.Count == 0) {
+                    MCTSGame.SetNextPlayer();
+                    validCmds = MCTSGame.GetValidCommands();
                 }
 
-                validCmds = MCTSGame.GetValidCommands();
                 Simulation.SetUp(validCmds);
                 simulatedCmds = Simulation.Execute();
 
@@ -145,6 +153,10 @@ namespace RiseOfMitra.MonteCarlo
                 nextState.Cmd.SetCurPlayer(playerCp);
                 state = nextState;
                 playouts++;
+
+                if (MCTSGame.IsOver()) {
+                    break;
+                }
             }
             return result;
         }
