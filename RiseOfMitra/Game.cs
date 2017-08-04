@@ -68,7 +68,7 @@ namespace RiseOfMitra
 
             Gamers = new Player[2];
             Gamers[0] = new RandomPlayer(ECultures.DALRIONS, this);
-            Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, this);
+            Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, new OMCSelection(), new BestOfAllSimulation(), this);
 
             CurPlayer = Gamers[0];
             Gamers[1].SetCursor(new Coord(BoardConsts.MAX_LIN - 2, BoardConsts.MAX_COL - 2));
@@ -91,26 +91,32 @@ namespace RiseOfMitra
             Menu();
             Gaia gaia = new Gaia();
             int turn = 1;
+            Node current = new Node(0, Boards, null);
             do {
                 Boards.PrintBoard();
-                Node state = CurPlayer.PrepareAction(Boards, GetOponent());
+                Node state = CurPlayer.PrepareAction(current, GetOponent());
                 ChangeState(state);
+                current = state;
                 //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
                 turn++;
                 Console.Clear();
             } while (Play);
 
-            if (CurPlayer.GetCultCenter() == null || CurPlayer.GetCultCenter().CurrLife <= 0) {
-                string winner = "";
-                if (CurPlayer.GetCulture() == ECultures.DALRIONS) {
-                    winner = "Rahkars";
-                    wins++;
-                } else {
-                    winner = "Dalrions";
-                }
-                string winnerMsg = String.Format("Congratulations! Now, {0} own the monopoly of Argyros!", winner);
+            if (HasWinner()) {
+                string winnerMsg = String.Format("Congratulations! Now, {0} own the monopoly of Argyros!", GetOponent().GetCulture());
                 Console.WriteLine(winnerMsg);
             }
+        }
+
+        private bool HasWinner() {
+
+            bool hasWinner = false;
+            if (CurPlayer.GetCultCenter() == null) {
+                hasWinner = true;
+            } else if (CurPlayer.GetCultCenter().CurrLife <= 0) {
+                hasWinner = true;
+            }
+            return hasWinner;
         }
 
         public void ChangeState(Node state, bool isSimulation = false) {
@@ -122,9 +128,9 @@ namespace RiseOfMitra
                 if (validCmd) {
                     if (state.Value == 0)
                         state.Value = state.Cmd.Value();
-                    if(state.Cmd.Execute(isSimulation))
+                    if (state.Cmd.Execute(isSimulation)) {
                         SetNextPlayer();
-                    
+                    }
                     foreach (Player player in Gamers) {
                         if (player.GetCultCenter() == null || player.GetCultCenter().CurrLife <= 0)
                             Play = false;
