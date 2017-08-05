@@ -31,7 +31,7 @@ namespace RiseOfMitra.Players
                 APawn tmpPawn = GetPawns()[i].Copy(board);
                 random.AddPawn(tmpPawn);
             }
-            random.SetCultCenter(CultCenter.Copy(board));
+            random.SetCultCenter(CultCenter);
             random.SetCursor(tmpCursor);
             return random;
         }
@@ -41,7 +41,7 @@ namespace RiseOfMitra.Players
             Random rand = new Random();
             List<ACommand> validCmds = CurGame.GetValidCommands();
 
-            if(validCmds != null && validCmds.Count > 0) {
+            if(currState != null && validCmds != null && validCmds.Count > 0) {
                 double highest = 0;
                 foreach (ACommand cmd in validCmds) {
                     if (cmd.Value() > highest)

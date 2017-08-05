@@ -23,14 +23,15 @@ namespace RiseOfMitra.MonteCarlo.Selection
             List<Node> bestNodes = new List<Node>();
             if (args.validStates != null && args.validStates.Count > 0) {
                 double highestValue = args.validStates[0].Value;
+                bestNodes.Add(args.validStates[0]);
                 for (int i = 1; i < args.validStates.Count; i++) {
-                    double currValue = args.validStates[i].Cmd.Value();
+                    double currValue = args.validStates[i].Value;
                     if (currValue > highestValue) {
                         highestValue = currValue;
                     }
                 }
                 for (int i = 1; i < args.validStates.Count; i++) {
-                    double currValue = args.validStates[i].Cmd.Value();
+                    double currValue = args.validStates[i].Value;
                     if (currValue > highestValue * (1 - Threshold)) {
                         bestNodes.Add(args.validStates[i]);
                     }

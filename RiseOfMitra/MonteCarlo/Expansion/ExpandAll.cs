@@ -10,11 +10,11 @@ namespace RiseOfMitra.MonteCarlo.Expansion
     {
         public void Expand(Node root, Node subTree) {
             if (root != null) {
-                if (!root.Childs.Contains(subTree)) {
-                    root.Childs.Add(subTree);
+                int i = root.Childs.IndexOf(subTree);
+                if (i == - 1) {
                     subTree.VisitCount++;
+                    root.Childs.Add(subTree);
                 } else {
-                    int i = root.Childs.IndexOf(subTree);
                     root.Childs[i].VisitCount++;
                 }
             }

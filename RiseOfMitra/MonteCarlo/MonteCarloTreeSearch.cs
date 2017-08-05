@@ -39,19 +39,18 @@ namespace RiseOfMitra.MonteCarlo
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
             CultCenter = null;
-
         }
 
-        private MonteCarloTreeSearch(ECultures cult) {
+        private MonteCarloTreeSearch(MonteCarloTreeSearch other) {
             GameTree = new Node(0, null, null);
-            Culture = cult;
+            Culture = other.GetCulture();
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
-            CultCenter = null;
+            CultCenter = other.CultCenter;
         }
 
         public override Player Copy(Board board) {
-            Player mcts = new MonteCarloTreeSearch(GetCulture());
+            Player mcts = new MonteCarloTreeSearch(this);
             Coord tmpCursor = new Coord(GetCursor().X, GetCursor().Y);
             for (int i = 0; i < GetPawns().Count; i++) {
                 APawn tmpPawn = GetPawns()[i].Copy(board);
@@ -62,18 +61,18 @@ namespace RiseOfMitra.MonteCarlo
             return mcts;
         }
         
-        public override Node PrepareAction(Node currState, Player oponent) {
+        public override Node PrepareAction(Node prevState, Player oponent) {
 
             Node nextPlay = null;
             // Verify if the last state belongs to the mcts game tree
             // If the curr state is null, that means the previous player had no moves
             // and the game state did not changed.
-            if(currState != null) {
-                if (!GameTree.Childs.Contains(currState)) {
-                    GameTree = currState;
+            if(prevState != null) {
+                if (!GameTree.Childs.Contains(prevState)) {
+                    GameTree = prevState;
                 } else {
                     foreach (Node node in GameTree.Childs) {
-                        if (node.Equals(currState)) {
+                        if (node.Equals(prevState)) {
                             GameTree = node;
                             break;
                         }
@@ -82,39 +81,60 @@ namespace RiseOfMitra.MonteCarlo
             }
 
             if (Selection != null && Simulation != null) {
+                Node currState = GameTree;
+                Node lastNode = currState;
                 List<Node> selectionPath = new List<Node>();
+                List<Node> validStates = new List<Node>();
                 Stopwatch cron = new Stopwatch();
                 TimeSpan max = new TimeSpan(0, 0, MAX_TIME);
                 SelectionParameters args;
                 int simulationResult = 0;
-                Node auxRoot = GameTree;
-                selectionPath.Add(auxRoot);
+                selectionPath.Add(currState);
                 // Traverse the game tree searching until it reaches a node that has no childs
-                if(auxRoot != null) {
-                    while ((auxRoot.Childs != null) && (auxRoot.Childs.Count > 0)) {
-                        
-                        args.root = auxRoot;
-                        args.validStates = auxRoot.Childs;
 
-                        auxRoot = Selection.Execute(args);
-                        auxRoot.VisitCount++;
-                        selectionPath.Add(auxRoot);
-                    }
-                }
-                // Starts to simulate games from the last node visited in the previous loop
                 cron.Start();
                 while (cron.Elapsed < max) {
-                    if (auxRoot != null) {
-                        simulationResult = RunSimulation(auxRoot);
-                        Backpropagation(selectionPath, simulationResult);
-                        selectionPath.Clear();
+                    MCTSGame = new Game(CurGame);
+                    // Traverse the game tree using a given strategy
+                    while (lastNode.Equals(currState) || lastNode.Childs.Contains(currState)) {
+                        validStates.Clear();
+                        List<ACommand> validCmds = MCTSGame.GetValidCommands();
+                        if (validCmds.Count > 0) {
+                            foreach (ACommand cmd in validCmds) {
+                                validStates.Add(new Node(cmd.Value(), MCTSGame.GetBoards(), cmd));
+                            }
+
+                            args.root = currState;
+                            args.validStates = validStates;
+
+                            lastNode = currState;
+                            currState = Selection.Execute(args);
+                            selectionPath.Add(currState);
+                        } else {
+                            currState = null;
+                        }              
+                        MCTSGame.ChangeState(currState, true);
+                        if (MCTSGame.IsOver()) {
+                            break;
+                        }
                     }
-                    auxRoot = GameTree;
+                    if (currState != null && !MCTSGame.IsOver()) {
+                        // Here, the selected node is added to the game tree
+                        Expansion.Expand(lastNode, currState);
+                        // Starts to simulate games starting from the new state added
+                        simulationResult = RunSimulation(currState);
+                        // Backpropagates the simulation result through the node visited in the selection
+                        Backpropagation(selectionPath, simulationResult);
+                    }
+                    currState = GameTree;
+                    selectionPath.Clear();
                 }
 
                 Random rnd = new Random();
-                nextPlay = GameTree.Childs.ElementAt(rnd.Next(auxRoot.Childs.Count));
-                GameTree = nextPlay;
+                if (!MCTSGame.IsOver()) {
+                    nextPlay = GameTree.Childs.ElementAt(rnd.Next(currState.Childs.Count));
+                    GameTree = nextPlay;
+                }
             }
             return nextPlay;
         }
@@ -130,39 +150,40 @@ namespace RiseOfMitra.MonteCarlo
         /// </returns>
         private int RunSimulation(Node state) {
 
-            MCTSGame = new Game(CurGame);
             int result = 0;
             int playouts = 0;
             Random rnd = new Random();
             List<ACommand> simulatedCmds;
             List<ACommand> validCmds;
-            
+            Game tmpGame = new Game(MCTSGame);
+            Node nextState = null;
+
+
             while (playouts < MAX_SIMULATION_DEPTH) {
-                
-                validCmds = MCTSGame.GetValidCommands();
-                // If the current player has no pawns left
-                if(validCmds.Count == 0) {
-                    MCTSGame.SetNextPlayer();
-                    validCmds = MCTSGame.GetValidCommands();
-                }
 
-                Simulation.SetUp(validCmds);
-                simulatedCmds = Simulation.Execute();
-
-                int index = rnd.Next(simulatedCmds.Count);
-                Player playerCp = MCTSGame.GetCurPlayer().Copy(MCTSGame.GetBoards());
-                Node nextState = new Node(simulatedCmds[index].Value(), MCTSGame.GetBoards(), simulatedCmds[index]);
-
-                Expansion.Expand(state, nextState);
-
-                MCTSGame.ChangeState(nextState, true);
-                nextState.Cmd.SetCurPlayer(playerCp);
-                state = nextState;
-                playouts++;
-
-                if (MCTSGame.IsOver()) {
+                if (tmpGame.IsOver()) {
                     break;
                 }
+                validCmds = tmpGame.GetValidCommands();
+                
+                // If the current player has no pawns left
+                if(validCmds.Count > 0) {
+                    Simulation.SetUp(validCmds);
+                    simulatedCmds = Simulation.Execute();
+
+                    Player playerCp = tmpGame.GetCurPlayer().Copy(tmpGame.GetBoards());
+                    int index = rnd.Next(simulatedCmds.Count);
+                    nextState = new Node(simulatedCmds[index].Value(), tmpGame.GetBoards(), simulatedCmds[index]);
+
+                    Expansion.Expand(state, nextState);
+
+                    nextState.Cmd.SetCurPlayer(playerCp);
+                    state = nextState;
+                } else {
+                    nextState = null;
+                }
+                tmpGame.ChangeState(nextState, true);
+                playouts++;
             }
             return result;
         }

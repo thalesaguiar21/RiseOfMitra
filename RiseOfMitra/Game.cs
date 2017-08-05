@@ -70,7 +70,7 @@ namespace RiseOfMitra
 
             Gamers = new Player[2];
             Gamers[0] = new RandomPlayer(ECultures.DALRIONS, this);
-            Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, new OMCSelection(), new BestOfAllSimulation(), this);
+            Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, new DefaultSelection(), new BestOfAllSimulation(), this);
 
             CurPlayer = Gamers[0];
             Gamers[1].SetCursor(new Coord(BoardConsts.MAX_LIN - 2, BoardConsts.MAX_COL - 2));
@@ -99,7 +99,7 @@ namespace RiseOfMitra
                 Node state = CurPlayer.PrepareAction(current, GetOponent());
                 ChangeState(state);
                 current = state;
-                gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
+                //gaia.DoGaiaWill(Gamers[0], Gamers[1], Boards, turn);
                 turn++;
                 Console.Clear();
             } while (Play);
@@ -149,7 +149,7 @@ namespace RiseOfMitra
             CurPlayer.IncreaseTurn();
             CurPlayer.ExecuteTurnEvents(Boards);
 
-            if (CurPlayer == Gamers[0]) {
+            if (CurPlayer.Equals(Gamers[0])) {
                 CurPlayer = Gamers[1];
             } else {
                 CurPlayer = Gamers[0];   
@@ -221,8 +221,8 @@ namespace RiseOfMitra
 
         public static void Main() {
             try {
-                 Game rom = new Game();
-                 rom.Start();
+                Game rom = new Game();
+                rom.Start();
             } catch (FormatException) {
                 Console.WriteLine("Invalid Terrain or Board file format!");
             } catch (IOException) {

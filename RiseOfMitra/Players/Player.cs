@@ -127,7 +127,9 @@ namespace RiseOfMitra.Players
             return attackers;
         }
 
-        public ECultures GetCulture() { return Culture; }
+        public ECultures GetCulture() {
+            return Culture;
+        }
 
         public void SetCulture(ECultures cult) {
             Culture = cult;
@@ -175,6 +177,18 @@ namespace RiseOfMitra.Players
         /// </summary>
         public void IncreaseTurn() {
             Turn += 1;
+        }
+
+        public override bool Equals(object obj) {
+            if(obj is Player) {
+                Player other = (Player)obj;
+                return other.Culture == Culture;
+            }
+            return false;
+        }
+
+        public override int GetHashCode() {
+            return base.GetHashCode();
         }
     }
 }
