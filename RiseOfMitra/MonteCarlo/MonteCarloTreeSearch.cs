@@ -30,7 +30,7 @@ namespace RiseOfMitra.MonteCarlo
         private const int MAX_SIMULATION_DEPTH = 5; 
 
         public MonteCarloTreeSearch(ECultures cult, ISelection selection, ISimulation simulation, Game game) {
-            GameTree = new Node(0, game.GetBoards(), null);
+            GameTree = new Node(game.GetBoards(), null);
             CurGame = game;
             Selection = selection;
             Simulation = simulation;
@@ -42,7 +42,7 @@ namespace RiseOfMitra.MonteCarlo
         }
 
         private MonteCarloTreeSearch(MonteCarloTreeSearch other) {
-            GameTree = new Node(0, null, null);
+            GameTree = new Node(null, null);
             Culture = other.GetCulture();
             Cursor = new Coord(1, 1);
             Pawns = new List<APawn>();
@@ -99,7 +99,7 @@ namespace RiseOfMitra.MonteCarlo
                         List<ACommand> validCmds = MCTSGame.GetValidCommands();
                         if (validCmds.Count > 0) {
                             foreach (ACommand cmd in validCmds) {
-                                validStates.Add(new Node(cmd.Value(), MCTSGame.GetBoards(), cmd));
+                                validStates.Add(new Node(MCTSGame.GetBoards(), cmd));
                             }
 
                             args.root = lastState;
@@ -169,7 +169,7 @@ namespace RiseOfMitra.MonteCarlo
 
                     Player playerCp = tmpGame.GetCurPlayer().Copy(tmpGame.GetBoards());
                     int index = rnd.Next(simulatedCmds.Count);
-                    nextState = new Node(simulatedCmds[index].Value(), tmpGame.GetBoards(), simulatedCmds[index]);
+                    nextState = new Node(tmpGame.GetBoards(), simulatedCmds[index]);
 
                     Expansion.Expand(state, nextState);
 
