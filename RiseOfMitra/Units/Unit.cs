@@ -29,8 +29,7 @@ namespace Units
                     totalLife = value;
             }
         }
-
-
+        
         public int CurrLife
         {
             get { return currLife; }
