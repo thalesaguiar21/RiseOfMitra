@@ -36,7 +36,7 @@ namespace Units
             get { return currLife; }
             set
             {
-                if ((value >= 0) && (value <= TotalLife))
+                if (value <= TotalLife)
                     currLife = value;
             }
         }
@@ -82,11 +82,13 @@ namespace Units
             msg.Append("Culture: " + Culture + "\n");
             return msg.ToString();
         }
-        
+
         public bool InUnit(Coord target) {
+            int pX = Position.X - (size / 2);
+            int pY = Position.Y - (size / 2);
             for (int i = 0; i < Size; i++) {
                 for (int j = 0; j < Size; j++) {
-                    if (Position.X + i == target.X && Position.Y + j == target.Y)
+                    if (pX + i == target.X && pY + j == target.Y)
                         return true;
                 }
             }
