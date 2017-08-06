@@ -11,8 +11,8 @@ namespace Units.Pawns
         public DalrionPawn() {
             PositiveTerrains = new ETerrain[] { ETerrain.MOUNTAIN, ETerrain.MARSH, ETerrain.DESERT };
             BOARD_CHAR = BoardConsts.DALRION_PAWN;
-            CurrLife = 23;
             TotalLife = 23;
+            CurrLife = 23;
             Culture = ECultures.DALRIONS;
             Def = 5;
             Position = new Coord(0, 0);
