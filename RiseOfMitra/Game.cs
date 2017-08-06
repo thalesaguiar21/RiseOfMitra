@@ -95,6 +95,7 @@ namespace RiseOfMitra
             int turn = 1;
             Node current = new Node(0, Boards, null);
             do {
+                Boards.Status = Gamers[0].GetCultCenter().GetStatus().Split('\n');
                 Boards.PrintBoard();
                 Node state = CurPlayer.PrepareAction(current, GetOponent());
                 ChangeState(state);

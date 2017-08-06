@@ -68,51 +68,50 @@ namespace RiseOfMitra.MonteCarlo
             // If the curr state is null, that means the previous player had no moves
             // and the game state did not changed.
             if(prevState != null) {
-                if (!GameTree.Childs.Contains(prevState)) {
+                int i = GameTree.Childs.IndexOf(prevState);
+                if (i == -1) {
                     GameTree = prevState;
                 } else {
-                    foreach (Node node in GameTree.Childs) {
-                        if (node.Equals(prevState)) {
-                            GameTree = node;
-                            break;
-                        }
-                    }
+                    GameTree = GameTree.Childs[i];
                 }
             }
 
             if (Selection != null && Simulation != null) {
-                Node currState = GameTree;
-                Node lastNode = currState;
-                List<Node> selectionPath = new List<Node>();
+                Node currState = null;
+                Node lastState = null;
+                Stack<Node> selectionPath = new Stack<Node>();
                 List<Node> validStates = new List<Node>();
                 Stopwatch cron = new Stopwatch();
                 TimeSpan max = new TimeSpan(0, 0, MAX_TIME);
                 SelectionParameters args;
                 int simulationResult = 0;
-                selectionPath.Add(currState);
                 // Traverse the game tree searching until it reaches a node that has no childs
 
                 cron.Start();
                 while (cron.Elapsed < max) {
                     MCTSGame = new Game(CurGame);
+                    currState = GameTree;
+                    lastState = currState;
+                    selectionPath.Clear();
+                    selectionPath.Push(currState);
                     // Traverse the game tree using a given strategy
-                    while (lastNode.Equals(currState) || lastNode.Childs.Contains(currState)) {
-                        validStates.Clear();
+                    while (lastState.Childs.Contains(currState)) {
                         List<ACommand> validCmds = MCTSGame.GetValidCommands();
                         if (validCmds.Count > 0) {
                             foreach (ACommand cmd in validCmds) {
                                 validStates.Add(new Node(cmd.Value(), MCTSGame.GetBoards(), cmd));
                             }
 
-                            args.root = currState;
+                            args.root = lastState;
                             args.validStates = validStates;
 
-                            lastNode = currState;
+                            lastState = currState;
                             currState = Selection.Execute(args);
-                            selectionPath.Add(currState);
+                            selectionPath.Push(currState);
+                            validStates.Clear();
                         } else {
                             currState = null;
-                        }              
+                        }
                         MCTSGame.ChangeState(currState, true);
                         if (MCTSGame.IsOver()) {
                             break;
@@ -120,14 +119,12 @@ namespace RiseOfMitra.MonteCarlo
                     }
                     if (currState != null && !MCTSGame.IsOver()) {
                         // Here, the selected node is added to the game tree
-                        Expansion.Expand(lastNode, currState);
+                        Expansion.Expand(lastState, currState);
                         // Starts to simulate games starting from the new state added
                         simulationResult = RunSimulation(currState);
                         // Backpropagates the simulation result through the node visited in the selection
                         Backpropagation(selectionPath, simulationResult);
                     }
-                    currState = GameTree;
-                    selectionPath.Clear();
                 }
 
                 Random rnd = new Random();
@@ -158,7 +155,6 @@ namespace RiseOfMitra.MonteCarlo
             Game tmpGame = new Game(MCTSGame);
             Node nextState = null;
 
-
             while (playouts < MAX_SIMULATION_DEPTH) {
 
                 if (tmpGame.IsOver()) {
@@ -188,13 +184,15 @@ namespace RiseOfMitra.MonteCarlo
             return result;
         }
 
-        private void Backpropagation(List<Node> path, int result) {
+        private void Backpropagation(Stack<Node> path, int result) {
 
             if (path != null && path.Count > 0) {
                 if (result == 0 || result == 1 || result == -1) {
-                    foreach (Node state in path) {
-                        state.WinRate += result;
-                        state.VisitCount++;
+                    Node last = path.Pop();
+                    while(path.Count > 0) {
+                        Node curr = path.Pop();
+                        curr.Value += last.Value;
+                        last = curr;
                     }
                 } else {
                     UserUtils.PrintError(result + " is not a valid simulation result!");
