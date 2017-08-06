@@ -25,7 +25,7 @@ namespace RiseOfMitra.Players
 
         public override Node PrepareAction(Node currState, Player oponent) {
             ACommand partialCommand = GetCmd(currState.Boards, oponent);
-            Node state = new Node(0, currState.Boards, partialCommand);
+            Node state = new Node(currState.Boards, partialCommand);
             return state;
         }
 

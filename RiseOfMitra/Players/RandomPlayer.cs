@@ -55,7 +55,7 @@ namespace RiseOfMitra.Players
                 }
 
                 int selected = rand.Next(someCmds.Count);
-                return new Node(0.0, currState.Boards, someCmds[selected]);
+                return new Node(currState.Boards, someCmds[selected]);
             } else {
                 return null;
             }

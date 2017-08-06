@@ -93,7 +93,7 @@ namespace RiseOfMitra
             Menu();
             Gaia gaia = new Gaia();
             int turn = 1;
-            Node current = new Node(0, Boards, null);
+            Node current = new Node(Boards, null);
             do {
                 Boards.Status = Gamers[0].GetCultCenter().GetStatus().Split('\n');
                 Boards.PrintBoard();

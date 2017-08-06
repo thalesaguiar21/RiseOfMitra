@@ -22,12 +22,16 @@ namespace RiseOfMitra.MonteCarlo
         public int WinRate;
 
 
-        public Node(double value, Board boards, ACommand cmd) {
+        public Node(Board boards, ACommand cmd) {
+            Childs = new List<Node>();
             VisitCount = 0;
             Boards = boards;
             Cmd = cmd;
-            Value = value;
-            Childs = new List<Node>();
+            if (cmd != null) {
+                Value = cmd.Value();
+            } else {
+                Value = 0;
+            }
         }
 
         public static bool ValidateNode(Node node) {
@@ -45,8 +49,7 @@ namespace RiseOfMitra.MonteCarlo
         }
 
         public override bool Equals(object obj) {
-            if(obj is Node) {
-                Node other = (Node)obj;
+            if (obj is Node other) {
                 return Boards.Equals(other.Boards) && Cmd.Equals(other.Cmd);
             } else {
                 return false;
