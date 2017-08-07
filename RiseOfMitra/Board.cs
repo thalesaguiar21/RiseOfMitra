@@ -6,6 +6,7 @@ using Utils;
 using Utils.Types;
 using Utils.Space;
 using Units;
+using Units.Pawns;
 
 namespace Boards
 {
@@ -133,7 +134,7 @@ namespace Boards
             return auxBoard;
         }
 
-        public Coord SelectUnit(IEnumerable<Unit> units) {
+        public Coord SelectUnit(IEnumerable<Unit> units, string cmd) {
             if(units == null || units.Count() == 0) {
                 UserUtils.PrintError("There are no pawns!");
             } else {
@@ -142,10 +143,23 @@ namespace Boards
                 int currUnit = 0;
                 bool selected = false;
                 int index = 0;
+                Dijkstra didi;
+                List<Coord> validPath = new List<Coord>();
                 do {
                     Console.Clear();
-                    PrintBoard(unitPosition);
-
+                    Status = units.ElementAt(index).GetStatus().Split('\n');
+                    if (cmd == Command.MOVE) {
+                        if (units.ElementAt(index) is APawn pawn) {
+                            didi = new Dijkstra(MainBoard, unitPosition, pawn.MovePoints);
+                            validPath = didi.GetValidPaths(cmd);
+                        }
+                    } else if(cmd == Command.ATTACK) {
+                        if (units.ElementAt(index) is ABasicPawn aPawn) {
+                            didi = new Dijkstra(MainBoard, unitPosition, aPawn.MovePoints);
+                            validPath = didi.GetValidPaths(cmd);
+                        }
+                    }
+                    PrintBoard(cmd, unitPosition, unitPosition, validPath);
                     var move = Console.ReadKey(false).Key;
                     switch (move) {
                         case ConsoleKey.Enter:

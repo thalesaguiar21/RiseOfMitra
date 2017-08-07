@@ -56,7 +56,7 @@ namespace RiseOfMitra.Players
                         validCmd = true;
                         break;
                     case Command.MOVE:
-                        playerCommand = SetUpMove(boards);
+                        playerCommand = SetUpMove(boards, oponent);
                         validCmd = true;
                         break;
                     case Command.INSPECT:
@@ -98,7 +98,7 @@ namespace RiseOfMitra.Players
 
         private AttackCommand SetUpAttack(Board boards, Player oponent) {
             AttackCommand attackCmd = new AttackCommand();
-            Coord selPos = boards.SelectUnit(Pawns);
+            Coord selPos = boards.SelectUnit(Pawns, Command.ATTACK);
             Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
             Cursor = selPos;
             if (GetPawnAt(selPos) is ABasicPawn ally) {
@@ -112,9 +112,9 @@ namespace RiseOfMitra.Players
             return attackCmd;
         }
 
-        private MoveCommand SetUpMove(Board boards) {
+        private MoveCommand SetUpMove(Board boards, Player oponent) {
             MoveCommand move = new MoveCommand();
-            Coord selPos = boards.SelectUnit(Pawns);
+            Coord selPos = boards.SelectUnit(Pawns, Command.MOVE);
             APawn ally = GetPawnAt(selPos);
             Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
             Cursor = selPos;
@@ -124,7 +124,7 @@ namespace RiseOfMitra.Players
                 Coord target = boards.SelectPosition(cursorCp, selPos, Command.MOVE, moveRange);
 
                 // Set up command variables
-                move.SetUp(this, selPos, target, boards);
+                move.SetUp(this, oponent, selPos, target, boards);
             }
             return move;
         }
@@ -134,7 +134,7 @@ namespace RiseOfMitra.Players
             List<Unit> allUnits = new List<Unit>();
             allUnits.AddRange(GetUnits());
             allUnits.AddRange(oponent.GetUnits());
-            Coord selPos = boards.SelectUnit(allUnits);
+            Coord selPos = boards.SelectUnit(allUnits, "");
             Cursor = selPos;
 
             inspect.SetUp(selPos, boards, allUnits);

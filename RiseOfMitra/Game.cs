@@ -69,7 +69,7 @@ namespace RiseOfMitra
         private void InitPlayers() {
 
             Gamers = new Player[2];
-            Gamers[0] = new RandomPlayer(ECultures.DALRIONS, this);
+            Gamers[0] = new HumanPlayer(ECultures.DALRIONS);
             Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, new DefaultSelection(), new BestOfAllSimulation(), this);
 
             CurPlayer = Gamers[0];
@@ -118,6 +118,9 @@ namespace RiseOfMitra
                 hasWinner = true;
             } else if (CurPlayer.GetCultCenter().CurrLife <= 0) {
                 hasWinner = true;
+            }
+            if (hasWinner && GetOponent().GetCulture() == ECultures.RAHKARS) {
+                wins++;
             }
             return hasWinner;
         }
@@ -192,7 +195,7 @@ namespace RiseOfMitra
                 foreach (Coord cell in moveRange) {
                     MoveCommand mv = new MoveCommand();
                     mv.SetUp(Boards, CurPlayer, GetOponent());
-                    mv.SetUp(CurPlayer, pawn.Position, cell, Boards);
+                    mv.SetUp(CurPlayer, GetOponent(), pawn.Position, cell, Boards);
                     if (mv.IsValid()) validMvs.Add(mv);
                 }
             }
@@ -222,8 +225,11 @@ namespace RiseOfMitra
 
         public static void Main() {
             try {
-                Game rom = new Game();
-                rom.Start();
+                int t = 0;
+                while (t < 20) {
+                    Game rom = new Game();
+                    rom.Start();
+                }
             } catch (FormatException) {
                 Console.WriteLine("Invalid Terrain or Board file format!");
             } catch (IOException) {

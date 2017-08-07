@@ -75,11 +75,12 @@ namespace RiseOfMitra.Players.Commands
             return "MOV";
         }
 
-        public void SetUp(Player curPlayer, Coord allypos, Coord target, Board boards) {
+        public void SetUp(Player curPlayer, Player oponent, Coord allypos, Coord target, Board boards) {
             SetCurPlayer(curPlayer);
             SetAllyPos(allypos);
             SetTarget(target);
             SetBoards(boards);
+            SetOponent(oponent);
         }
 
         protected override bool Validate() {

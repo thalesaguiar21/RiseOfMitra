@@ -27,7 +27,7 @@ namespace RiseOfMitra.MonteCarlo
             VisitCount = 0;
             Boards = boards;
             Cmd = cmd;
-            if (cmd != null) {
+            if (cmd != null && cmd.IsValid()) {
                 Value = cmd.Value();
             } else {
                 Value = 0;

@@ -50,7 +50,7 @@ namespace RiseOfMitra.Players
 
                 List<ACommand> someCmds = new List<ACommand>();
                 for (int i = 0; i < validCmds.Count; i++) {
-                    if (validCmds[i].Value() >= 0.7 * highest)
+                    if (validCmds[i].Value() >= 0.5 * highest)
                         someCmds.Add(validCmds[i]);
                 }
 
