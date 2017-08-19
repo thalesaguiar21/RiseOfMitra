@@ -62,10 +62,38 @@ namespace RiseOfMitra.Players.Commands
                     }
                 } 
             }
-            //if (!isSimulation) {
-            //    UserUtils.PrintSucess((valid) ? (HitMsg) : (ErrorMsg));
-            //    Console.ReadLine();
-            //}
+            if (!isSimulation) {
+                UserUtils.PrintSucess((valid) ? (HitMsg) : (ErrorMsg));
+                Console.ReadLine();
+            }
+            return valid;
+        }
+
+        public override bool Execute(List<Coord> validCells, bool isSimulation = false) {
+            bool valid = false;
+            if (Validate()) {
+                ABasicPawn allyPawn = (ABasicPawn)CurPlayer.GetPawnAt(AllyPos);
+                List<Coord> atkRange = validCells;
+                if (PosValidate(atkRange)) {
+                    valid = true;
+                    Unit enemyUnit = Oponent.GetUnitAt(Target);
+                    int damage = allyPawn.Atk - enemyUnit.Def;
+                    if (damage > 0) {
+                        HitMsg = String.Format("{0} HAVE DEALT {1} DAMAGE!", allyPawn.Culture, damage);
+                        enemyUnit.CurrLife = enemyUnit.CurrLife - damage;
+                        if (enemyUnit.CurrLife <= 0) {
+                            Oponent.RemoveUnitAt(Target, Boards);
+                            HitMsg += " ENEMY KILLED!!";
+                        }
+                    } else {
+                        HitMsg = BLOCK;
+                    }
+                }
+            }
+            if (!isSimulation) {
+                UserUtils.PrintSucess((valid) ? (HitMsg) : (ErrorMsg));
+                Console.ReadLine();
+            }
             return valid;
         }
 

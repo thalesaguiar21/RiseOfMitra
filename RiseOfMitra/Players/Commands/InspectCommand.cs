@@ -36,6 +36,24 @@ namespace RiseOfMitra.Players.Commands
             return false;
         }
 
+        public override bool Execute(List<Coord> validCells, bool isSimulation = false) {
+            bool valid = Validate();
+            if (valid) {
+                foreach (Unit unit in Units) {
+                    if (unit.InUnit(Target)) {
+                        Boards.Status = unit.GetStatus().Split('\n');
+                        Console.Clear();
+                        Boards.PrintBoard();
+                        Console.ReadLine();
+                        break;
+                    }
+                }
+            } else {
+                UserUtils.PrintError(ErrorMsg);
+            }
+            return false;
+        }
+
         public override double Value() {
             return 0;
         }

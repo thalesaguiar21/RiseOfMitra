@@ -98,13 +98,12 @@ namespace RiseOfMitra.Players
 
         private AttackCommand SetUpAttack(Board boards, Player oponent) {
             AttackCommand attackCmd = new AttackCommand();
-            Coord selPos = boards.SelectUnit(Pawns, Command.ATTACK);
+            List<Coord> validCells = new List<Coord>();
+            Coord selPos = boards.SelectUnit(validCells, Pawns, Command.ATTACK);
             Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
             Cursor = selPos;
             if (GetPawnAt(selPos) is ABasicPawn ally) {
-                Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.AtkRange);
-                List<Coord> atkRange = didi.GetValidPaths(Command.ATTACK);
-                Coord enemyPos = boards.SelectPosition(cursorCp, selPos, Command.ATTACK, atkRange);
+                Coord enemyPos = boards.SelectPosition(cursorCp, selPos, Command.ATTACK, validCells);
 
                 // Set up command variables
                 attackCmd.SetUp(selPos, enemyPos, this, oponent, boards);
@@ -114,15 +113,13 @@ namespace RiseOfMitra.Players
 
         private MoveCommand SetUpMove(Board boards, Player oponent) {
             MoveCommand move = new MoveCommand();
-            Coord selPos = boards.SelectUnit(Pawns, Command.MOVE);
+            List<Coord> validCells = new List<Coord>();
+            Coord selPos = boards.SelectUnit(validCells, Pawns, Command.MOVE);
             APawn ally = GetPawnAt(selPos);
             Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
             Cursor = selPos;
             if (ally != null) {
-                Dijkstra didi = new Dijkstra(boards.GetBoard(), selPos, ally.MovePoints);
-                List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
-                Coord target = boards.SelectPosition(cursorCp, selPos, Command.MOVE, moveRange);
-
+                Coord target = boards.SelectPosition(cursorCp, selPos, Command.MOVE, validCells);
                 // Set up command variables
                 move.SetUp(this, oponent, selPos, target, boards);
             }
@@ -134,7 +131,7 @@ namespace RiseOfMitra.Players
             List<Unit> allUnits = new List<Unit>();
             allUnits.AddRange(GetUnits());
             allUnits.AddRange(oponent.GetUnits());
-            Coord selPos = boards.SelectUnit(allUnits, "");
+            Coord selPos = boards.SelectUnit(null, allUnits, "");
             Cursor = selPos;
 
             inspect.SetUp(selPos, boards, allUnits);

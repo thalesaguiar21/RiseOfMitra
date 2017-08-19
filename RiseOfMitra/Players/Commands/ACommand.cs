@@ -36,6 +36,7 @@ namespace RiseOfMitra.Players.Commands
 
         public abstract double Value();
         public abstract bool Execute(bool isSimulation = false);
+        public abstract bool Execute(List<Coord> validCells, bool isSimulation = false);
         public abstract bool IsValid();
         protected abstract bool Validate();
         public abstract string GetShort();

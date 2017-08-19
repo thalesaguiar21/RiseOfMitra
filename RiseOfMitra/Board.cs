@@ -134,7 +134,7 @@ namespace Boards
             return auxBoard;
         }
 
-        public Coord SelectUnit(IEnumerable<Unit> units, string cmd) {
+        public Coord SelectUnit(List<Coord> validCells, IEnumerable<Unit> units, string cmd) {
             if(units == null || units.Count() == 0) {
                 UserUtils.PrintError("There are no pawns!");
             } else {
@@ -144,22 +144,21 @@ namespace Boards
                 bool selected = false;
                 int index = 0;
                 Dijkstra didi;
-                List<Coord> validPath = new List<Coord>();
                 do {
                     Console.Clear();
                     Status = units.ElementAt(index).GetStatus().Split('\n');
                     if (cmd == Command.MOVE) {
                         if (units.ElementAt(index) is APawn pawn) {
                             didi = new Dijkstra(MainBoard, unitPosition, pawn.MovePoints);
-                            validPath = didi.GetValidPaths(cmd);
+                            validCells = didi.GetValidPaths(cmd);
                         }
                     } else if(cmd == Command.ATTACK) {
                         if (units.ElementAt(index) is ABasicPawn aPawn) {
                             didi = new Dijkstra(MainBoard, unitPosition, aPawn.MovePoints);
-                            validPath = didi.GetValidPaths(cmd);
+                            validCells = didi.GetValidPaths(cmd);
                         }
                     }
-                    PrintBoard(cmd, unitPosition, unitPosition, validPath);
+                    PrintBoard(cmd, unitPosition, unitPosition, validCells);
                     var move = Console.ReadKey(false).Key;
                     switch (move) {
                         case ConsoleKey.Enter:

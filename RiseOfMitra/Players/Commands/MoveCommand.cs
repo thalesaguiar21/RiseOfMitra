@@ -45,6 +45,29 @@ namespace RiseOfMitra.Players.Commands
             return valid;
         }
 
+        public override bool Execute(List<Coord> validCells, bool isSimualtion = false) {
+            bool valid = false;
+            if (Validate()) {
+                APawn allyPawn = CurPlayer.GetPawnAt(AllyPos);
+                List<Coord> moveRange = validCells;
+                if (moveRange.Contains(Target)) {
+                    valid = true;
+                    allyPawn.Erase(Boards);
+                    allyPawn.Position = Target;
+                    allyPawn.Place(Boards);
+                    //allyPawn.Adapt(Boards.TerrainAt(AllyPos), Boards.TerrainAt(Target));
+                } else {
+                    ErrorMsg = OUT_OF_RANGE;
+                }
+            }
+            if (!ErrorMsg.Equals("") && !isSimualtion) {
+                UserUtils.PrintError(ErrorMsg);
+                Console.ReadLine();
+            }
+
+            return valid;
+        }
+
         public override double Value() {
             double total = 1;
             
