@@ -99,7 +99,7 @@ namespace RiseOfMitra.Players
         private AttackCommand SetUpAttack(Board boards, Player oponent) {
             AttackCommand attackCmd = new AttackCommand();
             List<Coord> validCells = new List<Coord>();
-            Coord selPos = boards.SelectUnit(validCells, Pawns, Command.ATTACK);
+            Coord selPos = boards.SelectUnit(ref validCells, Pawns, Command.ATTACK);
             Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
             Cursor = selPos;
             if (GetPawnAt(selPos) is ABasicPawn ally) {
@@ -114,7 +114,7 @@ namespace RiseOfMitra.Players
         private MoveCommand SetUpMove(Board boards, Player oponent) {
             MoveCommand move = new MoveCommand();
             List<Coord> validCells = new List<Coord>();
-            Coord selPos = boards.SelectUnit(validCells, Pawns, Command.MOVE);
+            Coord selPos = boards.SelectUnit(ref validCells, Pawns, Command.MOVE);
             APawn ally = GetPawnAt(selPos);
             Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
             Cursor = selPos;
@@ -129,9 +129,10 @@ namespace RiseOfMitra.Players
         private InspectCommand SetUpInspect(Board boards, Player oponent) {
             InspectCommand inspect = new InspectCommand();
             List<Unit> allUnits = new List<Unit>();
+            List<Coord> validPositions = new List<Coord>();
             allUnits.AddRange(GetUnits());
             allUnits.AddRange(oponent.GetUnits());
-            Coord selPos = boards.SelectUnit(null, allUnits, "");
+            Coord selPos = boards.SelectUnit(ref validPositions, allUnits, "");
             Cursor = selPos;
 
             inspect.SetUp(selPos, boards, allUnits);
