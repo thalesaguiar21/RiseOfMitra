@@ -154,7 +154,7 @@ namespace Boards
                         }
                     } else if(cmd == Command.ATTACK) {
                         if (units.ElementAt(index) is ABasicPawn aPawn) {
-                            didi = new Dijkstra(MainBoard, unitPosition, aPawn.MovePoints);
+                            didi = new Dijkstra(MainBoard, unitPosition, aPawn.AtkRange);
                             validCells = didi.GetValidPaths(cmd);
                         }
                     }
