@@ -99,8 +99,8 @@ namespace Boards
             int col = 0;
             string line;
             Array terrains = Enum.GetValues(typeof(ETerrain));
-            FileStream fStream = new FileStream(TerrainFilePath, FileMode.Open, FileAccess.Read);
-            StreamReader file = new StreamReader(fStream);
+            var fStream = new FileStream(TerrainFilePath, FileMode.Open, FileAccess.Read);
+            var file = new StreamReader(fStream);
 
             while ((line = file.ReadLine()) != null) {
                 string[] cells = line.Split(' ');
@@ -124,8 +124,8 @@ namespace Boards
             int lin = 0;
             int col = 0;
             string line;
-            FileStream fStream = new FileStream(TerrainFilePath, FileMode.Open, FileAccess.Read);
-            StreamReader file = new StreamReader(fStream);
+            var fStream = new FileStream(TerrainFilePath, FileMode.Open, FileAccess.Read);
+            var file = new StreamReader(fStream);
 
             while ((line = file.ReadLine()) != null) {
                 string[] cells = line.Split(' ');
