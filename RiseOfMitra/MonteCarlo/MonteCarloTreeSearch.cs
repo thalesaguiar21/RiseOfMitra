@@ -116,7 +116,7 @@ namespace RiseOfMitra.MonteCarlo
                 lastMove = currMove;
                 currMove = Selection.Execute(parameters);
                 Player tmpPlayer = MCTSGame.GetCurPlayer().Copy(MCTSGame.GetBoards());
-                currMove.Cmd.SetCurPlayer(tmpPlayer);
+                currMove.Command.CurPlayer = tmpPlayer;
                 select = ((lastMove.Equals(currMove)) || (lastMove.Childs.Contains(currMove)))
                     && !MCTSGame.IsOver();
                 if(select)
@@ -141,23 +141,23 @@ namespace RiseOfMitra.MonteCarlo
             int depth = 0;
             double simValue = 0;
             double mctsValue = 0;
-            Game tmpGame = new Game(MCTSGame);
-            Node currState = new Node(state.Boards, state.Cmd);
-            List<ACommand> validCmds = new List<ACommand>();
-            Random rnd = new Random();
+            var tmpGame = new Game(MCTSGame);
+            var currState = new Node(state.Boards, state.Command);
+            var validStates = new List<Node>();
+            var rnd = new Random();
 
             while (depth < MAX_SIMULATION_DEPTH && !tmpGame.IsOver()) {
-                validCmds = tmpGame.GetValidCommands();
-                if(validCmds.Count == 0) {
+                validStates = Node.FromRange(tmpGame.GetBoards(), tmpGame.GetValidCommands());
+                if(validStates.Count == 0) {
                     tmpGame.ChangeState(null, true);
-                    validCmds = tmpGame.GetValidCommands();
+                    validStates = Node.FromRange(tmpGame.GetBoards(), tmpGame.GetValidCommands());
                 }
-                Simulation.SetUp(validCmds);
-                validCmds = Simulation.Execute();
+                Simulation.SetUp(validStates);
+                validStates = Simulation.Execute();
 
-                ACommand tmpCmd = validCmds.ElementAt(rnd.Next(validCmds.Count));
-                tmpCmd.SetCurPlayer(tmpGame.GetCurPlayer().Copy(tmpGame.GetBoards()));
-                Node nextMove = new Node(tmpGame.GetBoards(), tmpCmd);
+                var tmpState = validStates.ElementAt(rnd.Next(validStates.Count));
+                tmpState.Command.CurPlayer = tmpGame.GetCurPlayer().Copy(tmpGame.GetBoards());
+                Node nextMove = new Node(tmpGame.GetBoards(), tmpState.Command);
                 simValue += nextMove.Value;
                 if (tmpGame.GetCurPlayer() is MonteCarloTreeSearch) {
                     mctsValue += nextMove.Value;
@@ -186,7 +186,7 @@ namespace RiseOfMitra.MonteCarlo
                     Node last = path.Pop();
                     while(path.Count > 0) {
                         Node curr = path.Pop();
-                        curr.Value += last.Value;
+                        curr.Value = last.Value;
                         last = curr;
                     }
                 } else {

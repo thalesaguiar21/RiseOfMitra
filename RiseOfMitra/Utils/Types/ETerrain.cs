@@ -1,15 +1,6 @@
 ﻿namespace Utils.Types
 {
-    public enum ETerrain
-    {
-        MOUNTAIN,
-        PLAIN,
-        RIVER,
-        FIELD,
-        MARSH,
-        FOREST,
-        DESERT
-    }
+    public enum ETerrain { MOUNTAIN, PLAIN, RIVER, FIELD, MARSH, FOREST, DESERT }
 
     public static class TerrainUtil
     {

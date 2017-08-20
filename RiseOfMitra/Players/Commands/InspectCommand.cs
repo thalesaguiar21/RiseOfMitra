@@ -11,22 +11,20 @@ namespace RiseOfMitra.Players.Commands
     {
         List<Unit> Units;
 
-        public InspectCommand() {
+        public InspectCommand(Coord target) {
             ErrorMsg = "";
             Units = new List<Unit>();
-            Target = null;
-            Boards = null;
+            this.target = Validate<Coord>.IsNotNull("Target can not be null!", target);
         }
 
-        public override bool Execute(bool isSimulation = false) {
-            bool valid = Validate();
+        public override bool Execute(Board board, bool isSimulation = false) {
+
+            Validate<Board>.IsNotNull(Validate<Board>.BOARD_NULL, board);
+            bool valid = IsValid(board);
             if (valid) {
                 foreach (Unit unit in Units) {
                     if (unit.InUnit(Target)) {
-                        Boards.Status =  unit.GetStatus().Split('\n');
-                        Console.Clear();
-                        Boards.PrintBoard();
-                        Console.ReadLine();
+                        board.Status =  unit.GetStatus().Split('\n');
                         break;
                     }
                 }
@@ -36,39 +34,13 @@ namespace RiseOfMitra.Players.Commands
             return false;
         }
 
-        public override bool Execute(List<Coord> validCells, bool isSimulation = false) {
-            bool valid = Validate();
-            if (valid) {
-                foreach (Unit unit in Units) {
-                    if (unit.InUnit(Target)) {
-                        Boards.Status = unit.GetStatus().Split('\n');
-                        Console.Clear();
-                        Boards.PrintBoard();
-                        Console.ReadLine();
-                        break;
-                    }
-                }
-            } else {
-                UserUtils.PrintError(ErrorMsg);
-            }
-            return false;
-        }
-
-        public override double Value() {
-            return 0;
-        }
-
         public override string GetShort() {
             return "INSP";
         }
 
-        public void SetUp(Coord target, Board boards, List<Unit> units) {
-            SetTarget(target);
-            SetBoards(boards);
-            SetUnits(units);
-        }
+        public override bool IsValid(Board board) {
 
-        protected override bool Validate() {
+            Validate<Board>.IsNotNull(Validate<Board>.BOARD_NULL, board);
             bool valid = true;
             if (!Coord.IsValid(Target)) {
                 ErrorMsg = INVALID_POS;
@@ -86,22 +58,8 @@ namespace RiseOfMitra.Players.Commands
             return valid;
         }
 
-        public override bool IsValid() {
-            return Validate();
-        }
-
         public override bool Equals(ACommand otherCmd) {
             return otherCmd is InspectCommand;
-        }
-
-        private void SetUnits(List<Unit> units) {
-            if (units != null)
-                Units = units;
-        }
-
-        private void SetTarget(Coord target) {
-            if (Coord.IsValid(target))
-                Target = target;
         }
     }
 }

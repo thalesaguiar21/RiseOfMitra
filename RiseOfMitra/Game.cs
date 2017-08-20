@@ -70,7 +70,8 @@ namespace RiseOfMitra
 
             Gamers = new Player[2];
             Gamers[0] = new HumanPlayer(ECultures.DALRIONS);
-            Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, new DefaultSelection(), new BestOfAllSimulation(), this);
+            Gamers[1] = new HumanPlayer(ECultures.RAHKARS);
+            //Gamers[1] = new MonteCarloTreeSearch(ECultures.RAHKARS, new DefaultSelection(), new BestOfAllSimulation(), this);
 
             CurPlayer = Gamers[0];
             Gamers[1].SetCursor(new Coord(BoardConsts.MAX_LIN - 2, BoardConsts.MAX_COL - 2));
@@ -93,7 +94,8 @@ namespace RiseOfMitra
             Menu();
             Gaia gaia = new Gaia();
             int turn = 1;
-            Node current = new Node(Boards, null);
+            var firstCmd = new MoveCommand(new Coord(1, 1), new Coord(1, 1), CurPlayer, GetOponent());
+            Node current = new Node(Boards, firstCmd);
             do {
                 Boards.Status = Gamers[0].GetCultCenter().GetStatus().Split('\n');
                 Boards.PrintBoard();
@@ -129,20 +131,12 @@ namespace RiseOfMitra
             if (state == null)
                 SetNextPlayer();
             else if(Node.ValidateNode(state)) {
-                state.Cmd.SetUp(Boards, CurPlayer, GetOponent());
-                bool validCmd = state.Cmd.IsValid();
-                if (validCmd) {
-                    if (state.Value == 0)
-                        state.Value = state.Cmd.Value();
-                    if (state.Cmd.Execute(isSimulation)) {
-                        SetNextPlayer();
-                    }
-                    foreach (Player player in Gamers) {
-                        if (player.GetCultCenter() == null || player.GetCultCenter().CurrLife <= 0)
-                            Play = false;
-                    }
-                } else {
-                    UserUtils.PrintError("Invalid command!");
+                if (state.Command.Execute(Boards, isSimulation)) {
+                    SetNextPlayer();
+                }
+                foreach (Player player in Gamers) {
+                    if (player.GetCultCenter() == null || player.GetCultCenter().CurrLife <= 0)
+                        Play = false;
                 }
             } else {
                 UserUtils.PrintError("Invalid node!");
@@ -187,31 +181,27 @@ namespace RiseOfMitra
             return validCmds;
         }
 
-        private List<ACommand> GetValidMoviments() {
-            List<ACommand> validMvs = new List<ACommand>();
+        private List<MoveCommand> GetValidMoviments() {
+            var validMvs = new List<MoveCommand>();
             foreach (APawn pawn in CurPlayer.GetPawns()) {
                 Dijkstra didi = new Dijkstra(Boards.GetBoard(), pawn.Position, pawn.MovePoints);
                 List<Coord> moveRange = didi.GetValidPaths(Command.MOVE);
                 foreach (Coord cell in moveRange) {
-                    MoveCommand mv = new MoveCommand();
-                    mv.SetUp(Boards, CurPlayer, GetOponent());
-                    mv.SetUp(CurPlayer, GetOponent(), pawn.Position, cell, Boards);
-                    if (mv.IsValid()) validMvs.Add(mv);
+                    var mv = new MoveCommand(pawn.Position, cell, CurPlayer, GetOponent());
+                    if (mv.IsValid(Boards)) validMvs.Add(mv);
                 }
             }
 
             return validMvs;
         }
 
-        private List<ACommand> GetValidAttacks() {
-            List<ACommand> validAtks = new List<ACommand>();
+        private List<AttackCommand> GetValidAttacks() {
+            var validAtks = new List<AttackCommand>();
             foreach(ABasicPawn pawn in CurPlayer.GetPawns()) {
                 foreach (ABasicPawn enemy in GetOponent().GetPawns()) {
                     if(Coord.Distance(pawn.Position, enemy.Position) < pawn.MovePoints) {
-                        AttackCommand atk = new AttackCommand();
-                        atk.SetUp(Boards, CurPlayer, GetOponent());
-                        atk.SetUp(pawn.Position, enemy.Position, CurPlayer, GetOponent(), Boards);
-                        if (atk.IsValid()) validAtks.Add(atk);
+                        var atk = new AttackCommand(pawn.Position, enemy.Position, CurPlayer, GetOponent());
+                        if (atk.IsValid(Boards)) validAtks.Add(atk);
                     }
                 }
             }

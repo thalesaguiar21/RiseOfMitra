@@ -9,7 +9,7 @@ namespace RiseOfMitra.MonteCarlo.Simulation
 {
     public interface ISimulation
     {
-        void SetUp(List<ACommand> validCmds);
-        List<ACommand> Execute();
+        void SetUp(List<Node> validCmds);
+        List<Node> Execute();
     }
 }

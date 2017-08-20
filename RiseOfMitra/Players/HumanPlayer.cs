@@ -42,7 +42,7 @@ namespace RiseOfMitra.Players
         }
 
         private ACommand GetCmd(Board boards, Player oponent) {
-            Console.Write("YOUR TURN.");
+            Console.Write("{0} turn...", this.GetCulture());
             bool validCmd = false;
             ACommand playerCommand = null;
             string userCmd = "";
@@ -63,9 +63,6 @@ namespace RiseOfMitra.Players
                         playerCommand = SetUpInspect(boards, oponent);
                         validCmd = true;
                         break;
-                    case Command.EXIT:
-                        
-                        break;
                     case Command.HELP:
                         SetUpHelp();
                         break;
@@ -76,12 +73,13 @@ namespace RiseOfMitra.Players
                             UserUtils.PrintError(userCmd + " is not a valid command! Please, try again!");
                         break;
                 }
-
             }
+
             return playerCommand;
         }
 
         private void SetUpHelp() {
+
             string str = "To interact with the game, type in one of the following commands.\n" +
                 "The game command processing is not case sensitive. \n\n" +
                 "Avaiable commands are: ";
@@ -97,46 +95,37 @@ namespace RiseOfMitra.Players
         }
 
         private AttackCommand SetUpAttack(Board boards, Player oponent) {
-            AttackCommand attackCmd = new AttackCommand();
-            List<Coord> validCells = new List<Coord>();
-            Coord selPos = boards.SelectUnit(ref validCells, Pawns, Command.ATTACK);
-            Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
-            Cursor = selPos;
-            if (GetPawnAt(selPos) is ABasicPawn ally) {
-                Coord enemyPos = boards.SelectPosition(cursorCp, selPos, Command.ATTACK, validCells);
 
-                // Set up command variables
-                attackCmd.SetUp(selPos, enemyPos, this, oponent, boards);
-            }
-            return attackCmd;
+            var validCells = new List<Coord>();
+            var selPos = boards.SelectUnit(ref validCells, Pawns, Command.ATTACK);
+            var cursorCp = new Coord(Cursor.X, Cursor.Y);
+            Cursor = selPos;
+            Coord enemyPos = boards.SelectPosition(cursorCp, selPos, Command.ATTACK, validCells);
+
+            return new AttackCommand(selPos, enemyPos, this, oponent);
         }
 
         private MoveCommand SetUpMove(Board boards, Player oponent) {
-            MoveCommand move = new MoveCommand();
-            List<Coord> validCells = new List<Coord>();
-            Coord selPos = boards.SelectUnit(ref validCells, Pawns, Command.MOVE);
-            APawn ally = GetPawnAt(selPos);
-            Coord cursorCp = new Coord(Cursor.X, Cursor.Y);
+
+            var validCells = new List<Coord>();
+            var selPos = boards.SelectUnit(ref validCells, Pawns, Command.MOVE);
+            var cursorCp = new Coord(Cursor.X, Cursor.Y);
             Cursor = selPos;
-            if (ally != null) {
-                Coord target = boards.SelectPosition(cursorCp, selPos, Command.MOVE, validCells);
-                // Set up command variables
-                move.SetUp(this, oponent, selPos, target, boards);
-            }
-            return move;
+            Coord target = boards.SelectPosition(cursorCp, selPos, Command.MOVE, validCells);
+
+            return new MoveCommand(selPos, target, this, oponent);
         }
 
         private InspectCommand SetUpInspect(Board boards, Player oponent) {
-            InspectCommand inspect = new InspectCommand();
-            List<Unit> allUnits = new List<Unit>();
-            List<Coord> validPositions = new List<Coord>();
+
+            var allUnits = new List<Unit>();
+            var validPositions = new List<Coord>();
             allUnits.AddRange(GetUnits());
             allUnits.AddRange(oponent.GetUnits());
             Coord selPos = boards.SelectUnit(ref validPositions, allUnits, "");
             Cursor = selPos;
 
-            inspect.SetUp(selPos, boards, allUnits);
-            return inspect;
+            return new InspectCommand(selPos);
         }
     }
 }

@@ -30,13 +30,14 @@ namespace Units.Centers
         }
 
         public CulturalCenter Copy(Board board) {
-            CulturalCenter tmpCenter = new CulturalCenter(Culture);
-            tmpCenter.TotalLife = TotalLife;
-            tmpCenter.CurrLife = CurrLife;
-            tmpCenter.Def = Def;
-            tmpCenter.LifePerSec = LifePerSec;
-            tmpCenter.Position = Position;
-            tmpCenter.Size = Size;
+            CulturalCenter tmpCenter = new CulturalCenter(Culture) {
+                TotalLife = TotalLife,
+                CurrLife = CurrLife,
+                Def = Def,
+                LifePerSec = LifePerSec,
+                Position = Position,
+                Size = Size
+            };
             tmpCenter.SetUnitPerTurn(UnitPerTurn);
             tmpCenter.SetSpawnPoint(board, new Coord(SpawnPoint.X, SpawnPoint.Y));
             tmpCenter.SetSpawnRange(SpawnRange);

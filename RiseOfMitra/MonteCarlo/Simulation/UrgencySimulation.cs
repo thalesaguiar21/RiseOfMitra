@@ -9,25 +9,24 @@ namespace RiseOfMitra.MonteCarlo.Simulation
 {
     public class UrgencySimulation : ISimulation
     {
-        private List<ACommand> ValidMoves;
+        private List<Node> ValidMoves;
         
-        public List<ACommand> Execute() {
-            List<ACommand> simulatedCmds = new List<ACommand>();
+        public List<Node> Execute() {
+            var simulatedCmds = new List<Node>();
             if(ValidMoves != null && ValidMoves.Count > 0) {
                 double[] urgencies = new double[ValidMoves.Count];
                 double[] cmdValue = new double[ValidMoves.Count];
-                double total = 0;
-
+                double total = 0.0;
 
                 Random rnd = new Random();
                 double threshold = rnd.Next(cmdValue.Length) / (double)cmdValue.Length;
 
                 for (int i = 0; i < ValidMoves.Count; i++) {
-                    cmdValue[i] = ValidMoves[i].Value();
-                    total += cmdValue[i];
+                    total += ValidMoves[i].Value;
                 }
+
                 for (int i = 0; i < ValidMoves.Count; i++) {
-                    urgencies[i] = cmdValue[i] / total;
+                    urgencies[i] = ValidMoves[i].Value / total;
                     if(urgencies[i] >= threshold) {
                         simulatedCmds.Add(ValidMoves[i]);
                     }
@@ -36,7 +35,7 @@ namespace RiseOfMitra.MonteCarlo.Simulation
             return simulatedCmds;
         }
 
-        public void SetUp(List<ACommand> validCmds) {
+        public void SetUp(List<Node> validCmds) {
             ValidMoves = validCmds;
         }
     }

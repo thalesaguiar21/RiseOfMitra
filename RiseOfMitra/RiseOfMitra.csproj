@@ -92,6 +92,7 @@
     <Compile Include="MonteCarlo\Simulation\ISimulation.cs" />
     <Compile Include="Units\Temples\Temple.cs" />
     <Compile Include="Units\Unit.cs" />
+    <Compile Include="Utils\Validate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -26,6 +26,7 @@ namespace RiseOfMitra.Players
         protected int Turn;
 
         public APawn GetPawnAt(Coord pos) {
+
             for (int i = 0; i < Pawns.Count; i++) {
                 if (Pawns[i].Position.Equals(pos))
                     return Pawns[i];
@@ -33,7 +34,17 @@ namespace RiseOfMitra.Players
             return null;
         }
 
+        public ABasicPawn GetBasicPawnAt(Coord target) {
+
+            for (int i = 0; i < Pawns.Count; i++) {
+                if (Pawns[i].Position.Equals(target) && Pawns[i] is ABasicPawn)
+                    return (ABasicPawn)Pawns[i];
+            }
+            return null;
+        }
+
         public List<Unit> GetUnits() {
+
             List<Unit> playerUnits = new List<Unit>();
             playerUnits.AddRange(Pawns);
             playerUnits.Add(CultCenter);
@@ -41,6 +52,7 @@ namespace RiseOfMitra.Players
         }
 
         public Unit GetUnitAt(Coord pos) {
+
             Unit unit = null;
             if (pos != null) {
                 List<Unit> units = GetUnits();
@@ -180,8 +192,7 @@ namespace RiseOfMitra.Players
         }
 
         public override bool Equals(object obj) {
-            if(obj is Player) {
-                Player other = (Player)obj;
+            if (obj is Player other) {
                 return other.Culture == Culture;
             }
             return false;
