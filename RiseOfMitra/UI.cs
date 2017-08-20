@@ -8,9 +8,9 @@ namespace RiseOfMitra
 {
     class UI
     {
-
         List<EMenuOptions> menuOptions =
             new List<EMenuOptions> { EMenuOptions.PLAY, EMenuOptions.HIST, EMenuOptions.EXIT };
+        enum EMenuOptions { PLAY, HIST, EXIT }
 
         private void PrintLogo()
         {

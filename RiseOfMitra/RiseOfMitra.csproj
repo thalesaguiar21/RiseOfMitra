@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EMenuOptions.cs" />
     <Compile Include="MonteCarlo\Simulation\BestOfAllSimulation.cs" />
     <Compile Include="MonteCarlo\Selection\DefaultSelection.cs" />
     <Compile Include="MonteCarlo\Expansion\ExpandAll.cs" />
