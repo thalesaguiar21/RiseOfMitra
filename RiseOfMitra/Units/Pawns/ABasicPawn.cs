@@ -14,13 +14,13 @@ namespace Units.Pawns
     /// </summary>
     public abstract class ABasicPawn : APawn
     {
-        private int atk;
-        private int atkRange;
-        private const int MAX_ATK = 25;
+        int atk;
+        int atkRange;
+        const int MAX_ATK = 25;
         protected const int MAX_RANGE = 10;
 
-        public override APawn Copy(Board boards) {
-
+        public override APawn Copy(Board boards)
+        {
             ABasicPawn pawn;
             if (Culture == ECultures.DALRIONS)
                 pawn = new DalrionPawn();
@@ -38,8 +38,8 @@ namespace Units.Pawns
             return pawn;
         }
 
-        public int Atk {
-
+        public int Atk
+        {
             get { return atk; }
             set {
                 if ((value >= 0) && (value <= MAX_ATK))
@@ -47,8 +47,8 @@ namespace Units.Pawns
             }
         }
 
-        public int AtkRange {
-
+        public int AtkRange
+        {
             get { return atkRange; }
             set {
                 if ((value > 0) && (value <= MAX_RANGE))
@@ -56,9 +56,9 @@ namespace Units.Pawns
             }
         }
 
-        public override string GetStatus() {
-
-            StringBuilder msg = new StringBuilder(base.GetStatus());
+        public override string GetStatus()
+        {
+            var msg = new StringBuilder(base.GetStatus());
             msg.Append("Atk: " + Atk + "\n");
             msg.Append("Atk range: " + AtkRange + "\n");
             return msg.ToString();

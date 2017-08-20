@@ -9,14 +9,16 @@ namespace RiseOfMitra.MonteCarlo.Selection
 {
     class UCTSelection : ISelection
     {
-        private double Beta;
+        double Beta;
 
-        public UCTSelection (double beta) {
+        public UCTSelection(double beta)
+        {
             if (beta > 0)
-                Beta = beta;    
+                Beta = beta;
         }
 
-        public Node Execute(SelectionParameters args) {
+        public Node Execute(SelectionParameters args)
+        {
             Node chosen = null;
             if (args.validStates != null && args.validStates.Count > 0 && args.root != null) {
                 double maxValue = 0;

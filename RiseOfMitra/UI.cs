@@ -9,11 +9,12 @@ namespace RiseOfMitra
     class UI
     {
 
-        private List<EMenuOptions> menuOptions = 
+        List<EMenuOptions> menuOptions =
             new List<EMenuOptions> { EMenuOptions.PLAY, EMenuOptions.HIST, EMenuOptions.EXIT };
 
-        private void PrintLogo() {
-            List<string> logo = new List<string>() {
+        private void PrintLogo()
+        {
+            var logo = new List<string>() {
                                  "###                                        #         #    #                  ",
                                  "#  #                               ##      # #     # #  #####                ",
                                  "#   #                             #  #     #  #   #  #    #                  ",
@@ -26,17 +27,15 @@ namespace RiseOfMitra
             int lineSize = logo[0].Length;
             int padLength = (Console.WindowWidth - lineSize) / 2;
 
-
             foreach (string logoLine in logo) {
                 Console.WriteLine(logoLine.PadLeft(lineSize + padLength, ' '));
             }
             Console.WriteLine("\n\n");
         }
-        
-        public void PrintMenu() {
 
+        public void PrintMenu()
+        {
             int highlightedOption = 0;
-
             while (true) {
                 PrintLogo();
                 int padLength = (Console.WindowWidth - "MENU".Length) / 2;
@@ -59,7 +58,7 @@ namespace RiseOfMitra
                 highlightedOption = HoverOptions(highlightedOption, selectedOption);
 
                 if (selectedOption == ConsoleKey.Enter) {
-                    if(menuOptions[highlightedOption] == EMenuOptions.PLAY) {
+                    if (menuOptions[highlightedOption] == EMenuOptions.PLAY) {
                         break;
                     } else {
                         ChangeView(menuOptions[highlightedOption]);
@@ -70,8 +69,8 @@ namespace RiseOfMitra
             Console.Clear();
         }
 
-        private void ChangeView(EMenuOptions opt) {
-
+        private void ChangeView(EMenuOptions opt)
+        {
             Console.Clear();
 
             switch (opt) {
@@ -86,11 +85,11 @@ namespace RiseOfMitra
             }
         }
 
-        private void HistView() {
-
+        private void HistView()
+        {
             PrintLogo();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            List<string> history = new List<string> { "Rise of Mitra tells the history of a battle for resources between",
+            var history = new List<string> { "Rise of Mitra tells the history of a battle for resources between",
                 "two races in the small planet Mitra. The planet is the only place in galaxy w",
                 "here Argyros Crystal grows. A small piece of it has an almost infinity energy ",
                 "that can be used to sustain a large city for many centuries. The planet is inh",
@@ -100,7 +99,7 @@ namespace RiseOfMitra
                 "rating the old gods and realizing sacrifices in their names. Both of them have",
                 "their interests on Argyros, and they have been in war since ancient times for",
                 "the control of this resource." };
-            
+
             foreach (var line in history) {
                 int padLength = (Console.BufferWidth - line.Length) / 2;
                 Console.WriteLine(line.PadLeft(line.Length + padLength, ' '));
@@ -108,7 +107,7 @@ namespace RiseOfMitra
             Console.ResetColor();
 
             string rodape = "Press ESC to exit";
-            Console.WriteLine(rodape.PadLeft(Console.BufferWidth - rodape.Length/2, ' '));
+            Console.WriteLine(rodape.PadLeft(Console.BufferWidth - rodape.Length / 2, ' '));
 
             ConsoleKey exit;
             do {
@@ -116,8 +115,8 @@ namespace RiseOfMitra
             } while (ConsoleKey.Escape != exit);
         }
 
-        private void ExitView() {
-
+        private void ExitView()
+        {
             PrintLogo();
             string exitWarn = "Press ENTER close application or ESC to cancel!";
             int padLength = (Console.WindowWidth - exitWarn.Length) / 2;
@@ -133,9 +132,9 @@ namespace RiseOfMitra
             }
         }
 
-        private int HoverOptions(int position, ConsoleKey keyPressed) {
-            
-            if(ConsoleKey.LeftArrow == keyPressed || ConsoleKey.DownArrow == keyPressed) {
+        private int HoverOptions(int position, ConsoleKey keyPressed)
+        {
+            if (ConsoleKey.LeftArrow == keyPressed || ConsoleKey.DownArrow == keyPressed) {
                 position = (position + 1) % menuOptions.Count;
             } else if (ConsoleKey.RightArrow == keyPressed || ConsoleKey.UpArrow == keyPressed) {
                 position = (position - 1) % menuOptions.Count;

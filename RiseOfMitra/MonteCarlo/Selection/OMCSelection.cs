@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiseOfMitra.MonteCarlo.Selection
 {
     class OMCSelection : ISelection
     {
-        private List<Meta.Numerics.Complex> Urgency(List<Node> states) {
-            List<Meta.Numerics.Complex> stateUrgency = new List<Meta.Numerics.Complex>();
+        private List<Meta.Numerics.Complex> Urgency(List<Node> states)
+        {
+            var stateUrgency = new List<Meta.Numerics.Complex>();
             double bestValue = 0.0;
             double mean = 0;
             foreach (Node state in states) {
@@ -30,7 +28,8 @@ namespace RiseOfMitra.MonteCarlo.Selection
             return stateUrgency;
         }
 
-        private List<Meta.Numerics.Complex> Fairness(List<Meta.Numerics.Complex> urgency, List<Node> states) {
+        private List<Meta.Numerics.Complex> Fairness(List<Meta.Numerics.Complex> urgency, List<Node> states)
+        {
             Meta.Numerics.Complex siblingsSum = 0;
             for (int i = 0; i < urgency.Count; i++) {
                 siblingsSum += states[i].VisitCount * urgency[i];
@@ -43,14 +42,15 @@ namespace RiseOfMitra.MonteCarlo.Selection
             return fairnessValues;
         }
 
-        public Node Execute(SelectionParameters args) {
-            if(args.validStates != null) {
-                List<Meta.Numerics.Complex> urgencies = Urgency(args.validStates);
-                List<Meta.Numerics.Complex> fairnessValues = Fairness(urgencies, args.validStates);
+        public Node Execute(SelectionParameters args)
+        {
+            if (args.validStates != null) {
+                var urgencies = Urgency(args.validStates);
+                var fairnessValues = Fairness(urgencies, args.validStates);
                 double max = 0;
                 Node chosen = null;
                 for (int i = 0; i < fairnessValues.Count; i++) {
-                    if(fairnessValues[i].Re > max) {
+                    if (fairnessValues[i].Re > max) {
                         max = fairnessValues[i].Re;
                         chosen = args.validStates[i];
                     }

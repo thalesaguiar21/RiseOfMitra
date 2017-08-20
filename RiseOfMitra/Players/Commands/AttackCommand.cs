@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Units;
-using Units.Pawns;
-using Units.Centers;
-
 using Boards;
 
 using Utils;
@@ -16,17 +12,17 @@ namespace RiseOfMitra.Players.Commands
 {
     public class AttackCommand : ACommand
     {
-
-        public AttackCommand(Coord origin, Coord target, Player curr, Player oponent) {
-
-            this.curPlayer = Validate<Player>.IsNotNull("Current Player cannot be null!", curr);
+        public AttackCommand(Coord origin, Coord target, Player curr, Player oponent)
+        {
+            curPlayer = Validate<Player>.IsNotNull("Current Player cannot be null!", curr);
             this.oponent = Validate<Player>.IsNotNull("Oponent Player cannot be null!", oponent);
             this.origin = Validate<Coord>.IsNotNull("Origin cell cannot be null!", origin);
             this.target = Validate<Coord>.IsNotNull("Target cell cannot be null!", target);
             ErrorMsg = "";
         }
 
-        public override bool Execute(Board board, bool isSimulation = false) {
+        public override bool Execute(Board board, bool isSimulation = false)
+        {
 
             Validate<Board>.IsNotNull(Validate<Board>.BOARD_NULL, board);
             bool valid = IsValid(board);
@@ -35,17 +31,17 @@ namespace RiseOfMitra.Players.Commands
                 var allyPawn = CurPlayer.GetBasicPawnAt(Origin);
                 var enemyUnit = Oponent.GetUnitAt(Target);
                 int damage = allyPawn.Atk - enemyUnit.Def;
-                if(damage > 0) {
+                if (damage > 0) {
                     hitMsg = string.Format("{0} HAVE DEALT {1} DAMAGE!", allyPawn.Culture, damage);
                     enemyUnit.CurrLife = enemyUnit.CurrLife - damage;
-                    if(enemyUnit.CurrLife <= 0) {
+                    if (enemyUnit.CurrLife <= 0) {
                         Oponent.RemoveUnitAt(target, board);
                         hitMsg += " ENEMY KILLED!!";
                     }
                 } else {
                     hitMsg = BLOCK;
                 }
-            }else if (!isSimulation) {
+            } else if (!isSimulation) {
                 if (valid)
                     UserUtils.PrintSucess(hitMsg);
                 else
@@ -55,8 +51,8 @@ namespace RiseOfMitra.Players.Commands
             return valid;
         }
 
-        public override bool IsValid(Board board) {
-
+        public override bool IsValid(Board board)
+        {
             Validate<Board>.IsNotNull(Validate<Board>.BOARD_NULL, board);
             bool valid = true;
             if (!Coord.IsValid(Origin) || !Coord.IsValid(Target)) {
@@ -74,12 +70,13 @@ namespace RiseOfMitra.Players.Commands
                 if (!atkRange.Contains(Target)) {
                     ErrorMsg = OUT_OF_RANGE;
                     valid = false;
-                }                
+                }
             }
             return valid;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             string msg = base.ToString();
             string cult = "";
             if (CurPlayer.GetCulture() == ECultures.DALRIONS)
@@ -92,12 +89,13 @@ namespace RiseOfMitra.Players.Commands
             return msg;
         }
 
-        public override string GetShort() {
+        public override string GetShort()
+        {
             return "ATK";
         }
 
-        public override bool Equals(ACommand otherCmd) {
-
+        public override bool Equals(ACommand otherCmd)
+        {
             if (otherCmd is AttackCommand other) {
                 bool isEqual = true;
                 isEqual &= (Origin.Equals(other.Origin)) && (Target.Equals(other.Target));

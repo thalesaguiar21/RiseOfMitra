@@ -10,25 +10,25 @@ namespace Units.Pawns
     {
         bool Validate;
 
-        public PawnFactory(bool validate = true) {
+        public PawnFactory(bool validate = true)
+        {
             Validate = validate;
         }
 
-        public APawn Create(ECultures nature) {
+        public APawn Create(ECultures nature)
+        {
             APawn pawn = null;
 
             switch (nature) {
                 case ECultures.DALRIONS:
                     return new DalrionPawn();
-
                 case ECultures.RAHKARS:
                     return new RahkarPawn();
-
                 default:
                     UserUtils.PrintError(nature + " isn't a valid culture!");
                     Console.ReadLine();
                     break;
-            }            
+            }
             return pawn;
         }
     }

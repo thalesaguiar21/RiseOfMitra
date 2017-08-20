@@ -8,7 +8,8 @@ namespace Units.Centers
 {
     public class CulturalCenterFactory
     {
-        public ABuilding Create(ECultures native, Board boards) {
+        public ABuilding Create(ECultures native, Board boards)
+        {
             CulturalCenter center = null;
             switch (native) {
                 case ECultures.DALRIONS:
@@ -41,14 +42,14 @@ namespace Units.Centers
             return center;
         }
 
-        private bool Validate(CulturalCenter center) {
+        private bool Validate(CulturalCenter center)
+        {
             bool valid = true;
-            if(center.Culture == ECultures.DALRIONS) {
+            if (center.Culture == ECultures.DALRIONS) {
                 valid &= center.CurrLife == 100;
                 valid &= center.CurrLife == center.TotalLife;
                 valid &= center.Def == 3;
                 valid &= center.LifePerSec == 2;
-
             } else {
                 valid &= center.CurrLife == 65;
                 valid &= center.CurrLife == center.TotalLife;

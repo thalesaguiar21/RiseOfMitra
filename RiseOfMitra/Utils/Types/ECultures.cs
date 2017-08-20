@@ -1,8 +1,4 @@
 ﻿namespace Utils.Types
 {
-    public enum ECultures : int
-    {
-        DALRIONS,
-        RAHKARS
-    }
+    public enum ECultures { DALRIONS, RAHKARS }
 }

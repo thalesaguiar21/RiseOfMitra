@@ -16,13 +16,13 @@ using Units;
 
 namespace RiseOfMitra.Players
 {
-    class RandomPlayer : Player
+    public class RandomPlayer : Player
     {
-        private Game CurGame;
-        private double Threshold;
+        Game CurGame;
+        double Threshold;
 
-        public RandomPlayer(CulturalCenter center, ECultures cult, Game curGame, double threshold = 0.5) {
-
+        public RandomPlayer(CulturalCenter center, ECultures cult, Game curGame, double threshold = 0.5)
+        {
             CurGame = Validate<Game>.IsNotNull("Current game can not be null!", CurGame);
             CultCenter = Validate<CulturalCenter>.IsNotNull("Cultural center can not be null!", center);
             Pawns = new List<APawn>();
@@ -31,8 +31,9 @@ namespace RiseOfMitra.Players
             Threshold = threshold;
         }
 
-        public override Player Copy(Board board) {
-            Player random = new RandomPlayer(CultCenter.Copy(board), Culture, CurGame, Threshold);
+        public override Player Copy(Board board)
+        {
+            var random = new RandomPlayer(CultCenter.Copy(board), Culture, CurGame, Threshold);
             Coord tmpCursor = new Coord(1, 1);
             for (int i = 0; i < GetPawns().Count; i++) {
                 APawn tmpPawn = GetPawns()[i].Copy(board);
@@ -43,12 +44,13 @@ namespace RiseOfMitra.Players
             return random;
         }
 
-        public override Node PrepareAction(Node currState, Player oponent) {
+        public override Node PrepareAction(Node currState, Player oponent)
+        {
 
-            Random rand = new Random();
+            var rand = new Random();
             var validStates = Node.FromRange(CurGame.GetBoards(), CurGame.GetValidCommands());
 
-            if(currState != null && validStates != null && validStates.Count > 0) {
+            if (currState != null && validStates != null && validStates.Count > 0) {
                 double highest = 0.0;
                 foreach (Node state in validStates) {
                     if (state.Value > highest)

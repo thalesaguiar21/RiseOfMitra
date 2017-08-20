@@ -8,7 +8,8 @@ namespace Units.Pawns
 {
     class DalrionPawn : ABasicPawn
     {
-        public DalrionPawn() {
+        public DalrionPawn()
+        {
             PositiveTerrains = new ETerrain[] { ETerrain.MOUNTAIN, ETerrain.MARSH, ETerrain.DESERT };
             BOARD_CHAR = BoardConsts.DALRION_PAWN;
             TotalLife = 23;
@@ -22,7 +23,8 @@ namespace Units.Pawns
             MovePoints = 5;
         }
 
-        public override void ReAdapt(ETerrain terrain) {
+        public override void ReAdapt(ETerrain terrain)
+        {
             switch (terrain) {
                 case ETerrain.MOUNTAIN:
                     MovePoints -= 1;
@@ -49,7 +51,8 @@ namespace Units.Pawns
             }
         }
 
-        public override void UnAdapt(ETerrain terrain) {
+        public override void UnAdapt(ETerrain terrain)
+        {
             switch (terrain) {
                 case ETerrain.MOUNTAIN:
                     MovePoints += 1;

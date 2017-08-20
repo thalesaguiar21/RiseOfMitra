@@ -11,30 +11,28 @@ namespace Units
     public class Unit
     {
         protected string BOARD_CHAR;
-        private int totalLife;
-        private int currLife;
-        private int def;
-        private int size;
-        private Coord position;
-        private const int MAX_LIFE = 3000;
-        private const int MAX_DEF = 30;
-        private const int MAX_SIZE = 5;
+        int totalLife;
+        int currLife;
+        int def;
+        int size;
+        Coord position;
+        const int MAX_LIFE = 3000;
+        const int MAX_DEF = 30;
+        const int MAX_SIZE = 5;
 
         public int TotalLife
         {
             get { return totalLife; }
-            set
-            {
+            set {
                 if ((value >= 0) && (value <= MAX_LIFE))
                     totalLife = value;
             }
         }
-        
+
         public int CurrLife
         {
             get { return currLife; }
-            set
-            {
+            set {
                 if (value <= TotalLife)
                     currLife = value;
             }
@@ -43,8 +41,7 @@ namespace Units
         public int Def
         {
             get { return def; }
-            set
-            {
+            set {
                 if ((value >= 0) && (value <= MAX_DEF))
                     def = value;
             }
@@ -53,8 +50,7 @@ namespace Units
         public int Size
         {
             get { return size; }
-            set
-            {
+            set {
                 if ((value >= 0) && (value % 2 == 1))
                     size = value;
             }
@@ -63,8 +59,7 @@ namespace Units
         public Coord Position
         {
             get { return position; }
-            set
-            {
+            set {
                 if (Coord.IsValid(value))
                     position = value;
             }
@@ -72,8 +67,9 @@ namespace Units
 
         public ECultures Culture { get; set; }
 
-        public virtual string GetStatus() {
-            StringBuilder msg = new StringBuilder();
+        public virtual string GetStatus()
+        {
+            var msg = new StringBuilder();
             msg.Append("Life: " + CurrLife + "/" + TotalLife + "\n");
             msg.Append("Def: " + Def + "\n");
             msg.Append("Position: " + Position + "\n");
@@ -82,7 +78,8 @@ namespace Units
             return msg.ToString();
         }
 
-        public bool InUnit(Coord target) {
+        public bool InUnit(Coord target)
+        {
             int pX = Position.X - (size / 2);
             int pY = Position.Y - (size / 2);
             for (int i = 0; i < Size; i++) {
@@ -94,8 +91,9 @@ namespace Units
             return false;
         }
 
-        public void Erase(Board boards) {
-            Coord tmpPos = new Coord(Position.X - Size / 2, Position.Y - Size / 2);
+        public void Erase(Board boards)
+        {
+            var tmpPos = new Coord(Position.X - Size / 2, Position.Y - Size / 2);
             for (int i = 0; i < Size; i++) {
                 for (int k = 0; k < Size; k++) {
                     Coord pos = new Coord(tmpPos.X + i, tmpPos.Y + k);
@@ -104,8 +102,9 @@ namespace Units
             }
         }
 
-        public void Place(Board boards) {
-            Coord tmpPos = new Coord(Position.X - Size / 2, Position.Y - Size / 2);
+        public void Place(Board boards)
+        {
+            var tmpPos = new Coord(Position.X - Size / 2, Position.Y - Size / 2);
             for (int i = 0; i < Size; i++) {
                 for (int k = 0; k < Size; k++) {
                     Coord pos = new Coord(tmpPos.X + i, tmpPos.Y + k);
@@ -114,7 +113,8 @@ namespace Units
             }
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return BOARD_CHAR;
         }
     }

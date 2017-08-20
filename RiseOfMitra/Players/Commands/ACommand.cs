@@ -54,8 +54,8 @@ namespace RiseOfMitra.Players.Commands
         public abstract bool IsValid(Board board);
         public abstract string GetShort();
 
-        public override string ToString() {
-
+        public override string ToString()
+        {
             return String.Format("Target: {0}\n", Target);
         }
     }

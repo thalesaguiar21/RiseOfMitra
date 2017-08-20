@@ -6,7 +6,7 @@ namespace Units
     /// This class represents every unit that can move across the board and is able to
     /// change its attributes accordingly to its actual position and terrain.
     /// </summary>
-    interface IAdaptable  
+    interface IAdaptable
     {
         /// <summary>
         /// This method most be used to remove any bonuses acquired in the unit's

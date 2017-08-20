@@ -5,7 +5,8 @@ namespace Units.Temples
 {
     class Temple : ABuilding
     {
-        public Temple(ECultures culture) {
+        public Temple(ECultures culture)
+        {
             Culture = culture;
             CurrLife = 0;
             TotalLife = 0;

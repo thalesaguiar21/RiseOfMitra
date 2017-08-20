@@ -11,7 +11,8 @@ namespace Utils
         public static string BOARD_NULL = "Board can not be null!";
         public static string COMMAND_NULL = "Command can not be null!";
 
-        public static T IsNotNull(string errorMsg, T obj) {
+        public static T IsNotNull(string errorMsg, T obj)
+        {
             if (obj == null)
                 throw new NullReferenceException(errorMsg);
             else

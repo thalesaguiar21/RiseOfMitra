@@ -6,10 +6,5 @@ using System.Threading.Tasks;
 
 namespace RiseOfMitra
 {
-    enum EMenuOptions
-    {
-        PLAY,
-        HIST,
-        EXIT
-    }
+    enum EMenuOptions { PLAY, HIST, EXIT }
 }

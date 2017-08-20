@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using RiseOfMitra.Players;
+
 using Units;
 using Units.Centers;
 using Units.Pawns;
+
 using Utils.Types;
 using Utils.Space;
+
 using Boards;
-using Utils;
 
 
 
@@ -25,19 +26,20 @@ namespace Juno
 {
     public class Gaia
     {
-        private const double CRITICAL_DIST = Math.E * 0.6;
-        private const double MAX_CENTER_RISK = 100.0;
-        private const int NUM_OF_CULTS = 2;
-        private const int ALLY_DIST = 0;
-        private const int ENMY_DIST = 1;
-        private const int CENTER_RISK = 2;
+        const double CRITICAL_DIST = Math.E * 0.6;
+        const double MAX_CENTER_RISK = 100.0;
+        const int NUM_OF_CULTS = 2;
+        const int ALLY_DIST = 0;
+        const int ENMY_DIST = 1;
+        const int CENTER_RISK = 2;
 
         PawnsPerTerrain DalrionPpts, RahkarPpts;
         List<ABasicPawn> NearEnemies;
         List<double> DalrionStatistcs;
         List<double> RahkarStatistcs;
 
-        public Gaia() {
+        public Gaia()
+        {
             DalrionPpts = new PawnsPerTerrain(ECultures.DALRIONS);
             RahkarPpts = new PawnsPerTerrain(ECultures.RAHKARS);
             NearEnemies = new List<ABasicPawn>();
@@ -45,8 +47,9 @@ namespace Juno
             RahkarStatistcs = new List<double>() { 0, 0, 0 };
         }
 
-        public void DoGaiaWill(Player playerOne, Player playerTwo, Board boards, int turn) {
-            Random rnd = new Random();
+        public void DoGaiaWill(Player playerOne, Player playerTwo, Board boards, int turn)
+        {
+            var rnd = new Random();
             int actionTurn = 10 + rnd.Next(6);
             if (turn % actionTurn == 0) {
                 InspectField(playerOne, playerTwo, boards);
@@ -83,14 +86,14 @@ namespace Juno
                         currStatistics = DalrionStatistcs;
                     }
                 }
-                List<APawn> playerPawns = currPlayer.GetPawns();
+                var playerPawns = currPlayer.GetPawns();
                 string msg = "Gaia will now ";
                 if (currPpt.PPTs[(ETerrain)terrains.GetValue(terrain)] < 2) {
                     if (currStatistics[ENMY_DIST] < 1) {
-                        if(currPpt.OccupiedTerrains() > 3) {
+                        if (currPpt.OccupiedTerrains() > 3) {
                             msg += "increase the defense of pawns at " + (ETerrain)terrains.GetValue(terrain);
                             foreach (APawn pawn in playerPawns) {
-                                if(boards.TerrainAt(pawn.Position) == (ETerrain)terrains.GetValue(terrain)) {
+                                if (boards.TerrainAt(pawn.Position) == (ETerrain)terrains.GetValue(terrain)) {
                                     pawn.Def += 3;
                                 }
                             }
@@ -111,18 +114,18 @@ namespace Juno
                                 pawn.MovePoints += 2;
                         }
                     } else {
-                        if(currStatistics[ALLY_DIST] < 3) {
+                        if (currStatistics[ALLY_DIST] < 3) {
                             msg += "set the move range of pawns at " + (ETerrain)terrains.GetValue(terrain) + " to 1!";
                             foreach (APawn pawn in playerPawns) {
                                 if (boards.TerrainAt(pawn.Position) == (ETerrain)terrains.GetValue(terrain))
                                     pawn.MovePoints = 1;
                             }
-                        } else if (currStatistics[ALLY_DIST] >= 3  && currStatistics[ALLY_DIST] < 7) {
+                        } else if (currStatistics[ALLY_DIST] >= 3 && currStatistics[ALLY_DIST] < 7) {
                             msg += "increase the attack range of pawns at " + (ETerrain)terrains.GetValue(terrain);
                             foreach (APawn pawn in playerPawns) {
                                 if (boards.TerrainAt(pawn.Position) == (ETerrain)terrains.GetValue(terrain)
                                     && pawn is ABasicPawn) {
-                                    ABasicPawn bPawn = (ABasicPawn)pawn;
+                                    var bPawn = (ABasicPawn)pawn;
                                     bPawn.AtkRange += 2;
                                 }
                             }
@@ -137,11 +140,12 @@ namespace Juno
                 }
 
                 //UserUtils.PrintSucess(msg + " For " + currPlayer.GetCulture());
-               // Console.ReadLine();
+                // Console.ReadLine();
             }
         }
 
-        private void InspectField(Player playerOne, Player playerTwo, Board boards) {
+        private void InspectField(Player playerOne, Player playerTwo, Board boards)
+        {
             // Calculating player two statistics 
             SetPawnsPerTerrain(playerOne.GetPawns(), boards);
             CalculateMeanAllyDistance(playerOne.GetUnits());
@@ -154,8 +158,9 @@ namespace Juno
             CalculateCulturalCenterRisk(playerTwo.GetAttackers(), playerOne.GetAttackers(), playerTwo.GetCultCenter());
         }
 
-        private void CalculateMeanAllyDistance(List<Unit> allies) {
-            if(allies != null) {
+        private void CalculateMeanAllyDistance(List<Unit> allies)
+        {
+            if (allies != null) {
                 double totalDist = 0;
                 if (allies.Count > 2) {
                     for (int i = 0; i < allies.Count; i++) {
@@ -171,12 +176,13 @@ namespace Juno
                         SetMeanAllyDistance(allies[0].Culture, totalDist / allies.Count);
                 } else
                     SetMeanAllyDistance(allies[0].Culture, 0);
-            }            
+            }
         }
 
-        private void CalculateMeanEnemyDistance(List<Unit> allies, List<Unit> enemies) {
-            if(allies != null && enemies != null) {
-                if(allies.Count > 0 && enemies.Count > 0) {
+        private void CalculateMeanEnemyDistance(List<Unit> allies, List<Unit> enemies)
+        {
+            if (allies != null && enemies != null) {
+                if (allies.Count > 0 && enemies.Count > 0) {
                     double totalDist = 0;
                     for (int i = 0; i < allies.Count; i++) {
                         int min = Coord.Distance(allies[i].Position, enemies[0].Position);
@@ -192,8 +198,9 @@ namespace Juno
             }
         }
 
-        private void SetPawnsPerTerrain(List<APawn> pawns, Board boards) {
-            if(pawns != null && pawns.Count > 0) {
+        private void SetPawnsPerTerrain(List<APawn> pawns, Board boards)
+        {
+            if (pawns != null && pawns.Count > 0) {
                 if (pawns[0].Culture == ECultures.DALRIONS)
                     DalrionPpts.ResetNumbers();
                 else
@@ -208,15 +215,16 @@ namespace Juno
             }
         }
 
-        private void CalculateCulturalCenterRisk(List<ABasicPawn> allies, List<ABasicPawn> enemies, CulturalCenter center) {
-            if(allies != null && enemies != null && center != null) {
-                if(enemies.Count > 0) {
+        private void CalculateCulturalCenterRisk(List<ABasicPawn> allies, List<ABasicPawn> enemies, CulturalCenter center)
+        {
+            if (allies != null && enemies != null && center != null) {
+                if (enemies.Count > 0) {
                     double risk = 0;
                     risk += RiskPerEnemyProximity(enemies, center);
                     risk += RiskPerAllyCloseToEnemy(allies);
-                    if(center.CurrLife > 0) risk += Math.Exp(1.0 / center.CurrLife);
+                    if (center.CurrLife > 0) risk += Math.Exp(1.0 / center.CurrLife);
                     SetCenterRisk(center.Culture, risk);
-                } else if (allies.Count > 0){
+                } else if (allies.Count > 0) {
                     SetCenterRisk(center.Culture, 0);
                 } else {
                     // No enemies or allies on the board, both center are in no risk
@@ -226,7 +234,8 @@ namespace Juno
             }
         }
 
-        private double RiskPerAllyCloseToEnemy(List<ABasicPawn> allies) {
+        private double RiskPerAllyCloseToEnemy(List<ABasicPawn> allies)
+        {
             double result = 0;
             int nearAllies = 0;
             foreach (ABasicPawn ally in allies) {
@@ -242,11 +251,12 @@ namespace Juno
             return result;
         }
 
-        private double RiskPerEnemyProximity(List<ABasicPawn> enemies, CulturalCenter center) {
+        private double RiskPerEnemyProximity(List<ABasicPawn> enemies, CulturalCenter center)
+        {
             NearEnemies.Clear();
             double result = 0;
-            if(enemies != null && center != null) {
-                if(enemies.Count > 0) {
+            if (enemies != null && center != null) {
+                if (enemies.Count > 0) {
                     foreach (ABasicPawn enemy in enemies) {
                         double dist = Math.Exp(1.0 / Coord.Distance(enemy.Position, center.Position));
                         result += dist;
@@ -261,8 +271,9 @@ namespace Juno
             return result;
         }
 
-        private void SetCenterRisk(ECultures cult, double risk) {
-            if(risk >= 0) {
+        private void SetCenterRisk(ECultures cult, double risk)
+        {
+            if (risk >= 0) {
                 if (cult == ECultures.DALRIONS)
                     DalrionStatistcs[CENTER_RISK] = risk;
                 else
@@ -270,7 +281,8 @@ namespace Juno
             }
         }
 
-        private void SetMeanAllyDistance(ECultures cult, double dist) {
+        private void SetMeanAllyDistance(ECultures cult, double dist)
+        {
             if (dist >= 0) {
                 if (cult == ECultures.DALRIONS)
                     DalrionStatistcs[ALLY_DIST] = dist;
@@ -279,7 +291,8 @@ namespace Juno
             }
         }
 
-        private void SetMeanEnemyDist(ECultures cult, double dist) {
+        private void SetMeanEnemyDist(ECultures cult, double dist)
+        {
             if (dist >= 0) {
                 if (cult == ECultures.DALRIONS)
                     DalrionStatistcs[ENMY_DIST] = dist;

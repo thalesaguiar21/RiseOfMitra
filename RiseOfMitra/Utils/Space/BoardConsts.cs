@@ -22,15 +22,18 @@ namespace Utils.Space
         private string[] RAHKAR_UNITS = { "#", "%" };
 
 
-        public bool IsDalrion(string cell) {
+        public bool IsDalrion(string cell)
+        {
             return DALRION_UNITS.Contains(cell);
         }
 
-        public bool IsRahkar(string cell) {
+        public bool IsRahkar(string cell)
+        {
             return RAHKAR_UNITS.Contains(cell);
         }
 
-        public bool IsValid(string cell) {
+        public bool IsValid(string cell)
+        {
             return IsRahkar(cell) || IsDalrion(cell);
         }
     }

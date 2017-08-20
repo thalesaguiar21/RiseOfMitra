@@ -5,13 +5,14 @@ namespace Utils.Space
 {
     public class Dijkstra
     {
-        private string[,] Board;
-        private Coord Origin;
-        private int MaxDist;
-        private List<Coord> validCells;
+        string[,] Board;
+        Coord Origin;
+        int MaxDist;
+        List<Coord> validCells;
         Dictionary<Coord, int> acumDist;
 
-        public Dijkstra(string[,] board, Coord origin, int maxDist) {
+        public Dijkstra(string[,] board, Coord origin, int maxDist)
+        {
             Board = board;
             Origin = origin;
             MaxDist = maxDist;
@@ -21,7 +22,8 @@ namespace Utils.Space
             acumDist.Add(Origin, 0);
         }
 
-        private bool IsValidMoveNeighbor(Coord origin, Coord np, string cmd) {
+        private bool IsValidMoveNeighbor(Coord origin, Coord np, string cmd)
+        {
             bool isValid = true;
             if (!Coord.IsValid(np))
                 isValid = false;
@@ -34,9 +36,10 @@ namespace Utils.Space
             return isValid;
         }
 
-        private List<Coord> GetNeighbors(Coord cell, string cmd) {
-            List<Coord> neighbors = new List<Coord>();
-            List<Coord> tmpNeighbors = new List<Coord>(); ;
+        private List<Coord> GetNeighbors(Coord cell, string cmd)
+        {
+            var neighbors = new List<Coord>();
+            var tmpNeighbors = new List<Coord>(); ;
 
             tmpNeighbors.Add(new Coord(cell.X + 1, cell.Y));
             tmpNeighbors.Add(new Coord(cell.X - 1, cell.Y));
@@ -58,11 +61,12 @@ namespace Utils.Space
             return neighbors;
         }
 
-        public List<Coord> GetValidPaths(string cmd) {
-            List<Coord> tmpValidCells = new List<Coord>();
+        public List<Coord> GetValidPaths(string cmd)
+        {
+            var tmpValidCells = new List<Coord>();
             tmpValidCells.Add(Origin);
             while (tmpValidCells.Count > 0) {
-                List<Coord> validNeighbors = GetNeighbors(tmpValidCells[0], cmd);
+                var validNeighbors = GetNeighbors(tmpValidCells[0], cmd);
                 for (int i = 0; i < validNeighbors.Count; i++) {
                     tmpValidCells.Add(validNeighbors[i]);
                     validCells.Add(validNeighbors[i]);

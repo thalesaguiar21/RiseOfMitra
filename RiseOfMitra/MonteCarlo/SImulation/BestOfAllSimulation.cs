@@ -1,9 +1,5 @@
-﻿using RiseOfMitra.Players.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiseOfMitra.MonteCarlo.Simulation
 {
@@ -11,7 +7,8 @@ namespace RiseOfMitra.MonteCarlo.Simulation
     {
         List<Node> ValidStates;
 
-        private double Mean(List<Node> states) {
+        private double Mean(List<Node> states)
+        {
             double mean = 0;
             if (states != null && states.Count > 0) {
                 foreach (Node state in states) {
@@ -22,7 +19,8 @@ namespace RiseOfMitra.MonteCarlo.Simulation
             return mean;
         }
 
-        private double StandartDeviation(List<Node> states, double mean) {
+        private double StandartDeviation(List<Node> states, double mean)
+        {
             double value = 0;
             if (states != null && states.Count > 0) {
                 double variation = 0;
@@ -36,7 +34,8 @@ namespace RiseOfMitra.MonteCarlo.Simulation
             return value;
         }
 
-        public List<Node> Execute() {
+        public List<Node> Execute()
+        {
 
             var filteredNodes = new List<Node>();
             if (ValidStates != null) {
@@ -60,7 +59,8 @@ namespace RiseOfMitra.MonteCarlo.Simulation
             return filteredNodes;
         }
 
-        public void SetUp(List<Node> validCmds) {
+        public void SetUp(List<Node> validCmds)
+        {
             ValidStates = validCmds;
         }
     }

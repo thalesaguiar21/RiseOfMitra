@@ -4,7 +4,8 @@
 
     public static class TerrainUtil
     {
-        public static string Convert(this ETerrain terrain) {
+        public static string Convert(this ETerrain terrain)
+        {
             switch (terrain) {
                 case ETerrain.MOUNTAIN:
                     return "MOUNTAIN";

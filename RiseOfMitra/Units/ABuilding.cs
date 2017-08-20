@@ -6,16 +6,18 @@ namespace Units
 {
     public abstract class ABuilding : Unit
     {
-        private int lifePerSec;
-        private const int MAX_LIFEPERSEC = 3;
+        int lifePerSec;
+        const int MAX_LIFEPERSEC = 3;
 
-        public override string GetStatus() {
+        public override string GetStatus()
+        {
             StringBuilder msg = new StringBuilder(base.GetStatus());
             msg.Append("Life/sec: " + LifePerSec + "\n");
             return msg.ToString();
         }
 
-        public int LifePerSec {
+        public int LifePerSec
+        {
 
             get { return lifePerSec; }
             set {
@@ -24,8 +26,9 @@ namespace Units
             }
         }
 
-        public void Regen() {
-            if(CurrLife < TotalLife)
+        public void Regen()
+        {
+            if (CurrLife < TotalLife)
                 CurrLife = CurrLife + LifePerSec;
         }
     }

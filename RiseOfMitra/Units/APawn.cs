@@ -14,14 +14,14 @@ namespace Units
     /// </summary>
     public abstract class APawn : Unit, IAdaptable
     {
-        private int movePoints;
+        int movePoints;
+        const int MAX_MOVE = 25;
         protected ETerrain[] positiveTerrains;
-        private const int MAX_MOVE = 25;
 
-        public int MovePoints {
+        public int MovePoints
+        {
             get { return movePoints; }
-            set
-            {
+            set {
                 if ((value > 0) && (value <= MAX_MOVE))
                     movePoints = value;
             }
@@ -30,13 +30,15 @@ namespace Units
         /// <summary>
         /// Gets or sets all terrains that give positive bonuses for this pawn.
         /// </summary>
-        public ETerrain[] PositiveTerrains {
+        public ETerrain[] PositiveTerrains
+        {
             get { return positiveTerrains; }
             set { positiveTerrains = value; }
         }
 
-        public override string GetStatus() {
-            StringBuilder msg = new StringBuilder(base.GetStatus());
+        public override string GetStatus()
+        {
+            var msg = new StringBuilder(base.GetStatus());
             msg.Append("Mov: " + MovePoints + "\n");
             return msg.ToString();
         }
@@ -52,7 +54,8 @@ namespace Units
 
         public abstract void ReAdapt(ETerrain terrain);
 
-        public void Adapt(ETerrain prev, ETerrain actual) {
+        public void Adapt(ETerrain prev, ETerrain actual)
+        {
             UnAdapt(prev);
             ReAdapt(actual);
         }

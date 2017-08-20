@@ -8,17 +8,20 @@ namespace Utils
 {
     class UserUtils
     {
-        private static void PrintMessage(string msg, ConsoleColor color) {
+        private static void PrintMessage(string msg, ConsoleColor color)
+        {
             Console.ForegroundColor = color;
             Console.Write(msg);
             Console.ResetColor();
         }
 
-        public static void PrintSucess(string msg) {
+        public static void PrintSucess(string msg)
+        {
             PrintMessage(msg, ConsoleColor.Green);
         }
 
-        public static void PrintError(string msg) {
+        public static void PrintError(string msg)
+        {
             PrintMessage(msg, ConsoleColor.Red);
         }
     }

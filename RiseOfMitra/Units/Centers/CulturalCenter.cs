@@ -10,11 +10,12 @@ namespace Units.Centers
 {
     public class CulturalCenter : ABuilding
     {
-        private int UnitPerTurn;
-        private Coord SpawnPoint;
-        private int SpawnRange;
+        int UnitPerTurn;
+        Coord SpawnPoint;
+        int SpawnRange;
 
-        public CulturalCenter(ECultures native) {
+        public CulturalCenter(ECultures native)
+        {
             if (native == ECultures.DALRIONS) BOARD_CHAR = BoardConsts.DALRION_CENTER;
             else if (native == ECultures.RAHKARS) BOARD_CHAR = BoardConsts.RAHKAR_CENTER;
             Culture = native;
@@ -29,7 +30,8 @@ namespace Units.Centers
             SpawnRange = 4;
         }
 
-        public CulturalCenter Copy(Board board) {
+        public CulturalCenter Copy(Board board)
+        {
             CulturalCenter tmpCenter = new CulturalCenter(Culture) {
                 TotalLife = TotalLife,
                 CurrLife = CurrLife,
@@ -45,10 +47,11 @@ namespace Units.Centers
             return tmpCenter;
         }
 
-        public APawn GeneratePawn(Board boards) {
-            PawnFactory factory = new PawnFactory();
-            APawn pawn = factory.Create(Culture);
-            Coord pos = PlacementPosition(boards);
+        public APawn GeneratePawn(Board boards)
+        {
+            var factory = new PawnFactory();
+            var pawn = factory.Create(Culture);
+            var pos = PlacementPosition(boards);
             if (pos == null) {
                 UserUtils.PrintError("Can not generate more pawns!");
                 return null;
@@ -56,13 +59,14 @@ namespace Units.Centers
                 pawn.Position = pos;
                 return pawn;
             }
-            
+
         }
 
-        private Coord PlacementPosition(Board boards) {
+        private Coord PlacementPosition(Board boards)
+        {
             Coord spawnPoint = null;
-            for(int i = 0; i < BoardConsts.MAX_LIN; i++) {
-                for(int j=0; j < BoardConsts.MAX_COL; j++) {
+            for (int i = 0; i < BoardConsts.MAX_LIN; i++) {
+                for (int j = 0; j < BoardConsts.MAX_COL; j++) {
                     if ((boards.CellAt(i, j) == BoardConsts.EMPTY) && (Coord.Distance(SpawnPoint, new Coord(i, j)) <= SpawnRange)) {
                         spawnPoint = new Coord(i, j);
                         break;
@@ -76,18 +80,21 @@ namespace Units.Centers
         public Coord GetSpawnPoint() { return SpawnPoint; }
         public int GetSpawnRange() { return SpawnRange; }
 
-        public void SetUnitPerTurn(int value) {
+        public void SetUnitPerTurn(int value)
+        {
             if (value >= 0)
                 UnitPerTurn = value;
         }
 
-        public void SetSpawnPoint(Board boards, Coord cell) {
-            if(cell != null) {
+        public void SetSpawnPoint(Board boards, Coord cell)
+        {
+            if (cell != null) {
                 SpawnPoint = cell;
             }
         }
 
-        public void SetSpawnRange(int range) {
+        public void SetSpawnRange(int range)
+        {
             if (range > 0)
                 SpawnRange = range;
         }

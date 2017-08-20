@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Boards;
 
 using Units;
-using Units.Pawns;
 
 using Utils;
 using Utils.Space;
@@ -15,9 +14,8 @@ namespace RiseOfMitra.Players.Commands
 {
     public class MoveCommand : ACommand
     {
-
-        public MoveCommand(Coord origin, Coord target, Player curr, Player oponent) {
-
+        public MoveCommand(Coord origin, Coord target, Player curr, Player oponent)
+        {
             this.curPlayer = Validate<Player>.IsNotNull("Current Player cannot be null!", curr);
             this.oponent = Validate<Player>.IsNotNull("Current oponent can not be null!", oponent);
             this.origin = Validate<Coord>.IsNotNull("Origin cell cannot be null!", origin);
@@ -25,30 +23,31 @@ namespace RiseOfMitra.Players.Commands
             ErrorMsg = "";
         }
 
-        public override bool Execute(Board board, bool isSimualtion = false) {
-
+        public override bool Execute(Board board, bool isSimualtion = false)
+        {
             Validate<Board>.IsNotNull(Validate<Board>.BOARD_NULL, board);
             bool valid = IsValid(board);
             if (valid) {
-                APawn allyPawn = CurPlayer.GetPawnAt(origin);
+                var allyPawn = CurPlayer.GetPawnAt(origin);
                 allyPawn.Erase(board);
                 allyPawn.Position = target;
                 allyPawn.Place(board);
                 allyPawn.Adapt(board.TerrainAt(origin), board.TerrainAt(target));
-            } else if (!isSimualtion){
+            } else if (!isSimualtion) {
                 UserUtils.PrintError(ErrorMsg);
                 Console.ReadLine();
-            }   
-            
+            }
+
             return valid;
         }
 
-        public override string GetShort() {
+        public override string GetShort()
+        {
             return "MOV";
         }
 
-        public override bool IsValid(Board board) {
-
+        public override bool IsValid(Board board)
+        {
             Validate<Board>.IsNotNull(Validate<Board>.BOARD_NULL, board);
             bool valid = true;
             if (!Coord.IsValid(target) || !Coord.IsValid(target)) {
@@ -66,7 +65,8 @@ namespace RiseOfMitra.Players.Commands
             return valid;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             string msg = base.ToString();
             string cult = "";
             if (CurPlayer.GetCulture() == ECultures.DALRIONS)
@@ -79,7 +79,8 @@ namespace RiseOfMitra.Players.Commands
             return msg;
         }
 
-        public override bool Equals(ACommand otherCmd) {
+        public override bool Equals(ACommand otherCmd)
+        {
             if (otherCmd is MoveCommand other) {
                 return (Origin.Equals(other.Origin)) && (Target.Equals(other.Target));
             } else {

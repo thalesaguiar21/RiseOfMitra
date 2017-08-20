@@ -11,35 +11,38 @@ namespace RiseOfMitra.Players.Commands
     {
         List<Unit> Units;
 
-        public InspectCommand(Coord target) {
+        public InspectCommand(Coord target)
+        {
             ErrorMsg = "";
             Units = new List<Unit>();
             this.target = Validate<Coord>.IsNotNull("Target can not be null!", target);
         }
 
-        public override bool Execute(Board board, bool isSimulation = false) {
+        public override bool Execute(Board board, bool isSimulation = false)
+        {
 
             Validate<Board>.IsNotNull(Validate<Board>.BOARD_NULL, board);
             bool valid = IsValid(board);
             if (valid) {
                 foreach (Unit unit in Units) {
                     if (unit.InUnit(Target)) {
-                        board.Status =  unit.GetStatus().Split('\n');
+                        board.Status = unit.GetStatus().Split('\n');
                         break;
                     }
                 }
             } else {
                 UserUtils.PrintError(ErrorMsg);
-            }            
+            }
             return false;
         }
 
-        public override string GetShort() {
+        public override string GetShort()
+        {
             return "INSP";
         }
 
-        public override bool IsValid(Board board) {
-
+        public override bool IsValid(Board board)
+        {
             Validate<Board>.IsNotNull(Validate<Board>.BOARD_NULL, board);
             bool valid = true;
             if (!Coord.IsValid(Target)) {
@@ -58,7 +61,8 @@ namespace RiseOfMitra.Players.Commands
             return valid;
         }
 
-        public override bool Equals(ACommand otherCmd) {
+        public override bool Equals(ACommand otherCmd)
+        {
             return otherCmd is InspectCommand;
         }
     }

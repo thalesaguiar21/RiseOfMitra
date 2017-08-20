@@ -6,7 +6,8 @@ namespace Units.Pawns
 {
     class RahkarPawn : ABasicPawn
     {
-        public RahkarPawn() {
+        public RahkarPawn()
+        {
             PositiveTerrains = new ETerrain[] { ETerrain.MOUNTAIN, ETerrain.RIVER, ETerrain.MARSH };
             BOARD_CHAR = BoardConsts.RAHKAR_PAWN;
             TotalLife = 14;
@@ -20,7 +21,8 @@ namespace Units.Pawns
             MovePoints = 5;
         }
 
-        public override void ReAdapt(ETerrain terrain) {
+        public override void ReAdapt(ETerrain terrain)
+        {
             switch (terrain) {
                 case ETerrain.MOUNTAIN:
                     MovePoints -= 1;
@@ -47,7 +49,8 @@ namespace Units.Pawns
             }
         }
 
-        public override void UnAdapt(ETerrain terrain) {
+        public override void UnAdapt(ETerrain terrain)
+        {
             switch (terrain) {
                 case ETerrain.MOUNTAIN:
                     MovePoints += 1;

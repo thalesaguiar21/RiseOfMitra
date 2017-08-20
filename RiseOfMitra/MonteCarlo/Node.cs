@@ -20,20 +20,21 @@ namespace RiseOfMitra.MonteCarlo
     /// </summary>
     public class Node
     {
+        double value;
         public int VisitCount;
         public int WinRate;
-        private double value;
         public Board Boards;
         public ACommand Command;
         public List<Node> Childs;
 
-        public double Value {
+        public double Value
+        {
             get { return this.value; }
             set { this.value = value; }
         }
 
-        public Node(Board boards, ACommand cmd) {
-
+        public Node(Board boards, ACommand cmd)
+        {
             Boards = Validate<Board>.IsNotNull(Validate<Board>.BOARD_NULL, boards);
             Command = Validate<ACommand>.IsNotNull(Validate<ACommand>.COMMAND_NULL, cmd);
             Childs = new List<Node>();
@@ -41,8 +42,8 @@ namespace RiseOfMitra.MonteCarlo
             VisitCount = 0;
         }
 
-        public double GetValue() {
-
+        public double GetValue()
+        {
             if (Command is MoveCommand move) {
                 return ComputeMoveValue(move);
             } else if (Command is AttackCommand attack) {
@@ -52,8 +53,8 @@ namespace RiseOfMitra.MonteCarlo
             }
         }
 
-        private double ComputeMoveValue(MoveCommand move) {
-
+        private double ComputeMoveValue(MoveCommand move)
+        {
             double total = 1;
             if (Coord.Distance(move.Target, move.Oponent.GetCultCenter().Position) <
                 Coord.Distance(move.Origin, move.Oponent.GetCultCenter().Position)) {
@@ -78,8 +79,8 @@ namespace RiseOfMitra.MonteCarlo
             return total;
         }
 
-        private double ComputeAttackValue(AttackCommand attack) {
-
+        private double ComputeAttackValue(AttackCommand attack)
+        {
             double total = 10;
             if (attack.Oponent.GetUnitAt(attack.Target) is CulturalCenter) {
                 total += 1.0;
@@ -96,7 +97,8 @@ namespace RiseOfMitra.MonteCarlo
             return total;
         }
 
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (obj is Node other) {
                 return Boards.Equals(other.Boards) && Command.Equals(other.Command);
             } else {
@@ -104,12 +106,13 @@ namespace RiseOfMitra.MonteCarlo
             }
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return base.GetHashCode();
         }
 
-        public static List<Node> FromRange(Board board, List<ACommand> commands) {
-
+        public static List<Node> FromRange(Board board, List<ACommand> commands)
+        {
             var nodes = new List<Node>();
             foreach (ACommand cmd in commands) {
                 nodes.Add(new Node(board, cmd));
@@ -118,7 +121,8 @@ namespace RiseOfMitra.MonteCarlo
             return nodes;
         }
 
-        public static bool ValidateNode(Node node) {
+        public static bool ValidateNode(Node node)
+        {
             bool valid = true;
             if (node == null) {
                 valid = false;

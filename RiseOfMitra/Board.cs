@@ -12,15 +12,25 @@ namespace Boards
 {
     public class Board
     {
-        private string[,] MainBoard;
-        private ETerrain[,] Terrains;
-        private Dictionary<ECultures, ConsoleColor> CultColors;
-        private Dictionary<string, bool> Cmds;
-        private string[] Legend;
+        string[,] MainBoard;
+        ETerrain[,] Terrains;
+        Dictionary<ECultures, ConsoleColor> CultColors;
+        Dictionary<string, bool> Cmds;
+        string[] Legend;
         public string[] Status { get; set; }
 
+        public Board()
+        {
+            Terrains = ReadTerrainFile();
+            MainBoard = ReadMainBoard();
+            CultColors = InitColors();
+            Cmds = InitCommands();
+            Legend = InitLegend();
+            Status = null;
+        }
 
-        public Board(Board board) {
+        public Board(Board board)
+        {
             MainBoard = new string[BoardConsts.MAX_LIN, BoardConsts.MAX_COL];
 
             for (int i = 0; i < board.GetBoard().GetLongLength(0); i++) {
@@ -34,16 +44,8 @@ namespace Boards
             Legend = board.Legend;
         }
 
-        public Board() {
-            Terrains = ReadTerrainFile();
-            MainBoard = ReadMainBoard();
-            CultColors = InitColors();
-            Cmds = InitCommands();
-            Legend = InitLegend();
-            Status = null;
-        }
-
-        private Dictionary<ECultures, ConsoleColor> InitColors() {
+        private Dictionary<ECultures, ConsoleColor> InitColors()
+        {
             Dictionary<ECultures, ConsoleColor> tmpColors = new Dictionary<ECultures, ConsoleColor> {
                 { ECultures.DALRIONS, ConsoleColor.Blue },
                 { ECultures.RAHKARS, ConsoleColor.Yellow }
@@ -51,7 +53,8 @@ namespace Boards
             return tmpColors;
         }
 
-        private Dictionary<string, bool> InitCommands() {
+        private Dictionary<string, bool> InitCommands()
+        {
             Dictionary<string, bool> tmpDic = new Dictionary<string, bool> {
                 { Command.ATTACK, true },
                 { Command.MOVE, true },
@@ -63,7 +66,8 @@ namespace Boards
             return tmpDic;
         }
 
-        private string[] InitLegend() {
+        private string[] InitLegend()
+        {
             string[] tmpLegend = new string[] {
                 "Dalrion pawn: "    + BoardConsts.DALRION_PAWN,
                 "Dalrion center: "  + BoardConsts.DALRION_CENTER,
@@ -76,7 +80,8 @@ namespace Boards
             return tmpLegend;
         }
 
-        private string[,] ClearBoard() {
+        private string[,] ClearBoard()
+        {
             string[,] auxBoard = new string[BoardConsts.MAX_LIN, BoardConsts.MAX_COL];
             for (int i = 0; i < BoardConsts.MAX_LIN; i++) {
                 for (int j = 0; j < BoardConsts.MAX_COL; j++) {
@@ -86,9 +91,10 @@ namespace Boards
             return auxBoard;
         }
 
-        private ETerrain[,] ReadTerrainFile() {
+        private ETerrain[,] ReadTerrainFile()
+        {
             string TerrainFilePath = @"C:\Users\thalesaguiar\Documents\Dev\C#\ROM\terrains.txt";
-            ETerrain[,] auxTerrains = new ETerrain[BoardConsts.MAX_LIN, BoardConsts.MAX_COL];
+            var auxTerrains = new ETerrain[BoardConsts.MAX_LIN, BoardConsts.MAX_COL];
             int lin = 0;
             int col = 0;
             string line;
@@ -111,7 +117,8 @@ namespace Boards
             return auxTerrains;
         }
 
-        private string[,] ReadMainBoard() {
+        private string[,] ReadMainBoard()
+        {
             string TerrainFilePath = @"C:\Users\thalesaguiar\Documents\Dev\C#\ROM\board.txt";
             string[,] auxBoard = new string[BoardConsts.MAX_LIN, BoardConsts.MAX_COL];
             int lin = 0;
@@ -134,11 +141,11 @@ namespace Boards
             return auxBoard;
         }
 
-        public Coord SelectUnit(ref List<Coord> validCells, IEnumerable<Unit> units, string cmd) {
-            if(units == null || units.Count() == 0) {
+        public Coord SelectUnit(ref List<Coord> validCells, IEnumerable<Unit> units, string cmd)
+        {
+            if (units == null || units.Count() == 0) {
                 UserUtils.PrintError("There are no pawns!");
             } else {
-                
                 Coord unitPosition = units.ElementAt(0).Position;
                 int currUnit = 0;
                 bool selected = false;
@@ -152,7 +159,7 @@ namespace Boards
                         if (units.ElementAt(index) is APawn pawn) {
                             maxRange = pawn.MovePoints;
                         }
-                    } else if(cmd == Command.ATTACK) {
+                    } else if (cmd == Command.ATTACK) {
                         if (units.ElementAt(index) is ABasicPawn aPawn) {
                             maxRange = aPawn.AtkRange;
                         }
@@ -168,7 +175,7 @@ namespace Boards
                             break;
                         case ConsoleKey.LeftArrow:
                             // Select the previous pawn on the list
-                            currUnit = (currUnit - 1) % units.Count();                            
+                            currUnit = (currUnit - 1) % units.Count();
                             break;
                         case ConsoleKey.RightArrow:
                             // Select the next pawn on the list
@@ -190,16 +197,18 @@ namespace Boards
             return null;
         }
 
-        private int SelectionIndex(int curr, int max) {
+        private int SelectionIndex(int curr, int max)
+        {
             int index = curr;
-            if(curr < 0) {
+            if (curr < 0) {
                 index = max - Math.Abs(curr);
             }
 
             return index;
         }
 
-        public Coord SelectPosition(Coord cursor, Coord prevSelec, string cmd, List<Coord> avaiableCells) {
+        public Coord SelectPosition(Coord cursor, Coord prevSelec, string cmd, List<Coord> avaiableCells)
+        {
             bool selected = false;
             Coord selection = null;
             do {
@@ -240,8 +249,9 @@ namespace Boards
             return selection;
         }
 
-        public void PrintBoard(string cmd, Coord cursor, Coord selection, List<Coord> avaiableCells) {
-            BoardConsts consts = new BoardConsts();
+        public void PrintBoard(string cmd, Coord cursor, Coord selection, List<Coord> avaiableCells)
+        {
+            var consts = new BoardConsts();
             Console.WriteLine();
             for (int i = 0; i < BoardConsts.MAX_LIN; i++) {
                 for (int j = 0; j < BoardConsts.MAX_COL; j++) {
@@ -266,8 +276,9 @@ namespace Boards
             DrawLine("-", 2 * BoardConsts.MAX_COL);
         }
 
-        public void PrintBoard() {
-            BoardConsts consts = new BoardConsts();
+        public void PrintBoard()
+        {
+            var consts = new BoardConsts();
             Console.WriteLine();
             for (int i = 0; i < BoardConsts.MAX_LIN; i++) {
                 for (int j = 0; j < BoardConsts.MAX_COL; j++) {
@@ -284,8 +295,9 @@ namespace Boards
             DrawLine("-", 2 * BoardConsts.MAX_COL);
         }
 
-        public void PrintBoard(Coord cursor) {
-            BoardConsts consts = new BoardConsts();
+        public void PrintBoard(Coord cursor)
+        {
+            var consts = new BoardConsts();
             Console.WriteLine();
             for (int i = 0; i < BoardConsts.MAX_LIN; i++) {
                 for (int j = 0; j < BoardConsts.MAX_COL; j++) {
@@ -303,7 +315,8 @@ namespace Boards
             DrawLine("-", 2 * BoardConsts.MAX_COL);
         }
 
-        private void PrintSideInfos(int i) {
+        private void PrintSideInfos(int i)
+        {
             Console.Write("\t");
 
             if (i == 0) Console.Write("Commands: ");
@@ -323,7 +336,8 @@ namespace Boards
 
         }
 
-        private void ColoredPrint(string msg, ConsoleColor color) {
+        private void ColoredPrint(string msg, ConsoleColor color)
+        {
             Console.ForegroundColor = color;
             Console.Write(msg);
             Console.ResetColor();
@@ -332,19 +346,22 @@ namespace Boards
         public string[,] GetBoard() { return MainBoard; }
         public ETerrain[,] GetTerrains() { return Terrains; }
 
-        public string CellAt(Coord pos) {
-            if ( Coord.IsValid(pos) ) {
+        public string CellAt(Coord pos)
+        {
+            if (Coord.IsValid(pos)) {
                 return MainBoard[pos.X, pos.Y];
             } else {
                 return null;
             }
         }
 
-        public string CellAt(int i, int j) {
+        public string CellAt(int i, int j)
+        {
             return CellAt(new Coord(i, j));
         }
 
-        public ETerrain TerrainAt(Coord pos) {
+        public ETerrain TerrainAt(Coord pos)
+        {
             if (Coord.IsValid(pos)) {
                 return Terrains[pos.X, pos.Y];
             } else {
@@ -352,21 +369,25 @@ namespace Boards
             }
         }
 
-        public ETerrain TerrainAt(int i, int j) {
+        public ETerrain TerrainAt(int i, int j)
+        {
             return TerrainAt(new Coord(i, j));
         }
 
-        public void SetCellAt(Coord pos, string value) {
+        public void SetCellAt(Coord pos, string value)
+        {
             if (Coord.IsValid(pos))
                 MainBoard[pos.X, pos.Y] = value;
         }
 
-        public void SetTerrainAt(Coord pos, ETerrain value) {
+        public void SetTerrainAt(Coord pos, ETerrain value)
+        {
             if (Coord.IsValid(pos))
                 Terrains[pos.X, pos.Y] = value;
         }
 
-        private void DrawLine(string str, int size) {
+        private void DrawLine(string str, int size)
+        {
             Console.WriteLine();
             for (int i = 0; i < size; i++) {
                 Console.Write(str);
@@ -374,8 +395,9 @@ namespace Boards
             Console.WriteLine();
         }
 
-        public bool Equals(Board otherOboard) {
-            if(otherOboard.MainBoard.GetLength(0) != BoardConsts.MAX_LIN
+        public bool Equals(Board otherOboard)
+        {
+            if (otherOboard.MainBoard.GetLength(0) != BoardConsts.MAX_LIN
                 || otherOboard.MainBoard.GetLength(1) != BoardConsts.MAX_COL) {
                 return false;
             } else {
